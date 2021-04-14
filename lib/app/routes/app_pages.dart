@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import 'package:waiter/app/modules/home/bindings/home_binding.dart';
 import 'package:waiter/app/modules/home/views/home_view.dart';
+import 'package:waiter/app/modules/order_details/bindings/order_details_binding.dart';
+import 'package:waiter/app/modules/order_details/views/order_details_view.dart';
 import 'package:waiter/app/modules/splash/bindings/splash_binding.dart';
 import 'package:waiter/app/modules/splash/views/splash_view.dart';
 import 'package:waiter/app/modules/unknown/bindings/unknown_binding.dart';
@@ -26,6 +28,11 @@ class AppPages {
       name: _Paths.SPLASH,
       page: () => SplashView(),
       binding: SplashBinding(),
+    ),
+    GetPage(
+      name: _Paths.ORDER_DETAILS,
+      page: () => OrderDetailsView(),
+      binding: OrderDetailsBinding(),
     ),
   ];
 }

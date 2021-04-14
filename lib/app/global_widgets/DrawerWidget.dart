@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:get/get.dart';
+import 'package:waiter/app/modules/home/controllers/home_controller.dart';
+import 'package:waiter/app/routes/app_pages.dart';
 
 
 class DrawerWidget extends StatelessWidget {
@@ -38,20 +40,19 @@ class DrawerWidget extends StatelessWidget {
           ),
             //  delivery boy
 
-            Column(
-              children: [
-                ListTile(
-                  onTap: () {
-                  },
-                  leading: Icon(
-                    Icons.delivery_dining,
-                    // color: Get.theme.focusColor.withOpacity(1),
-                  ),
-                  title: Text( 'Menu'.tr,
-                    // style:Get.theme.textTheme.subtitle1,
-                  ),
-                ),
-              ],
+            ListTile(
+              onTap: () {
+                Get.back();
+                Get.reload<HomeController>();
+                Get.toNamed(Routes.HOME);
+              },
+              leading: Icon(
+                Icons.delivery_dining,
+                // color: Get.theme.focusColor.withOpacity(1),
+              ),
+              title: Text( 'Menu'.tr,
+                // style:Get.theme.textTheme.subtitle1,
+              ),
             ),
 
           ListTile(
