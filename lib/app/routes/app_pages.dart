@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import 'package:waiter/app/modules/card/bindings/card_binding.dart';
+import 'package:waiter/app/modules/card/views/card_view.dart';
 import 'package:waiter/app/modules/home/bindings/home_binding.dart';
 import 'package:waiter/app/modules/home/views/home_view.dart';
 import 'package:waiter/app/modules/order_details/bindings/order_details_binding.dart';
@@ -33,6 +35,11 @@ class AppPages {
       name: _Paths.ORDER_DETAILS,
       page: () => OrderDetailsView(),
       binding: OrderDetailsBinding(),
+    ),
+    GetPage(
+      name: _Paths.CARD,
+      page: () => CardView(),
+      binding: CardBinding(),
     ),
   ];
 }

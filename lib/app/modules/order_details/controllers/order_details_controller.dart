@@ -4,9 +4,10 @@ import 'package:get/get.dart';
 class OrderDetailsController extends GetxController  with SingleGetTickerProviderMixin{
 
   TabController tabController;
-  final count = 0.obs;
+  final count = 1.obs;
   final bike = ''.obs;
   final car = ''.obs;
+  final agreedToOrder = false.obs;
   @override
   void onInit() {
     tabController = TabController(vsync: this, length: 3);
@@ -23,6 +24,15 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
   @override
   void onClose() {}
   void increment() => count.value++;
+  void decrement(){
+    if(count.value >1 ){
+      count.value--;
+    }
+  }
+  void setAgreedToOrder(bool newValue) {
+    agreedToOrder.value = newValue;
+    update();
+  }
 }
 
 
