@@ -5,7 +5,7 @@ class CompleteOrder  extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children:<Widget> [
-      Text('complete Order'),
+      Text('complete      Order'),
       ],
     );
   }
