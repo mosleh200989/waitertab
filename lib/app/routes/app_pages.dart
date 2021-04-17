@@ -6,6 +6,8 @@ import 'package:waiter/app/modules/home/bindings/home_binding.dart';
 import 'package:waiter/app/modules/home/views/home_view.dart';
 import 'package:waiter/app/modules/order_details/bindings/order_details_binding.dart';
 import 'package:waiter/app/modules/order_details/views/order_details_view.dart';
+import 'package:waiter/app/modules/order_list/bindings/order_list_binding.dart';
+import 'package:waiter/app/modules/order_list/views/order_list_view.dart';
 import 'package:waiter/app/modules/splash/bindings/splash_binding.dart';
 import 'package:waiter/app/modules/splash/views/splash_view.dart';
 import 'package:waiter/app/modules/unknown/bindings/unknown_binding.dart';
@@ -40,6 +42,11 @@ class AppPages {
       name: _Paths.CARD,
       page: () => CardView(),
       binding: CardBinding(),
+    ),
+    GetPage(
+      name: _Paths.ORDER_LIST,
+      page: () => OrderListView(),
+      binding: OrderListBinding(),
     ),
   ];
 }

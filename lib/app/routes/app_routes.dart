@@ -7,6 +7,7 @@ abstract class Routes {
   static const UNKNOWN = _Paths.UNKNOWN;
   static const ORDER_DETAILS = _Paths.ORDER_DETAILS;
   static const CARD = _Paths.CARD;
+  static const ORDER_LIST = _Paths.ORDER_LIST;
 }
 
 abstract class _Paths {
@@ -15,4 +16,5 @@ abstract class _Paths {
   static const UNKNOWN = '/unknown';
   static const ORDER_DETAILS = '/order-details';
   static const CARD = '/card';
+  static const ORDER_LIST = '/order-list';
 }

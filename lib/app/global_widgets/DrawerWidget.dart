@@ -57,13 +57,15 @@ class DrawerWidget extends StatelessWidget {
 
           ListTile(
             onTap: () {
+              Get.back();
+              Get.toNamed(Routes.ORDER_LIST);
             },
             leading: Icon(
               Icons.shop_two_sharp,
               color: Get.theme.focusColor.withOpacity(1),
             ),
             title: Text(
-              'my_orders'.tr,
+              'Order List',
               style:Get.theme.textTheme.subtitle1,
             ),
           ),
