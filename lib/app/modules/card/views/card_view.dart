@@ -13,7 +13,6 @@ class CardView extends GetView<CardController> {
         title: Text('Card'),
         centerTitle: true,
         actions: [
-
           Container(
             height: 20,
             width: 80,

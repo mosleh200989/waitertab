@@ -30,6 +30,11 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: 4.1.4
   get_storage: ^2.0.2
+  shared_preferences: ^2.0.5
+  auto_size_text: ^2.1.0
+  url_launcher: ^6.0.3
+  cached_network_image: ^3.0.0
+  fl_chart: ^0.35.0
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +61,32 @@ flutter:
     - assets/images/waiter_img.png
     - assets/images/burger_1.jpg
     - assets/images/launcher_icon.png
+    - assets/img/brazil.png
+    - assets/img/canada.png
+    - assets/img/china.png
+    - assets/img/france.png
+    - assets/img/germany.png
+    - assets/img/italy.png
+    - assets/img/netherlands.png
+    - assets/img/spain.png
+    - assets/img/united-arab-emirates.png
+    - assets/img/united-states-of-america.png
+    - assets/img/marker.png
+    - assets/img/my_marker.png
+    - assets/img/logo.png
+    - assets/img/loading.gif
+    - assets/img/whatsapp.png
+    - assets/img/box.jpg
+    - assets/img/verify_email_icon.jpg
+    - assets/img/buy_something.jpg
+    - assets/img/delivery_car_img.png
+    - assets/img/fmd_good_marker.png
+    - assets/img/camera_img.png
+    - assets/img/gallery_img.jpg
+    - assets/img/location_img.png
+    - assets/img/destination_map.png
+    - assets/img/car.png
+    - assets/img/googlemap.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

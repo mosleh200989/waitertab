@@ -16,7 +16,6 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
 
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
-
       body: SafeArea(
         child: Column(
           children: [
@@ -31,7 +30,7 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                     right:5.0,
                     child: InkWell(
                       onTap: () => Get.back(),
-                        child: Icon(Icons.keyboard_backspace))),
+                        child: Icon(Icons.keyboard_arrow_right))),
               ],
             ),
             Card(

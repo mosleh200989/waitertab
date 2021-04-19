@@ -13,7 +13,6 @@ class DrawerWidget extends StatelessWidget {
     return Drawer(
      elevation: 0.0,
       child: ListView(
-
         children: <Widget>[
           GestureDetector(
             onTap: () {
@@ -70,6 +69,20 @@ class DrawerWidget extends StatelessWidget {
             ),
           ),
           ListTile(
+            onTap: () {
+              Get.back();
+              Get.toNamed(Routes.ORDER_HISTORY);
+            },
+            leading: Icon(
+              Icons.history,
+              color: Get.theme.focusColor.withOpacity(1),
+            ),
+            title: Text(
+              'Order History',
+              style:Get.theme.textTheme.subtitle1,
+            ),
+          ),
+          ListTile(
             dense: true,
             title: Text(
               'application_preferences'.tr,
@@ -80,11 +93,10 @@ class DrawerWidget extends StatelessWidget {
               color: Get.theme.focusColor.withOpacity(0.3),
             ),
           ),
-/*
           ListTile(
             onTap: () {
               Get.back();
-              Get.toNamed(Routes.LANGUAGE_PAGE, arguments: 0);
+              Get.toNamed(Routes.LANGUAGE, arguments: 0);
             },
             leading: Icon(
               Icons.translate,
@@ -94,7 +106,7 @@ class DrawerWidget extends StatelessWidget {
               'languages'.tr,
               style: Get.textTheme.subtitle1,
             ),
-          ),*/
+          ),
 
           ListTile(
             onTap: () {
