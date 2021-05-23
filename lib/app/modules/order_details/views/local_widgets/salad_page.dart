@@ -104,7 +104,7 @@ class SaladCarPage extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () {
-                          controller.increment();
+                          controller.increment(index);
                         },
                         child: CircleAvatar(
                             radius: 12,
@@ -117,7 +117,7 @@ class SaladCarPage extends StatelessWidget {
                       ) ),
                       InkWell(
                         onTap: () {
-                          controller.decrement();
+                          controller.decrement(index);
                         },
                         child: CircleAvatar(
                             radius: 12,

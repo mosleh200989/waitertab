@@ -18,13 +18,13 @@ class MrConfig {
   /// API Key
   /// If you change here, you need to update in server.
   ///
-  static const String ps_api_key = 'teamalamathebest';
+  static const String mr_api_key = 'ggsk4wkssoc4sccgskggssws04gc4gokc4g4gokw';
 
   ///
   /// API URL
   /// Change your backend url
   ///
-  static const String ps_app_url ='https://eshtri.net/';
+  static const String base_app_url ='https://eshtri.net/';
   static const String ps_app_url_node ='https://shop.eshtri.net/';
   static const String ps_transactionList_url ='rest/transactionheaders/get/';
 

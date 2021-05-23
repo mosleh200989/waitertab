@@ -13,7 +13,6 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(OrderDetailsController());
-
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: SafeArea(

@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:waiter/app/data/models/categories.dart';
+import 'package:waiter/app/data/providers/categories_provider.dart';
 
 class HomeController extends GetxController {
-
+  var isLoading = true.obs;
+  var categoriesList = <Categories>[].obs;
   final count = 0.obs;
   @override
-  void onInit() {
+  void onInit()async {
     super.onInit();
+   await getAllCategories();
   }
 
   @override
@@ -50,4 +54,16 @@ class HomeController extends GetxController {
     "Pomegranate",
     "Starfruit"
   ];
+  Future<void> getAllCategories() async {
+    try {
+      isLoading(true);
+      var categories = await CategoriesProvider().getCategories();
+      if (categories != null) {
+        categoriesList.assignAll(categories);
+        // categoriesList.value = categories;
+      }
+    } finally {
+      isLoading(false);
+    }
+  }
 }

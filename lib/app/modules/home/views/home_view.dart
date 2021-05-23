@@ -98,42 +98,49 @@ class HomeView extends GetWidget<HomeController> {
       body: Column(
         children: [
           SizedBox(height: 100,),
-          Expanded(
-            child: Container(
-              // height: Get.height *.70,
-              child: GridView.builder(
-                itemCount: HomeController.mainDataList.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 2.0,
-                  mainAxisSpacing: 2.0,
-                    childAspectRatio: width / (height / 2)
-                ),
-                itemBuilder: (BuildContext context, int index) {
-                  return InkWell(
-                    onTap: () => Get.toNamed(Routes.ORDER_DETAILS,arguments: {'orderId':'9900'} ),
-                    child: Card(
-                      elevation: 5,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 10,),
-                          Image(image: AssetImage('assets/images/burger_1.jpg'),  fit: BoxFit.fill,
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('${HomeController.mainDataList.elementAt(index)}',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18 ),),
+        Obx(() {
+      if (controller.isLoading.value)
+        return Center(child: CircularProgressIndicator());
+      else
+          return Expanded(
+              child: Container(
+                // height: Get.height *.70,
+                child: GridView.builder(
+                  itemCount: controller.categoriesList.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 2.0,
+                    mainAxisSpacing: 2.0,
+                      childAspectRatio: width / (height / 2)
+                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    return InkWell(
+                      onTap: () => Get.toNamed(Routes.ORDER_DETAILS,arguments: {'catId':controller.categoriesList.elementAt(index).id} ),
+                      child: Card(
+                        elevation: 5,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 10,),
+                            Image(image: AssetImage('assets/images/burger_1.jpg'),  fit: BoxFit.fill,
                             ),
-                          ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text('${controller.categoriesList.elementAt(index).name}',
+                                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18 ),
+                                ),
+                              ),
+                            ),
 
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
-                ),
-            ),
+                    );
+                  },
+                  ),
+              ),
+            );},
           ),
         ],
       ),

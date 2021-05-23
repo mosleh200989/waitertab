@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:waiter/app/data/models/product.dart';
+import 'package:waiter/app/data/providers/order_details_provider.dart';
 
 class OrderDetailsController extends GetxController  with SingleGetTickerProviderMixin{
+  var isLoading = true.obs;
+  var productList = <Product>[].obs;
 
+  var product=Product().obs;
+  var counter = <int>[].obs;
   TabController tabController;
   final count = 1.obs;
   final bike = ''.obs;
   final car = ''.obs;
   final agreedToOrder = false.obs;
+  final catId=''.obs;
   @override
-  void onInit() {
+  void onInit()async {
     tabController = TabController(vsync: this, length: 3);
     bike.value = 'BMC';
     car.value = 'Ferrari';
+    if(Get.arguments !=null && Get.arguments.length>0){
+      catId.value=Get.arguments['catId'];
+      await getAllProducts();
+    }
     super.onInit();
   }
 
@@ -23,15 +34,33 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
 
   @override
   void onClose() {}
-  void increment() => count.value++;
-  void decrement(){
-    if(count.value >1 ){
-      count.value--;
+  void increment(int i) {
+    productList[i].counter++;
+   productList[i].totalPrice=productList[i].counter * double.parse(productList[i].price);
+    update();
+  }
+  void decrement(int i){
+    if(productList[i].counter > 1 ){
+      productList[i].counter--;
+      productList[i].totalPrice=productList[i].counter * double.parse(productList[i].price);
+      update();
     }
   }
   void setAgreedToOrder(bool newValue) {
     agreedToOrder.value = newValue;
     update();
+  }
+  Future<void> getAllProducts() async {
+    try {
+      isLoading(true);
+      var products = await OrderDetailsProvider().getProduct(catId.value);
+      if (products != null) {
+        productList.assignAll(products);
+        // categoriesList.value = categories;
+      }
+    } finally {
+      isLoading(false);
+    }
   }
 }
 

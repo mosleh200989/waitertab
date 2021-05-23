@@ -35,7 +35,9 @@ class PendingOrder  extends StatelessWidget {
                   Expanded(child: IconButton(icon:Icon(Icons.visibility,color: Colors.red,), onPressed:  () {
                     Get.toNamed(Routes.ORDER_VIEW);
                   },)),
-                  Expanded(child: IconButton(icon:Icon(Icons.edit), onPressed: null))
+                  Expanded(child: IconButton(icon:Icon(Icons.edit), onPressed:() {
+                    Get.toNamed(Routes.CARD);
+                  },))
                 ],)]),
               ]),
               TableRow( children: [
