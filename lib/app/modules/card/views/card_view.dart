@@ -1,13 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:waiter/app/modules/home/controllers/app_controller.dart';
+import 'package:waiter/app/modules/order_details/controllers/order_details_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
 import '../controllers/card_controller.dart';
 
 class CardView extends GetView<CardController> {
+  final OrderDetailsController orderDetailsController=Get.find();
   @override
   Widget build(BuildContext context) {
     final TextStyle labelTextStyle=TextStyle(fontWeight: FontWeight.bold);
+    print(orderDetailsController.basketItems.length??'');
+    print('appController.basketItems.length');
     return Scaffold(
       appBar: AppBar(
         title: Text('Card'),
@@ -18,7 +23,7 @@ class CardView extends GetView<CardController> {
             width: 80,
             child: TextButton(
                 onPressed: () {
-                  Get.offNamed(Routes.HOME);
+                  Get.offAllNamed(Routes.HOME);
             }, child: Text('Add New Item',textAlign:TextAlign.center,style: TextStyle(color: Colors.white),),
               style: TextButton.styleFrom(
                 padding: EdgeInsets.all(10),
@@ -54,7 +59,7 @@ class CardView extends GetView<CardController> {
              Container(
                height: 200,
                child: ListView.builder(
-                 itemCount: 3,
+                 itemCount: orderDetailsController.basketItems.length,
                  itemBuilder: (context, index) {
                  return  Card(
                    margin: EdgeInsets.all(5),
@@ -68,9 +73,9 @@ class CardView extends GetView<CardController> {
                            crossAxisAlignment: CrossAxisAlignment.center,
                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                            children:<Widget>[
-                             Expanded(child: Text('Bangla Set Menu Rice Boart',style: labelTextStyle,)),
-                             Expanded(child: Text('50',style: labelTextStyle,)),
-                             Expanded(child: Text('Tk 25.00',style: labelTextStyle,)),
+                             Expanded(child: Text('${orderDetailsController.basketItems.elementAt(index).product_name}',style: labelTextStyle,)),
+                             Expanded(child: Text('${orderDetailsController.quantity}',style: labelTextStyle,)),
+                             Expanded(child: Text('Tk ${orderDetailsController.basketItems.elementAt(index).real_unit_price??''}',style: labelTextStyle,)),
                              Expanded(child: Row(
                                children: [
                                  InkWell(
@@ -82,9 +87,11 @@ class CardView extends GetView<CardController> {
                                        backgroundColor:Colors.grey,
                                        child: Icon(Icons.add,color: Colors.black,)),
                                  ),
-                                 Obx(()=> Padding(
-                                   padding: const EdgeInsets.all(5.0),
-                                   child: Text('${controller.count}',textAlign: TextAlign.center,),
+                                 Obx(()=> Expanded(
+                                   child: Padding(
+                                     padding: const EdgeInsets.all(5.0),
+                                     child: Text('${orderDetailsController.basketItems.elementAt(index).quantity}',textAlign: TextAlign.center,),
+                                   ),
                                  ) ),
                                  InkWell(
                                    onTap: () {
@@ -97,7 +104,7 @@ class CardView extends GetView<CardController> {
                                  ),
                                ],
                              ),),
-                             Expanded(child: Text('Tk 25.00',style: labelTextStyle,)),
+                             Expanded(child: Text('Tk ${orderDetailsController.basketItems.elementAt(index).net_price}',style: labelTextStyle,)),
                            ],),
 
                          Card(

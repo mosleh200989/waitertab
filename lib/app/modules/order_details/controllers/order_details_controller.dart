@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/data/models/product.dart';
 import 'package:waiter/app/data/providers/order_details_provider.dart';
+import 'package:waiter/app/modules/home/controllers/app_controller.dart';
 
 class OrderDetailsController extends GetxController  with SingleGetTickerProviderMixin{
+  final basketItems=<Basket>[].obs;
   var isLoading = true.obs;
   var productList = <Product>[].obs;
-
+  Basket basket;
+  final Widget dividerLabel=  Container( height: 30.0,width: 2.0, color: Colors.grey,);
   var product=Product().obs;
   var counter = <int>[].obs;
   TabController tabController;
@@ -15,6 +19,9 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
   final car = ''.obs;
   final agreedToOrder = false.obs;
   final catId=''.obs;
+  final _quantity = 0.obs;
+  set quantity(int value) => _quantity.value = value;
+  int get quantity => _quantity.value;
   @override
   void onInit()async {
     tabController = TabController(vsync: this, length: 3);
@@ -61,6 +68,42 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
     } finally {
       isLoading(false);
     }
+  }
+  incrementQuantity() {
+    if (this.quantity >= 10) {
+      this.quantity = 10;
+    } else {
+      this.quantity += 1;
+    }
+  }
+
+  decrementQuantity() {
+    if (this.quantity <= 1) {
+      this.quantity = 1;
+    } else {
+      this.quantity -= 1;
+    }
+  }
+
+  Future<void> addToBasketAndBuyClickEvent(int i) async {
+  try{
+    basket=Basket(
+      product_name: productList.elementAt(i).name,
+      net_price: productList.elementAt(i).totalPrice.toString() !=null?productList.elementAt(i).totalPrice.toString() : productList.elementAt(i).price,
+      quantity: productList.elementAt(i).counter.toString(),
+      real_unit_price: productList.elementAt(i).price.toString(),
+    );
+    basketItems.add(basket);
+    incrementQuantity();
+    print(basketItems[0].product_name);
+    print(basket.net_price);
+    print('basket===');
+  }catch(error){
+ print(error);
+  }
+  Get.back();
+  Get.reload();
+  // Get.reloadAll();
   }
 }
 

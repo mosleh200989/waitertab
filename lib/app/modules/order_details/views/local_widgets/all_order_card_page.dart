@@ -3,6 +3,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:waiter/app/data/models/basket.dart';
+import 'package:waiter/app/data/models/options.dart';
+import 'package:waiter/app/data/models/product.dart';
 import 'package:waiter/app/modules/order_details/controllers/order_details_controller.dart';
 
 class AllOrderCarPage extends StatelessWidget {
@@ -55,81 +58,130 @@ class AllOrderCarPage extends StatelessWidget {
                   onTap: () {
                     controller.setAgreedToOrder(true);
                     Get.defaultDialog(
-                      // title: 'add_ons'.tr,
-                      titleStyle: TextStyle(fontSize: 24,color: Colors.white),
-                      backgroundColor: Colors.blueGrey,
-                      barrierDismissible: false,
-                      content: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('${controller.productList.elementAt(index).name}',style: TextStyle(color: Colors.white)),
-                                Visibility(
-                                    visible: controller.productList.elementAt(index).option!=null,
-                                    child: Text('${controller.productList.elementAt(index).option}',style: TextStyle(color: Colors.white))),
-                                GetBuilder<OrderDetailsController>(
-                                    builder: (_) {
-                                      // _.productList.elementAt(index).totalPrice=double.parse(_.productList.elementAt(index).price);
-                                      return Row(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.end,
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    _.increment(index);
-                                                  },
-                                                  child: CircleAvatar(
-                                                      radius: 12,
-                                                      backgroundColor:Colors.grey,
-                                                      child: Icon(Icons.add,color: Colors.black,)),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets.all(5.0),
-                                                  child: Text('${controller.productList.elementAt(index).counter.toString()??''}',textAlign: TextAlign.center,),
-                                                ),
-                                                InkWell(
-                                                  onTap: () {
-                                                    _.decrement(index);
-                                                  },
-                                                  child: CircleAvatar(
-                                                      radius: 12,
-                                                      backgroundColor:Colors.grey,
-                                                      child: Icon(Icons.remove,color: Colors.black,)),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Text('${_.productList.elementAt(index).totalPrice??_.productList.elementAt(index).price}',style: TextStyle(color: Colors.white)),
-                                        ],
-                                      );
-                                    }
-                                ),
+                      title: 'Add Product',
+                      titleStyle: TextStyle(fontSize: 24),
+                      // backgroundColor: Colors.blueGrey,
+                      // barrierDismissible: false,
+                      content: SizedBox(
+                        width: Get.width,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('${controller.productList.elementAt(index).name}'),
+                              controller.dividerLabel,
+                              Visibility(
+                                  visible: controller.productList.elementAt(index).option!=null,
+                                  child: Text('${controller.productList.elementAt(index).option}')),
 
-                              ],
-                            ),
-                          ],
+                              DropdownButton(
+                                underline: SizedBox(),
+                                icon: Icon(
+                                  Icons.arrow_drop_down_sharp,
+                                ),
+                                items:controller.productList.elementAt(index).optionsList !=null? controller.productList.elementAt(index).optionsList.map((lang) {
+                                  return  DropdownMenuItem<dynamic>(
+                                    value: lang.name,
+                                    child: Text(lang.name??'20.0'),
+                                  );
+                                }).toList(): null,
+
+                                onChanged: (val) {
+                                  print(val);
+                                },
+                              ),
+                              controller.dividerLabel,
+                              GetBuilder<OrderDetailsController>(
+                                  builder: (_) {
+                                    // _.productList.elementAt(index).totalPrice=double.parse(_.productList.elementAt(index).price);
+                                    return Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  _.increment(index);
+                                                },
+                                                child: CircleAvatar(
+                                                    radius: 12,
+                                                    backgroundColor:Colors.grey,
+                                                    child: Icon(Icons.add,color: Colors.black,)),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(5.0),
+                                                child: Text('${controller.productList.elementAt(index).counter.toString()??''}',textAlign: TextAlign.center,),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  _.decrement(index);
+                                                },
+                                                child: CircleAvatar(
+                                                    radius: 12,
+                                                    backgroundColor:Colors.grey,
+                                                    child: Icon(Icons.remove,color: Colors.black,)),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        controller.dividerLabel,
+                                        Text('${_.productList.elementAt(index).totalPrice??_.productList.elementAt(index).price}'),
+                                      ],
+                                    );
+                                  }
+                              ),
+
+                            ],
+                          ),
                         ),
                       ),
-                      textCancel: 'dismiss'.tr,
-                      cancelTextColor:Colors.white,
-                      onCancel: () {
-                      },
-                      textConfirm: 'submit'.tr,
+                      // textCancel: 'dismiss'.tr,
+                      // cancelTextColor:Colors.white,
+                      // onCancel: () {
+                      // },
+                      textConfirm: 'ADD TO CART'.tr,
                       confirmTextColor:Colors.white,
                       onConfirm: () {
-                        Get.back();
-
+                        controller.addToBasketAndBuyClickEvent(index);
                       },
 
                       buttonColor:Colors.grey ,
                     );
+                  /*  Get.defaultDialog(
+                        title: '',
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            TextField(
+                              controller:null,
+                              keyboardType: TextInputType.text,
+                              maxLines: 1,
+                              decoration: InputDecoration(
+                                  labelText: 'Category Name',
+                                  hintMaxLines: 1,
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.green, width: 4.0))),
+                            ),
+                            SizedBox(
+                              height: 30.0,
+                            ),
+                            RaisedButton(
+                              onPressed: () {
+
+                              },
+                              child: Text(
+                                'ADD CATEGORY',
+                                style: TextStyle(color: Colors.white, fontSize: 16.0),
+                              ),
+                              color: Colors.redAccent,
+                            )
+                          ],
+                        ),
+                        radius: 10.0);*/
                   },
                 ),
                 // Positioned(
@@ -185,7 +237,9 @@ class AllOrderCarPage extends StatelessWidget {
           },);},
     );
   }
+
 }
+
 class OrderItemController {
   int counter;
   OrderItemController(this.counter);

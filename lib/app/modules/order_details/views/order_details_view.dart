@@ -10,6 +10,7 @@ import 'package:waiter/app/routes/app_pages.dart';
 import '../controllers/order_details_controller.dart';
 
 class OrderDetailsView extends GetView<OrderDetailsController> {
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(OrderDetailsController());
@@ -80,10 +81,12 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CircleAvatar(
-                  radius: 10,
-                  // backgroundColor: Colors.green,
-                  child: Text('0'),
+                Obx(()=>
+                   CircleAvatar(
+                    radius: 10,
+                    // backgroundColor: Colors.green,
+                    child: Text('${controller.quantity}'),
+                  ),
                 ),
                 Text('View Your Cart',style: TextStyle(color: Colors.white,fontSize: 18),),
                 Text('Tk 0.0',style: TextStyle(color: Colors.white),),
@@ -93,7 +96,6 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
         ),
         onTap: () {
           Get.toNamed(Routes.CARD);
-
         },
       ),
     );
