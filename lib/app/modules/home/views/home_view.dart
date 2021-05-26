@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:waiter/app/global_widgets/DrawerWidget.dart';
 import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:waiter/app/modules/home/controllers/dialogcontroller_controller.dart';
+import 'package:waiter/app/modules/order_details/controllers/order_details_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
 
 import '../controllers/home_controller.dart';
-
 
 class HomeView extends GetWidget<HomeController> {
   final DialogcontrollerController cond = Get.put(DialogcontrollerController());
@@ -96,6 +96,8 @@ class HomeView extends GetWidget<HomeController> {
         }
       ),*/
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: 100,),
         Obx(() {
@@ -115,7 +117,10 @@ class HomeView extends GetWidget<HomeController> {
                   ),
                   itemBuilder: (BuildContext context, int index) {
                     return InkWell(
-                      onTap: () => Get.toNamed(Routes.ORDER_DETAILS,arguments: {'catId':controller.categoriesList.elementAt(index).id} ),
+                      onTap: () {
+                        Get.reload<OrderDetailsController>();
+                        Get.toNamed(Routes.ORDER_DETAILS,arguments: {'catId':controller.categoriesList.elementAt(index).id});
+                      },
                       child: Card(
                         elevation: 5,
                         child: Column(

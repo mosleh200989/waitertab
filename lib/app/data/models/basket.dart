@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:waiter/app/data/models/product.dart';
 
 class Basket {
@@ -17,6 +18,10 @@ class Basket {
   String real_unit_price;
   String product_comment;
   String serial;
+  bool isOrder;
+  Product product;
+  String notes;
+  TextEditingController textEditContNotes;
 
   Basket({
     this.id,
@@ -35,6 +40,10 @@ class Basket {
     this.real_unit_price,
     this.product_comment,
     this.serial,
+    this.isOrder,
+    this.product,
+    this.notes,
+    this.textEditContNotes,
   });
 
   Basket.fromJson(Map<String, dynamic> json){

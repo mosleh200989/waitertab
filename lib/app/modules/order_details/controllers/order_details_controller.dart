@@ -6,7 +6,7 @@ import 'package:waiter/app/data/providers/order_details_provider.dart';
 import 'package:waiter/app/modules/home/controllers/app_controller.dart';
 
 class OrderDetailsController extends GetxController  with SingleGetTickerProviderMixin{
-  final basketItems=<Basket>[].obs;
+ final AppController appController=Get.find();
   var isLoading = true.obs;
   var productList = <Product>[].obs;
   Basket basket;
@@ -22,6 +22,11 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
   final _quantity = 0.obs;
   set quantity(int value) => _quantity.value = value;
   int get quantity => _quantity.value;
+
+ int get cartQuantity {
+   return appController.basketItems.length;
+ }
+
   @override
   void onInit()async {
     tabController = TabController(vsync: this, length: 3);
@@ -29,6 +34,8 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
     car.value = 'Ferrari';
     if(Get.arguments !=null && Get.arguments.length>0){
       catId.value=Get.arguments['catId'];
+      print(catId);
+      print('catId======');
       await getAllProducts();
     }
     super.onInit();
@@ -36,6 +43,7 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
 
   @override
   void onReady() {
+   print('or ready order controller');
     super.onReady();
   }
 
@@ -53,9 +61,24 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
       update();
     }
   }
-  void setAgreedToOrder(bool newValue) {
-    agreedToOrder.value = newValue;
-    update();
+  void setAgreedToOrder(bool newValue, int index) {
+   print(newValue);
+   print('newValue===');
+   if(newValue==false) {
+     for(var i=0; i<appController.basketItems.length;i++){
+       if(appController.basketItems[i].product_id==productList[index].id){
+         appController.basketItems.removeAt(i);
+         productList[index].isOrder = newValue;
+         productList.refresh();
+         appController.basketItems.refresh();
+       }
+     }
+   }else{
+     productList[index].isOrder= newValue;
+     productList.refresh();
+     appController.basketItems.refresh();
+   }
+
   }
   Future<void> getAllProducts() async {
     try {
@@ -69,40 +92,90 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
       isLoading(false);
     }
   }
-  incrementQuantity() {
-    if (this.quantity >= 10) {
-      this.quantity = 10;
-    } else {
-      this.quantity += 1;
-    }
-  }
+  // incrementQuantity() {
+  //   if (this.quantity >= 10) {
+  //     this.quantity = 10;
+  //   } else {
+  //     this.quantity += 1;
+  //   }
+  // }
+  //
+  // decrementQuantity() {
+  //   if (this.quantity <= 1) {
+  //     this.quantity = 1;
+  //   } else {
+  //     this.quantity -= 1;
+  //   }
+  // }
 
-  decrementQuantity() {
-    if (this.quantity <= 1) {
-      this.quantity = 1;
-    } else {
-      this.quantity -= 1;
-    }
-  }
-
-  Future<void> addToBasketAndBuyClickEvent(int i) async {
+  Future<void> addToBasketAndBuyClickEvent(int index) async {
   try{
-    basket=Basket(
-      product_name: productList.elementAt(i).name,
-      net_price: productList.elementAt(i).totalPrice.toString() !=null?productList.elementAt(i).totalPrice.toString() : productList.elementAt(i).price,
-      quantity: productList.elementAt(i).counter.toString(),
-      real_unit_price: productList.elementAt(i).price.toString(),
+    Basket basket=Basket(
+      product_id: productList.elementAt(index).id,
+      product_name: productList.elementAt(index).name,
+      net_price: productList.elementAt(index).totalPrice.toString() !=null?productList.elementAt(index).totalPrice.toString() : productList.elementAt(index).price,
+      quantity: productList.elementAt(index).counter.toString(),
+      real_unit_price: productList.elementAt(index).price.toString(),
     );
-    basketItems.add(basket);
-    incrementQuantity();
-    print(basketItems[0].product_name);
-    print(basket.net_price);
-    print('basket===');
+    setAgreedToOrder(true, index);
+    appController.basketItems.add(basket);
+  /*  if(cartQuantity > 0 && cartQuantity !=0){
+    for (var i=0; i<appController.basketItems.length; i++) {
+      if(appController.basketItems[i].product_id==productList.elementAt(index).id){
+        print(appController.basketItems[i].product_id);
+        // increment(index);
+        setAgreedToOrder(true, index);
+        print('true');
+        print(productList.elementAt(index).id);
+      }else{
+      Basket basket=Basket(
+          product_id: productList.elementAt(index).id,
+          product_name: productList.elementAt(index).name,
+          net_price: productList.elementAt(index).totalPrice.toString() !=null?productList.elementAt(index).totalPrice.toString() : productList.elementAt(index).price,
+          quantity: productList.elementAt(index).counter.toString(),
+          real_unit_price: productList.elementAt(index).price.toString(),
+        );
+      setAgreedToOrder(true, index);
+        appController.basketItems.add(basket);
+        print("false");
+      }
+    }
+    }else{
+     Basket basket=Basket(
+        product_id: productList.elementAt(index).id,
+        product_name: productList.elementAt(index).name,
+        net_price: productList.elementAt(index).totalPrice.toString() !=null?productList.elementAt(index).totalPrice.toString() : productList.elementAt(index).price,
+        quantity: productList.elementAt(index).counter.toString(),
+        real_unit_price: productList.elementAt(index).price.toString(),
+      );
+      appController.basketItems.add(basket);
+     setAgreedToOrder(true, index);
+     print(Get.isDialogOpen);
+     print('is open ');
+     // Get.reload(tag: 'ordDtl');
+     // Get.back();
+      print("false========");
+      print("false========");
+    }
+*/
+    //  basket =
+    // appController.basketItems.value.firstWhere((cartItem) {
+    //   print('ekhane===');
+    //   print(cartItem.product_id);
+    //   print(productList.elementAt(i).id);
+    //   print('ekhane');
+    //   return cartItem.product_id == productList.elementAt(i).id;
+    // });
+
+    // increment(i);
+    // print(appController.basketItems[i].product_name);
+    // print(basket.net_price);
+    // print('basket===');
   }catch(error){
  print(error);
   }
   Get.back();
-  Get.reload();
+  // Get.reload();
   // Get.reloadAll();
   }
 }

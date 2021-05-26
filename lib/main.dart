@@ -36,7 +36,12 @@ class MyApp extends StatelessWidget {
       darkTheme: AppThemes.dark,
       theme: AppThemes.light,
       themeMode: ThemeService().theme,
+      popGesture: Get.isPopGestureEnable,
+      defaultGlobalState:true,
+
     );
+
+
   }
 }
 

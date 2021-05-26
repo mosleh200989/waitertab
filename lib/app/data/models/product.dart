@@ -22,7 +22,7 @@ class Product {
   List<OptionModel> optionsList;
   int counter=1;
   double totalPrice;
-
+  bool isOrder=false;
   Product({
     this.code,
     this.id,
@@ -41,6 +41,7 @@ class Product {
     this.unit,
     this.optionsList,
     this.counter,
+    this.isOrder,
   });
 
   Product.fromJson(Map<String, dynamic> json){

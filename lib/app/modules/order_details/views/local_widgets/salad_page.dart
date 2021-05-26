@@ -40,7 +40,7 @@ class SaladCarPage extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  controller.setAgreedToOrder(true);
+                  // controller.setAgreedToOrder(true);
                   Get.defaultDialog(
                     title: 'add_ons'.tr,
                     titleStyle: TextStyle(fontSize: 24,color: Colors.white),
@@ -94,7 +94,7 @@ class SaladCarPage extends StatelessWidget {
                   child:Obx(()=>Checkbox(
                     value: controller.agreedToOrder.value,
                     onChanged: (value) {
-                      controller.setAgreedToOrder(value);
+                      controller.setAgreedToOrder(value,index);
                     },
                   ),)),
               Positioned(

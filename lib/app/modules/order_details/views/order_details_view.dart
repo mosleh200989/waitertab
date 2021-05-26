@@ -9,11 +9,9 @@ import 'package:waiter/app/routes/app_pages.dart';
 
 import '../controllers/order_details_controller.dart';
 
-class OrderDetailsView extends GetView<OrderDetailsController> {
-
+class OrderDetailsView extends GetWidget<OrderDetailsController> {
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(OrderDetailsController());
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       body: SafeArea(
@@ -46,7 +44,6 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                   indicatorColor: Colors.red,
                   automaticIndicatorColorAdjustment: true,
                   labelStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-
                   // indicatorWeight: 10,
                   tabs: [
                     Tab(text:'All'),
@@ -63,9 +60,6 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                   AllOrderCarPage(),
                   OtherCarPage(),
                   SaladCarPage(),
-
-
-
                 ],
               ),
             ),
@@ -85,11 +79,11 @@ class OrderDetailsView extends GetView<OrderDetailsController> {
                    CircleAvatar(
                     radius: 10,
                     // backgroundColor: Colors.green,
-                    child: Text('${controller.quantity}'),
+                    child: Text('${controller.cartQuantity}'),
                   ),
                 ),
                 Text('View Your Cart',style: TextStyle(color: Colors.white,fontSize: 18),),
-                Text('Tk 0.0',style: TextStyle(color: Colors.white),),
+                Text('Tk ${controller.cartQuantity}',style: TextStyle(color: Colors.white),),
               ],
             ),
           ),
