@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/modules/home/controllers/app_controller.dart';
 import 'package:waiter/app/modules/order_details/controllers/order_details_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
 import '../controllers/card_controller.dart';
 
 class CardView extends StatelessWidget {
-  final AppController appController=Get.find();
-  final OrderDetailsController orderDetailsController=Get.find();
   @override
   Widget build(BuildContext context) {
+    final AppController appController=Get.find();
+    final OrderDetailsController orderDetailsController=Get.find();
     final TextStyle labelTextStyle=TextStyle(fontWeight: FontWeight.normal,);
-    print(appController.basketItems.length??'');
-    print('appController.basketItems.length');
     return Scaffold(
       appBar: AppBar(
         title: Text('Card'),
@@ -66,6 +66,7 @@ class CardView extends StatelessWidget {
                      return Container(
                        height: 200,
                        child: ListView.builder(
+                         reverse: controller.isReverse,
                          itemCount: appController.basketItems.length,
                          itemBuilder: (context, index) {
                          final  String productOption="${appController?.basketItems?.elementAt(index)?.product_option??''}";
@@ -118,7 +119,7 @@ class CardView extends StatelessWidget {
                                      ),
                                      GetBuilder<CardController>(
                                        builder: (_) {
-                                         return Expanded(child: Text('Tk ${appController.basketItems.elementAt(index).net_price}',style: labelTextStyle,textAlign: TextAlign.center,));
+                                         return Expanded(child: Text('Tk ${appController.basketItems.elementAt(index).net_price??''}',style: labelTextStyle,textAlign: TextAlign.center,));
                                        }
                                      ),
                                      Expanded(child: IconButton(
@@ -135,60 +136,61 @@ class CardView extends StatelessWidget {
                                          shape:StadiumBorder(),
                                        ),
                                        onPressed: () {
-                                         controller.changeShowNoteField(true);
+                                         controller.changeShowNoteField(true,index);
                                        },
                                        icon: Icon(Icons.arrow_drop_down,),
                                        label: Text('Notes',style: labelTextStyle,)),
                                  ),
+                                      GetBuilder<CardController>(
+                                        builder: (_) {
+                                          return Visibility(
+                                               visible:_.appController.basketItems[index].isNotes==true,
+                                               child: TextFormField(
+                                                 controller: appController.basketItems[index].textEditContNotes,
+                                                 keyboardType: TextInputType.text,
+                                                /* controller: TextEditingController.fromValue(
+                                                     TextEditingValue(
+                                                         text: appController.basketItems[index].product_name??'',
+                                                         selection: new TextSelection.collapsed(
+                                                             offset: appController.basketItems.length),
+                                                     )),*/
 
-
-                                   Obx(()=>
-                                      Visibility(
-                                           visible: controller.showNote==true,
-                                           child: TextFormField(
-                                             controller: appController.basketItems[index].textEditContNotes,
-                                             keyboardType: TextInputType.text,
-                                            /* controller: TextEditingController.fromValue(
-                                                 TextEditingValue(
-                                                     text: appController.basketItems[index].product_name??'',
-                                                     selection: new TextSelection.collapsed(
-                                                         offset: appController.basketItems.length),
-                                                 )),*/
-
-                                             onChanged: (value) {
-                                               controller.addNotes(index,value);
-                                               // controller.textEditNoteList[index].text=value;
-                                             },
-                                             decoration: InputDecoration(
-                                               contentPadding: EdgeInsets.all(12),
-                                               hintText: 'Notes'.tr,
-                                               hintStyle: TextStyle(
-                                                   color: Get.theme
-                                                       .focusColor
-                                                       .withOpacity(0.7)),
-                                               border: OutlineInputBorder(
-                                                   borderSide: BorderSide(
-                                                       color:Get.theme
-                                                           .focusColor
-                                                           .withOpacity(0.2))),
-                                               focusedBorder: OutlineInputBorder(
-                                                   borderSide: BorderSide(
-                                                       color:Get.theme
-                                                           .focusColor
-                                                           .withOpacity(0.5))),
-                                               enabledBorder: OutlineInputBorder(
-                                                   borderSide: BorderSide(
+                                                 onChanged: (value) {
+                                                   controller.addNotes(index,value);
+                                                   // controller.textEditNoteList[index].text=value;
+                                                 },
+                                                 decoration: InputDecoration(
+                                                   contentPadding: EdgeInsets.all(12),
+                                                   hintText: 'Notes'.tr,
+                                                   hintStyle: TextStyle(
                                                        color: Get.theme
                                                            .focusColor
-                                                           .withOpacity(0.2))),
+                                                           .withOpacity(0.7)),
+                                                   border: OutlineInputBorder(
+                                                       borderSide: BorderSide(
+                                                           color:Get.theme
+                                                               .focusColor
+                                                               .withOpacity(0.2))),
+                                                   focusedBorder: OutlineInputBorder(
+                                                       borderSide: BorderSide(
+                                                           color:Get.theme
+                                                               .focusColor
+                                                               .withOpacity(0.5))),
+                                                   enabledBorder: OutlineInputBorder(
+                                                       borderSide: BorderSide(
+                                                           color: Get.theme
+                                                               .focusColor
+                                                               .withOpacity(0.2))),
 
-                                             ),
-                                           ),
+                                                 ),
+                                               ),
 
 
 
-                                 ),
-                                   ),
+                                 );
+                                        }
+                                      ),
+
                                ],
                              ),
                            ),
@@ -331,6 +333,96 @@ class CardView extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children:<Widget> [
+                                Text('Discount'),
+                                Card(
+                                  elevation: 0.0,
+                                  child: Container(
+                                      width: Get.width *.5,
+                                      height: 45.0,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
+                                        child: TextFormField(
+                                          controller: controller.discountTextController,
+                                          keyboardType: TextInputType.numberWithOptions(signed: false, decimal: true),
+                                         inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),],
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(12),
+                                            hintText: 'Discount',
+                                            hintStyle: TextStyle(
+                                                color: Get.theme
+                                                    .focusColor
+                                                    .withOpacity(0.7)),
+                                            border: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color:Get.theme
+                                                        .focusColor
+                                                        .withOpacity(0.2))),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color:Get.theme
+                                                        .focusColor
+                                                        .withOpacity(0.0))),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Get.theme
+                                                        .focusColor
+                                                        .withOpacity(0.2))),
+
+                                          ),
+                                        ),
+                                      )),
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children:<Widget> [
+                                Text('Shipping Cost'),
+                                Card(
+                                  elevation: 0.0,
+                                  child: Container(
+                                      width: Get.width *.5,
+                                      height: 45,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
+                                        child: TextFormField(
+                                          controller: controller.shippingTextController,
+                                          keyboardType: TextInputType.number,
+                                         inputFormatters:  <TextInputFormatter>[
+                                           FilteringTextInputFormatter.digitsOnly
+                                         ],
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(12),
+                                            hintText: 'shipping cost',
+                                            hintStyle: TextStyle(
+                                                color: Get.theme
+                                                    .focusColor
+                                                    .withOpacity(0.7)),
+                                            // border: OutlineInputBorder(
+                                            //     borderSide: BorderSide(
+                                            //         color:Get.theme
+                                            //             .focusColor
+                                            //             .withOpacity(0.2))),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color:Get.theme
+                                                        .focusColor
+                                                        .withOpacity(0.0))),
+                                            // enabledBorder: OutlineInputBorder(
+                                            //     borderSide: BorderSide(
+                                            //         color: Get.theme
+                                            //             .focusColor
+                                            //             .withOpacity(0.2))),
+
+                                          ),
+                                        ),
+                                      )),
+                                )
+                              ],
+                            ),
+                    /*        Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children:<Widget> [
                                 Text('Vat/Tax'),
                                 Card(
                                   elevation: 1,
@@ -342,8 +434,8 @@ class CardView extends StatelessWidget {
                                       )),
                                 )
                               ],
-                            ),
-                            Row(
+                            ),*/
+                          /*  Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children:<Widget> [
                                 Text('Service Charge'),
@@ -357,7 +449,7 @@ class CardView extends StatelessWidget {
                                       )),
                                 )
                               ],
-                            ),
+                            ),*/
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children:<Widget> [
@@ -368,7 +460,7 @@ class CardView extends StatelessWidget {
                                       width: Get.width *.5,
                                       child: Padding(
                                         padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
-                                        child: Text('Tk 750.0',textAlign: TextAlign.center,),
+                                        child: Text('Tk ${_.grandTotal??0.0}',textAlign: TextAlign.center,),
                                       )),
                                 )
                               ],
@@ -433,11 +525,6 @@ class CardView extends StatelessWidget {
                       );
                     }
                   ),
-
-
-
-
-
                 ],
               ),
             ),
@@ -478,40 +565,6 @@ class CardView extends StatelessWidget {
           // Get.toNamed(Routes.CARD);
 
         },
-      ),
-    );
-  }
-  Widget singleItemList(int index, TextEditingController textController,BuildContext context) {
-    final CardController controller=Get.find();
-    return TextFormField(
-      controller: textController,
-      keyboardType: TextInputType.text,
-      onChanged: (value) {
-        controller.addNotes(index,value);
-      },
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(12),
-        hintText: 'Notes'.tr,
-        hintStyle: TextStyle(
-            color: Get.theme
-                .focusColor
-                .withOpacity(0.7)),
-        border: OutlineInputBorder(
-            borderSide: BorderSide(
-                color:Get.theme
-                    .focusColor
-                    .withOpacity(0.2))),
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                color:Get.theme
-                    .focusColor
-                    .withOpacity(0.5))),
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: Get.theme
-                    .focusColor
-                    .withOpacity(0.2))),
-
       ),
     );
   }

@@ -22,6 +22,7 @@ class Basket {
   Product product;
   String notes;
   TextEditingController textEditContNotes;
+  bool isNotes=false;
 
   Basket({
     this.id,
@@ -44,6 +45,7 @@ class Basket {
     this.product,
     this.notes,
     this.textEditContNotes,
+    this.isNotes,
   });
 
   Basket.fromJson(Map<String, dynamic> json){

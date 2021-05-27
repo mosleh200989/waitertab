@@ -22,7 +22,8 @@ handleFormSubmit() async {
   params["name"] = 'name';
   params["deviceToken"] = 'deviceToken';
   params["phoneId"] = 'verificationId';
-  Get.toNamed(Routes.VERIFY_VIEW, arguments: params);
+  Get.toNamed(Routes.HOME);
+  // Get.toNamed(Routes.VERIFY_VIEW, arguments: params);
   // if (phoneController.text.isEmpty) {
   //   Helpers.showSnackbar(message: 'warning_dialog__input_phone'.tr);
   //

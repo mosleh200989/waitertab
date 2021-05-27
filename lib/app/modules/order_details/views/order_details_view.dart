@@ -83,7 +83,7 @@ class OrderDetailsView extends GetWidget<OrderDetailsController> {
                   ),
                 ),
                 Text('View Your Cart',style: TextStyle(color: Colors.white,fontSize: 18),),
-                Text('Tk ${controller.cartQuantity}',style: TextStyle(color: Colors.white),),
+                Obx(()=> Text('Tk ${controller.grandTotal}',style: TextStyle(color: Colors.white),)),
               ],
             ),
           ),

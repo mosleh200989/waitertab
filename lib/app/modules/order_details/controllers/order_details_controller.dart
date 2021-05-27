@@ -26,6 +26,8 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
  int get cartQuantity {
    return appController.basketItems.length;
  }
+ final _grandTotal=0.0.obs;
+ double get grandTotal=>_grandTotal.value;
 
   @override
   void onInit()async {
@@ -38,6 +40,7 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
       print('catId======');
       await getAllProducts();
     }
+    // incrementGrandTotal();
     super.onInit();
   }
 
@@ -54,6 +57,15 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
    productList[i].totalPrice=productList[i].counter * double.parse(productList[i].price);
     update();
   }
+
+ void incrementOpenDialog(int i) {
+   productList[i].totalPrice= 1 * double.parse(productList[i].price);
+   update();
+ }
+ void decrementOpenDialog(int i) {
+   productList[i].totalPrice =1 * double.parse(productList[i].price);
+   update();
+ }
   void decrement(int i){
     if(productList[i].counter > 1 ){
       productList[i].counter--;
@@ -62,21 +74,25 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
     }
   }
   void setAgreedToOrder(bool newValue, int index) {
-   print(newValue);
-   print('newValue===');
    if(newValue==false) {
      for(var i=0; i<appController.basketItems.length;i++){
        if(appController.basketItems[i].product_id==productList[index].id){
-         appController.basketItems.removeAt(i);
+         print(appController.basketItems[i].net_price??'0.0');
          productList[index].isOrder = newValue;
+         _grandTotal.value -= double.parse(appController.basketItems[i].net_price);
+         appController.basketItems.removeAt(i);
          productList.refresh();
          appController.basketItems.refresh();
+
+
        }
      }
    }else{
+     print('in condition===');
      productList[index].isOrder= newValue;
      productList.refresh();
      appController.basketItems.refresh();
+
    }
 
   }
@@ -113,12 +129,18 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
     Basket basket=Basket(
       product_id: productList.elementAt(index).id,
       product_name: productList.elementAt(index).name,
-      net_price: productList.elementAt(index).totalPrice.toString() !=null?productList.elementAt(index).totalPrice.toString() : productList.elementAt(index).price,
+      net_price: productList[index].totalPrice.toString() ?? productList[index].price,
       quantity: productList.elementAt(index).counter.toString(),
       real_unit_price: productList.elementAt(index).price.toString(),
     );
     setAgreedToOrder(true, index);
     appController.basketItems.add(basket);
+    for(var i=0; i< appController.basketItems.length; i++){
+      if(i==index){
+        _grandTotal.value+= double.parse(appController.basketItems[i].net_price);
+      }
+      update();
+    }
   /*  if(cartQuantity > 0 && cartQuantity !=0){
     for (var i=0; i<appController.basketItems.length; i++) {
       if(appController.basketItems[i].product_id==productList.elementAt(index).id){
@@ -178,6 +200,7 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
   // Get.reload();
   // Get.reloadAll();
   }
+
 }
 
 

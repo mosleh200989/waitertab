@@ -55,103 +55,106 @@ class AllOrderCarPage extends StatelessWidget {
                         ),
                       ),
                       onTap: () {
-                        if(controller.productList.elementAt(index).isOrder==true)
+                        if(controller.productList.elementAt(index).isOrder==true) {
                           controller.setAgreedToOrder(false, index);
-                        else
-                        Get.defaultDialog(
-                          title: 'Add Product',
-                          titleStyle: TextStyle(fontSize: 24),
-                          // backgroundColor: Colors.blueGrey,
-                          // barrierDismissible: false,
-                          content: SizedBox(
-                            width: Get.width,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text('${controller.productList.elementAt(index).name}'),
-                                  controller.dividerLabel,
-                                  Visibility(
-                                      visible: controller.productList.elementAt(index).option!=null,
-                                      child: Text('${controller.productList.elementAt(index).option}')),
+                        } else{
+                          controller.incrementOpenDialog(index);
+                          Get.defaultDialog(
+                            title: 'Add Product',
+                            titleStyle: TextStyle(fontSize: 24),
+                            // backgroundColor: Colors.blueGrey,
+                            // barrierDismissible: false,
+                            content: SizedBox(
+                              width: Get.width,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${controller.productList.elementAt(index).name}'),
+                                    controller.dividerLabel,
+                                    Visibility(
+                                        visible: controller.productList.elementAt(index).option!=null,
+                                        child: Text('${controller.productList.elementAt(index).option}')),
 
-                                  DropdownButton(
-                                    underline: SizedBox(),
-                                    icon: Icon(
-                                      Icons.arrow_drop_down_sharp,
-                                    ),
-                                    items:controller.productList.elementAt(index).optionsList !=null? controller.productList.elementAt(index).optionsList.map((lang) {
-                                      return  DropdownMenuItem<dynamic>(
-                                        value: lang.name,
-                                        child: Text(lang.name??'20.0'),
-                                      );
-                                    }).toList(): null,
-
-                                    onChanged: (val) {
-                                      print(val);
-                                    },
-                                  ),
-                                  controller.dividerLabel,
-                                  GetBuilder<OrderDetailsController>(
-                                      builder: (_) {
-                                        // _.productList.elementAt(index).totalPrice=double.parse(_.productList.elementAt(index).price);
-                                        return Row(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      _.increment(index);
-                                                    },
-                                                    child: CircleAvatar(
-                                                        radius: 12,
-                                                        backgroundColor:Colors.grey,
-                                                        child: Icon(Icons.add,color: Colors.black,)),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(5.0),
-                                                    child: Text('${controller.productList.elementAt(index).counter.toString()??''}',textAlign: TextAlign.center,),
-                                                  ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      _.decrement(index);
-                                                    },
-                                                    child: CircleAvatar(
-                                                        radius: 12,
-                                                        backgroundColor:Colors.grey,
-                                                        child: Icon(Icons.remove,color: Colors.black,)),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            controller.dividerLabel,
-                                            Text('${_.productList.elementAt(index).totalPrice??_.productList.elementAt(index).price}'),
-                                          ],
+                                    DropdownButton(
+                                      underline: SizedBox(),
+                                      icon: Icon(
+                                        Icons.arrow_drop_down_sharp,
+                                      ),
+                                      items:controller.productList.elementAt(index).optionsList !=null? controller.productList.elementAt(index).optionsList.map((lang) {
+                                        return  DropdownMenuItem<dynamic>(
+                                          value: lang.name,
+                                          child: Text(lang.name??'20.0'),
                                         );
-                                      }
-                                  ),
+                                      }).toList(): null,
 
-                                ],
+                                      onChanged: (val) {
+                                        print(val);
+                                      },
+                                    ),
+                                    controller.dividerLabel,
+                                    GetBuilder<OrderDetailsController>(
+                                        builder: (_) {
+                                          // _.productList.elementAt(index).totalPrice=double.parse(_.productList.elementAt(index).price);
+                                          return Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        _.increment(index);
+                                                      },
+                                                      child: CircleAvatar(
+                                                          radius: 12,
+                                                          backgroundColor:Colors.grey,
+                                                          child: Icon(Icons.add,color: Colors.black,)),
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.all(5.0),
+                                                      child: Text('${controller.productList.elementAt(index).counter.toString()??''}',textAlign: TextAlign.center,),
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        _.decrement(index);
+                                                      },
+                                                      child: CircleAvatar(
+                                                          radius: 12,
+                                                          backgroundColor:Colors.grey,
+                                                          child: Icon(Icons.remove,color: Colors.black,)),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              controller.dividerLabel,
+                                              Text('${_.productList.elementAt(index).totalPrice??_.productList.elementAt(index).price}'),
+                                            ],
+                                          );
+                                        }
+                                    ),
+
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          // textCancel: 'dismiss'.tr,
-                          // cancelTextColor:Colors.white,
-                          // onCancel: () {
-                          // },
-                          textConfirm: 'ADD TO CART'.tr,
-                          confirmTextColor:Colors.white,
-                          onConfirm: () {
-                            controller.addToBasketAndBuyClickEvent(index);
-                          },
+                            // textCancel: 'dismiss'.tr,
+                            // cancelTextColor:Colors.white,
+                            // onCancel: () {
+                            // },
+                            textConfirm: 'ADD TO CART'.tr,
+                            confirmTextColor:Colors.white,
+                            onConfirm: () {
+                              controller.addToBasketAndBuyClickEvent(index);
+                            },
 
-                          buttonColor:Colors.grey ,
-                        );
+                            buttonColor:Colors.grey ,
+                          );
+                        }
+
                       },
                     ),
                     Positioned(
