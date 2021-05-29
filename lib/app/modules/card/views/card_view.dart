@@ -551,7 +551,7 @@ class CardView extends StatelessWidget {
                 SizedBox(width: 10,),
                 Expanded(
                   child: ElevatedButton(onPressed: () {
-
+                    Get.find<CardController>().postSalesOrder();
                   }, child: Text('Place Order'),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.green

@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/data/models/categories.dart';
 import 'package:waiter/app/data/providers/categories_provider.dart';
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 
 class HomeController extends GetxController {
+  final AuthController authController=Get.find();
   var isLoading = true.obs;
   var categoriesList = <Categories>[].obs;
-  final count = 0.obs;
   @override
   void onInit()async {
     super.onInit();
@@ -20,8 +21,9 @@ class HomeController extends GetxController {
   }
 
   @override
-  void onClose() {}
-  void increment() => count.value++;
+  void onClose() {
+    super.onClose();
+  }
   void updateFunction(){
     update();
   }

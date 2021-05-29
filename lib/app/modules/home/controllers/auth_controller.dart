@@ -1,12 +1,19 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:waiter/app/data/models/user_db.dart';
 
 class AuthController extends GetxController {
-  //TODO: Implement AuthController
+final _currentUser=UserDb().obs;
+UserDb get currentUser=>_currentUser.value;
+
 
   final count = 0.obs;
   @override
-  void onInit() {
+  void onInit()async {
     super.onInit();
+    await getCurrentUser();
   }
 
   @override
@@ -17,4 +24,15 @@ class AuthController extends GetxController {
   @override
   void onClose() {}
   void increment() => count.value++;
+  Future<UserDb> getCurrentUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('current_user')) {
+      _currentUser.value = UserDb.fromJSON(json.decode(await prefs.get('current_user')));
+      _currentUser.value.auth = true;
+      // _currentUser.value=currentUser.value;
+    } else {
+      _currentUser.value.auth = false;
+    }
+    return _currentUser.value;
+  }
 }

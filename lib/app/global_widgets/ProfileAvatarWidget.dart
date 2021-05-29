@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:waiter/app/data/models/user_db.dart';
 
 class ProfileAvatarWidget extends StatelessWidget {
-  final Userdb userdb;
+  final UserDb userdb;
 
   ProfileAvatarWidget({
     Key key,
@@ -43,7 +43,7 @@ class ProfileAvatarWidget extends StatelessWidget {
                     height: 135,
                     width: 135,
                     fit: BoxFit.cover,
-                    imageUrl: userdb.image.url,
+                    // imageUrl: userdb.image.url,
                     placeholder: (context, url) => Image.asset(
                       'assets/img/loading.gif',
                       fit: BoxFit.cover,
@@ -68,7 +68,7 @@ class ProfileAvatarWidget extends StatelessWidget {
             ),
           ),
           Text(
-            userdb?.user_name,
+            userdb?.username,
             style: Theme.of(context).textTheme.headline.merge(TextStyle(color: Theme.of(context).primaryColor)),
           ),
 //          Text(

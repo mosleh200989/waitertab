@@ -132,6 +132,7 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
       net_price: productList[index].totalPrice.toString() ?? productList[index].price,
       quantity: productList.elementAt(index).counter.toString(),
       real_unit_price: productList.elementAt(index).price.toString(),
+      product_code: productList.elementAt(index).code.toString(),
     );
     setAgreedToOrder(true, index);
     appController.basketItems.add(basket);

@@ -22,13 +22,13 @@ class ProfileView  extends StatelessWidget {
         ),
 
       ),
-      body: _con.userdb.apiToken == null
+      body: _con.userDb.username == null
           ? CircularLoadingWidget(height: 500)
           : SingleChildScrollView(
 //              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
         child: Column(
           children: <Widget>[
-            ProfileAvatarWidget(userdb: _con.userdb),
+            ProfileAvatarWidget(userdb: _con.userDb),
             ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               leading: Icon(
@@ -43,7 +43,7 @@ class ProfileView  extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                _con.userdb.bio,
+                _con.userDb.id,
                 style: Theme.of(context).textTheme.body1,
               ),
             ),

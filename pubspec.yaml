@@ -30,7 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: 4.1.4
   get_storage: ^2.0.2
-  shared_preferences: ^2.0.5
+  shared_preferences: ^2.0.6
   auto_size_text: ^2.1.0
   url_launcher: ^6.0.3
   cached_network_image: ^3.0.0
