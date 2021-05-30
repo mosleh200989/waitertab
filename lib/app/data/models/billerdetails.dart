@@ -1,8 +1,4 @@
-import 'dart:ffi';
 
-import 'package:waiter/app/data/models/basket.dart';
-
-import '../models/media.dart';
 List<BillerDetails> billerDetailsFromJson(dynamic str) => List<BillerDetails>.from((str as List<dynamic>).map((x) => BillerDetails.fromJSON(x)));
 class BillerDetails {
   String id;

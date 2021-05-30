@@ -36,8 +36,6 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
     car.value = 'Ferrari';
     if(Get.arguments !=null && Get.arguments.length>0){
       catId.value=Get.arguments['catId'];
-      print(catId);
-      print('catId======');
       await getAllProducts();
     }
     // incrementGrandTotal();
@@ -79,7 +77,7 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
        if(appController.basketItems[i].product_id==productList[index].id){
          print(appController.basketItems[i].net_price??'0.0');
          productList[index].isOrder = newValue;
-         _grandTotal.value -= double.parse(appController.basketItems[i].net_price);
+         _grandTotal.value -= double.parse(appController.basketItems[i].subtotal);
          appController.basketItems.removeAt(i);
          productList.refresh();
          appController.basketItems.refresh();
@@ -129,16 +127,24 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
     Basket basket=Basket(
       product_id: productList.elementAt(index).id,
       product_name: productList.elementAt(index).name,
-      net_price: productList[index].totalPrice.toString() ?? productList[index].price,
+      net_price: productList[index].net_price,
       quantity: productList.elementAt(index).counter.toString(),
-      real_unit_price: productList.elementAt(index).price.toString(),
-      product_code: productList.elementAt(index).code.toString(),
+      product_base_quantity: productList.elementAt(index).counter.toString(),
+      real_unit_price: productList.elementAt(index).price,
+      product_code: productList.elementAt(index).code,
+      product_option: productList.elementAt(index).option,
+      product_tax: productList.elementAt(index).tax_rate.id,
+      unit_price: productList.elementAt(index).unit_price,
+      product_unit: productList.elementAt(index).unit.id,
+      product_discount: '0',
+      item_discount: '0.0',
+      subtotal: productList[index].totalPrice.toString() ?? productList[index].price,
     );
     setAgreedToOrder(true, index);
     appController.basketItems.add(basket);
     for(var i=0; i< appController.basketItems.length; i++){
       if(i==index){
-        _grandTotal.value+= double.parse(appController.basketItems[i].net_price);
+        _grandTotal.value+= double.parse(appController.basketItems[i].subtotal);
       }
       update();
     }

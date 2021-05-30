@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/modules/home/controllers/app_controller.dart';
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:waiter/app/modules/order_details/controllers/order_details_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
 import '../controllers/card_controller.dart';
@@ -119,7 +120,7 @@ class CardView extends StatelessWidget {
                                      ),
                                      GetBuilder<CardController>(
                                        builder: (_) {
-                                         return Expanded(child: Text('Tk ${appController.basketItems.elementAt(index).net_price??''}',style: labelTextStyle,textAlign: TextAlign.center,));
+                                         return Expanded(child: Text('Tk ${appController.basketItems.elementAt(index).subtotal??''}',style: labelTextStyle,textAlign: TextAlign.center,));
                                        }
                                      ),
                                      Expanded(child: IconButton(
@@ -325,7 +326,7 @@ class CardView extends StatelessWidget {
                                     width: Get.width *.5,
                                       child: Padding(
                                         padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
-                                        child: Text('Walkin',textAlign: TextAlign.center,),
+                                        child: Text('${Get.find<AuthController>().currentUser.username}',textAlign: TextAlign.center,),
                                       )),
                                 )
                               ],
@@ -345,6 +346,9 @@ class CardView extends StatelessWidget {
                                           controller: controller.discountTextController,
                                           keyboardType: TextInputType.numberWithOptions(signed: false, decimal: true),
                                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),],
+                                          onChanged: (value) {
+                                            controller.discountChange(value);
+                                          },
                                           decoration: InputDecoration(
                                             contentPadding: EdgeInsets.all(12),
                                             hintText: 'Discount',
@@ -391,6 +395,9 @@ class CardView extends StatelessWidget {
                                          inputFormatters:  <TextInputFormatter>[
                                            FilteringTextInputFormatter.digitsOnly
                                          ],
+                                          onChanged: (value) {
+                                            controller.shippingChange(value);
+                                          },
                                           decoration: InputDecoration(
                                             contentPadding: EdgeInsets.all(12),
                                             hintText: 'shipping cost',

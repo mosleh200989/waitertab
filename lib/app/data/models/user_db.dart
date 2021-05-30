@@ -1,6 +1,4 @@
-import 'dart:ffi';
 
-import '../models/media.dart';
 List<UserDb> userDbFromJson(dynamic str) => List<UserDb>.from((str as List<dynamic>).map((x) => UserDb.fromJSON(x)));
 class UserDb {
   String username;

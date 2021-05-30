@@ -36,12 +36,21 @@ List<TextEditingController> textEditNoteList = [];
 final _grandTotal=0.0.obs;
 double get grandTotal=>_grandTotal.value;
 var isProcessing= false.obs;
+var _paid_by=''.obs;
+String get paid_by=>_paid_by.value;
+var _cc_type=''.obs;
+String get cc_type=>_cc_type.value;
+var _isDineIn=0.obs;
+int get getIsDineIn=>_isDineIn.value;
+
   @override
   void onInit() {
     super.onInit();
     for(var i=0; i<appController.basketItems.length; i++){
-      _grandTotal.value+=double.parse(appController.basketItems[i].net_price);
+      _grandTotal.value+=double.parse(appController.basketItems[i].subtotal);
     }
+    shippingTextController.text='10';
+    discountTextController.text='5';
   }
 
   @override
@@ -58,7 +67,21 @@ var isProcessing= false.obs;
 void onPaused() {
   print('on close card controller');
 }
+void discountChange(String value){
+    if(value !=null){
+      _grandTotal.value+= int.parse(value) ;
+    }
 
+}
+void shippingChange(String value){
+    int inputData=int.parse(value);
+    print(shippingTextController.text);
+    print('shippingTextController');
+    if(value !=null) {
+      _grandTotal.value =  grandTotal - double.parse(shippingTextController.text);
+    }
+
+}
   void changeShowNoteField(bool value,int index){
 
     if( appController.basketItems[index].isNotes==false){
@@ -74,28 +97,34 @@ void onPaused() {
     update();
   }
 
-void increment(int i) {
-    int quantity=int.parse(appController.basketItems[i].quantity);
+void increment(int index) {
+    int quantity=int.parse(appController.basketItems[index].quantity);
     quantity++;
-    appController.basketItems[i].quantity=quantity.toString();
-    double netPrice=double.parse(appController.basketItems[i].real_unit_price) * double.parse(appController.basketItems[i].quantity);
-    appController.basketItems[i].net_price=netPrice.toString();
+    appController.basketItems[index].quantity=quantity.toString();
+    double netPrice=double.parse(appController.basketItems[index].real_unit_price) * double.parse(appController.basketItems[index].quantity);
+    appController.basketItems[index].subtotal=netPrice.toString();
     for(var i=0; i<appController.basketItems.length; i++) {
-      _grandTotal.value +=
-          double.parse(appController.basketItems[i].real_unit_price);
+      if(index==i){
+        _grandTotal.value +=
+            double.parse(appController.basketItems[i].real_unit_price);
+      }
+
     }
 
     update();
 }
-void decrement(int i){
-  int quantity=int.parse(appController.basketItems[i].quantity);
+void decrement(int index){
+  int quantity=int.parse(appController.basketItems[index].quantity);
   quantity--;
-  appController.basketItems[i].quantity=quantity.toString();
-  double netPrice=double.parse(appController.basketItems[i].real_unit_price) * double.parse(appController.basketItems[i].quantity);
-  appController.basketItems[i].net_price=netPrice.toString();
+  appController.basketItems[index].quantity=quantity.toString();
+  double netPrice=double.parse(appController.basketItems[index].real_unit_price) * double.parse(appController.basketItems[index].quantity);
+  appController.basketItems[index].subtotal=netPrice.toString();
   for(var i=0; i<appController.basketItems.length; i++) {
-    _grandTotal.value -=
-        double.parse(appController.basketItems[i].real_unit_price);
+    if(index==i){
+      _grandTotal.value -=
+          double.parse(appController.basketItems[i].real_unit_price);
+    }
+
   }
   update();
 }
@@ -103,7 +132,7 @@ void decrement(int i){
     for(var i=0; i<appController.basketItems.length; i++){
       if(i==index){
         print(appController.basketItems[i].net_price);
-        _grandTotal.value -= double.parse(appController.basketItems[i].net_price);
+        _grandTotal.value -= double.parse(appController.basketItems[i].subtotal);
         appController.basketItems.removeAt(index);
         orderDetailsController.productList.refresh();
         appController.basketItems.refresh();
@@ -129,38 +158,40 @@ void decrement(int i){
     if(isDineIn!=newValue){
       isDineIn=true;
       isParcel=false;
+      _isDineIn.value=1;
       update();
     }
     if(isParcel==newValue){
       isDineIn=false;
       isParcel=true;
+      _isDineIn.value=2;
       update();
     }
-    print(isDineIn);
-    print(isParcel);
   }
 void changePaymentMethod(bool newValue){
   if(isCash!=newValue){
     _isReverse.value=true;
     _isCash.value=true;
     _isCC.value=false;
+    _paid_by.value='cash';
   }
   if(isCC==newValue){
     _isReverse.value=true;
     _isCash.value=false;
     _isCC.value=true;
+    _paid_by.value='CC';
   }
-  print(isCash);
-  print(isCC);
 }
 void changeCCMethod(bool newValue){
   if(isMada!=newValue){
     _isMada.value=true;
     _isVisa.value=false;
+    _cc_type.value='mada';
   }
   if(isVisa==newValue){
     _isMada.value=false;
     _isVisa.value=true;
+    _cc_type.value='visa';
   }
 }
 void addNotes(int index,String value){
@@ -188,29 +219,21 @@ void addNotes(int index,String value){
       // String order_tax = txtOrderTaxId;
       // String discount = txtDiscountAmnt;
       // String shipping = txtExtraChargeAmount;
-      sales.apiKey=MrConfig.mr_api_key;
-      sales.customer=customer;
-      sales.warehouse_id=warehouse;
-      sales.biller=biller;
-      sales.note=pos_note;
-      sales.staff_note=orderNoteController.text;
-      sales.order_tax='';
-      sales.discount=discountTextController.text;
-      sales.shipping=shippingTextController.text;
-      sales.total_items=appController.basketItems.length.toString();
-      sales.user_id='1';
+
 
       BillerDetails billerdetails=BillerDetails();
       billerdetails.id='3';
       billerdetails.group_name='biller';
       billerdetails.phone='0596664927';
       billerdetails.email='saleem@alama360.com';
-      sales.billerdetails=billerdetails;
+
       Basket basket;
       List<Basket> items = [];
+      int serial;
       for(var i=0; i<appController.basketItems.length;i++){
         print(appController.basketItems.length);
         print('appController.basketItems.length');
+        serial=1+i;
         basket=Basket(
           product_id:appController.basketItems[i].product_id,
           product_name:appController.basketItems[i].product_name,
@@ -225,31 +248,75 @@ void addNotes(int index,String value){
           net_price:appController.basketItems[i].net_price,
           unit_price:appController.basketItems[i].unit_price,
           real_unit_price:appController.basketItems[i].real_unit_price,
+          subtotal:appController.basketItems[i].subtotal,
           product_comment:'',
-          serial:i.toString(),
+          serial:serial.toString(),
         );
         // print(basket.toMap());
         // print('===basket====');
         items.add(basket);
       }
+      List<Payment> paymentList = [];
+
+      for(var i=0; i<5;i++){
+        Payment paymentObj=Payment();
+        if(i==0){
+          paymentObj.amount=grandTotal.toString();
+          paymentObj.balance_amount=grandTotal.toString();
+          paymentObj.paid_by=paid_by;
+          paymentObj.cc_no='';
+          paymentObj.paying_gift_card_no='';
+          paymentObj.cc_holder='';
+          paymentObj.cheque_no='';
+          paymentObj.cc_month='';
+          paymentObj.cc_year='';
+          paymentObj.cc_type=cc_type;
+          paymentObj.cc_cvv2='';
+          paymentObj.payment_note='';
+        }else{
+          paymentObj.amount='';
+          paymentObj.balance_amount='';
+          paymentObj.paid_by='';
+          paymentObj.cc_no='';
+          paymentObj.paying_gift_card_no='';
+          paymentObj.cc_holder='';
+          paymentObj.cheque_no='';
+          paymentObj.cc_month='';
+          paymentObj.cc_year='';
+          paymentObj.cc_type='';
+          paymentObj.cc_cvv2='';
+          paymentObj.payment_note='';
+        }
+        paymentList.add(paymentObj);
+      }
+      sales.payment=paymentList;
+      sales.billerdetails=billerdetails;
+      sales.apiKey=MrConfig.mr_api_key;
+      sales.customer=customer;
+      sales.warehouse=warehouse;
+      sales.biller=biller;
+      sales.biller_id=biller;
+      sales.note=pos_note;
+      sales.staff_note=orderNoteController.text;
+      sales.order_tax='';
+      sales.discount=discountTextController.text;
+      sales.shipping=shippingTextController.text;
+      sales.total_items=appController.basketItems.length.toString();
+      sales.user_id='1';
+      sales.is_dine_in=getIsDineIn.toString();
+      sales.table_no="Table No "+selectedIndex.toString();
+      sales.paidby=paid_by;
+      // sales.payment.cc_type=cc_type;
       sales.items=items;
-      Payment payment=Payment();
-      payment.balance_amount='';
-      payment.paid_by='';
-      payment.cc_no='';
-      payment.paying_gift_card_no='';
-      payment.cc_holder='';
-      payment.cheque_no='';
-      payment.cc_month='';
-      payment.cc_year='';
-      payment.cc_type='';
-      payment.cc_cvv2='';
-      payment.payment_note='';
-      sales.payment=payment;
+      int subTotalCal=int.parse(shippingTextController.text) - int.parse(discountTextController.text);
+      double grandTotalCal=grandTotal + subTotalCal;
+      sales.grand_total=grandTotal.toString();
       CardProvider().postSales(sales).then((result) {
+        print(result);
+        print('result===');
         if (result != null) {
-          isProcessing(false);
-          Get.toNamed(Routes.HOME);
+          // isProcessing(false);
+          // Get.toNamed(Routes.HOME);
         } else {
           Get.snackbar("Login", "Login Failed");
         }

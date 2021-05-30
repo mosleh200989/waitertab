@@ -1,11 +1,9 @@
-import 'dart:ffi';
 
 import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/data/models/billerdetails.dart';
 import 'package:waiter/app/data/models/payment.dart';
 import 'package:waiter/app/data/models/warehouse.dart';
 
-import '../models/media.dart';
 List<Sales> salesFromJson(dynamic str) => List<Sales>.from((str as List<dynamic>).map((x) => Sales.fromJSON(x)));
 class Sales {
   String biller;
@@ -48,15 +46,17 @@ class Sales {
   String total_items;
   String total_tax;
   String updated_by;
-  String warehouse_id;
+  String warehouse;
   String apiKey;
   String staff_note;
   String discount;
   String user_id;
+  String paidby;
+  String is_dine_in;
   BillerDetails billerdetails;
   List<Basket> items = [];
-  Warehouse warehouse;
-  Payment payment;
+  // Warehouse warehouse;
+  List <Payment> payment = [];
   Sales({
     this.biller,
     this.biller_id,
@@ -99,9 +99,12 @@ class Sales {
     this.total_tax,
     this.updated_by,
     this.user_id,
-    this.warehouse_id,
+    this.is_dine_in,
+    this.warehouse,
     this.billerdetails,
     this.items,
+    this.paidby,
+    this.payment,
 });
 
   Sales.fromJSON(Map<String, dynamic> jsonMap) {
@@ -146,13 +149,15 @@ class Sales {
       total_items = jsonMap['total_items'] !=null ? jsonMap['total_items'] : '';
       total_tax = jsonMap['total_tax'] !=null ? jsonMap['total_tax'] : '';
       updated_by = jsonMap['updated_by'] !=null ? jsonMap['updated_by'] : '';
-      warehouse_id = jsonMap['warehouse_id'] !=null ? jsonMap['warehouse_id'] : '';
+      warehouse = jsonMap['warehouse'] !=null ? jsonMap['warehouse'] : '';
       discount = jsonMap['discount'] !=null ? jsonMap['discount'] : '';
       user_id = jsonMap['user_id'] !=null ? jsonMap['user_id'] : '';
+      is_dine_in = jsonMap['is_dine_in'] !=null ? jsonMap['is_dine_in'] : '';
       billerdetails = jsonMap['billerdetails'] != null ? BillerDetails.fromJSON(jsonMap['billerdetails']) : new BillerDetails();
       items = jsonMap['items'] != null ? List.from(jsonMap['items']).map((element) => Basket.fromJson(element)).toList() : [];
-      warehouse = jsonMap['warehouse'] != null ? Warehouse.fromJSON(jsonMap['warehouse']) : new Warehouse();
-      payment = jsonMap['payment_details'] != null ? Payment.fromJSON(jsonMap['payment_details']) : new Payment();
+      payment = jsonMap['payment_details'] != null ? List.from(jsonMap['payment_details']).map((element) => Payment.fromJSON(element)).toList() : [];
+      // warehouse = jsonMap['warehouse'] != null ? Warehouse.fromJSON(jsonMap['warehouse']) : new Warehouse();
+      // payment = jsonMap['payment_details'] != null ? Payment.fromJSON(jsonMap['payment_details']) : new Payment();
 
     } catch (e) {
       print(e);
@@ -201,15 +206,17 @@ class Sales {
     map['total_items'] = total_items;
     map['total_tax'] = total_tax;
     map['updated_by'] = updated_by;
-    map['warehouse_id'] = warehouse_id;
+    map['warehouse'] = warehouse;
     map['api-key'] = apiKey;
     map['staff_note'] = staff_note;
     map['discount'] = discount;
     map['user_id'] = user_id;
-    map["billerdetails"] = billerdetails?.toMap();
+    map['is_dine_in'] = is_dine_in;
+    map['paidby'] = paidby;
+    // map["billerdetails"] = billerdetails?.toMap();
     map['details']=Basket().toMapList(items);
-    map["warehouse"] = warehouse?.toMap();
-    map["payment_details"] = payment?.toMap();
+    // map["warehouse"] = warehouse?.toMap();
+    map["payment_details"] = Payment()?.toMapList(payment);
     return map;
   }
   @override

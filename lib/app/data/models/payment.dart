@@ -1,8 +1,8 @@
-import 'dart:ffi';
 
-import '../models/media.dart';
 List<Payment> paymentFromJson(dynamic str) => List<Payment>.from((str as List<dynamic>).map((x) => Payment.fromJSON(x)));
 class Payment {
+  String id;
+  String amount;
   String balance_amount;
   String paid_by;
   String cc_no;
@@ -15,6 +15,8 @@ class Payment {
   String cc_cvv2;
   String payment_note;
   Payment({
+    this.id,
+    this.amount,
     this.balance_amount,
     this.paid_by,
     this.cc_no,
@@ -30,6 +32,8 @@ class Payment {
 
   Payment.fromJSON(Map<String, dynamic> jsonMap) {
     try {
+      id = jsonMap['id'] !=null ? jsonMap['id'] : '';
+      amount = jsonMap['amount'] !=null ? jsonMap['amount'] : '';
       balance_amount = jsonMap['balance_amount'] !=null ? jsonMap['balance_amount'] : '';
       paid_by = jsonMap['paid_by'] !=null ? jsonMap['paid_by'] : '';
       cc_no = jsonMap['cc_no'] !=null ? jsonMap['cc_no'] : '';
@@ -49,6 +53,8 @@ class Payment {
 
   Map toMap() {
     var map = new Map<String, dynamic>();
+    map['id'] = id;
+    map['amount'] = amount;
     map['balance_amount'] = balance_amount;
     map['paid_by'] = paid_by;
     map['cc_no'] = cc_no;
@@ -60,8 +66,21 @@ class Payment {
     map['cc_type'] = cc_type;
     map['cc_cvv2'] = cc_cvv2;
     map['payment_note'] = payment_note;
+    return map;
   }
-
+  List<Map<String, dynamic>> toMapList(List<Payment> objectList) {
+    final List<Map<String, dynamic>> mapList = <Map<String, dynamic>>[];
+    if (objectList != null) {
+      for (Payment data in objectList) {
+        if (data != null) {
+          print(objectList);
+          print('objectList');
+          mapList.add(data.toMap());
+        }
+      }
+    }
+    return mapList;
+  }
   @override
   String toString() {
     var map = this.toMap();

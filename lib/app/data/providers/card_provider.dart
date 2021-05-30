@@ -18,10 +18,11 @@ class CardProvider extends GetConnect {
       Response response = await post(postUrl,sales.toMap());
 
       print(response.body);
+      print('response.body');
 
-      var returnData=json.decode(response.body);
-      print(returnData);
-      print('returnData');
+      // var returnData=json.decode(response.body);
+      // print(returnData);
+      // print('returnData');
       if (response.statusCode == 200 ) {
         // print(jsonDecode(userData['data']));
         print('decode');

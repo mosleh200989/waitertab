@@ -1,5 +1,4 @@
-import 'package:waiter/app/data/models/tax_rate.dart';
-import 'package:waiter/app/data/models/unit.dart';
+
 
 List<OptionModel> optionFromJson(dynamic str) => List<OptionModel>.from((str as List<dynamic>).map((x) => OptionModel.fromJson(x)));
 class OptionModel {
