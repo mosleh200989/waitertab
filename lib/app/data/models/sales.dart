@@ -1,6 +1,7 @@
 
 import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/data/models/billerdetails.dart';
+import 'package:waiter/app/data/models/created_by.dart';
 import 'package:waiter/app/data/models/payment.dart';
 import 'package:waiter/app/data/models/warehouse.dart';
 
@@ -55,8 +56,9 @@ class Sales {
   String is_dine_in;
   BillerDetails billerdetails;
   List<Basket> items = [];
-  // Warehouse warehouse;
+  Warehouse warehouseList;
   List <Payment> payment = [];
+  CreatedBy created_by_obj;
   Sales({
     this.biller,
     this.biller_id,
@@ -105,6 +107,7 @@ class Sales {
     this.items,
     this.paidby,
     this.payment,
+    this.created_by_obj,
 });
 
   Sales.fromJSON(Map<String, dynamic> jsonMap) {
@@ -112,11 +115,15 @@ class Sales {
       biller = jsonMap['biller'] !=null ? jsonMap['biller'] : '';
       biller_id = jsonMap['biller_id'] !=null ? jsonMap['biller_id'] : '';
       cgst = jsonMap['cgst'] !=null ? jsonMap['cgst'] : '';
-      created_by = jsonMap['created_by'] !=null ? jsonMap['created_by'] : '';
+      // created_by = jsonMap['created_by'] !=null ? jsonMap['created_by'] : '';
       customer = jsonMap['customer'] !=null ? jsonMap['customer'] : '';
       customer_id = jsonMap['customer_id'] !=null ? jsonMap['customer_id'] : '';
       customer_type = jsonMap['customer_type'] !=null ? jsonMap['customer_type'] : '';
-      date = jsonMap['date'] !=null ? jsonMap['date'] : '';
+      // date = jsonMap['date'] !=null ? jsonMap['date'] : '';
+      String dateFormate = jsonMap["date"];
+      var adddate=jsonMap["date"] != null ? dateFormate.substring(0, 10):'';
+      // addTime = jsonMap["added_date"] != null ? date.substring(11, 19) :null;
+      date =adddate;
       due_date = jsonMap['due_date'] !=null ? jsonMap['due_date'] : '';
       grand_total = jsonMap['grand_total'] !=null ? jsonMap['grand_total'] : '';
       id = jsonMap['id'] !=null ? jsonMap['id'] : '';
@@ -149,14 +156,15 @@ class Sales {
       total_items = jsonMap['total_items'] !=null ? jsonMap['total_items'] : '';
       total_tax = jsonMap['total_tax'] !=null ? jsonMap['total_tax'] : '';
       updated_by = jsonMap['updated_by'] !=null ? jsonMap['updated_by'] : '';
-      warehouse = jsonMap['warehouse'] !=null ? jsonMap['warehouse'] : '';
+      warehouse = jsonMap['warehouse_id'] !=null ? jsonMap['warehouse_id'] : '';
       discount = jsonMap['discount'] !=null ? jsonMap['discount'] : '';
       user_id = jsonMap['user_id'] !=null ? jsonMap['user_id'] : '';
       is_dine_in = jsonMap['is_dine_in'] !=null ? jsonMap['is_dine_in'] : '';
       billerdetails = jsonMap['billerdetails'] != null ? BillerDetails.fromJSON(jsonMap['billerdetails']) : new BillerDetails();
       items = jsonMap['items'] != null ? List.from(jsonMap['items']).map((element) => Basket.fromJson(element)).toList() : [];
       payment = jsonMap['payment_details'] != null ? List.from(jsonMap['payment_details']).map((element) => Payment.fromJSON(element)).toList() : [];
-      // warehouse = jsonMap['warehouse'] != null ? Warehouse.fromJSON(jsonMap['warehouse']) : new Warehouse();
+      warehouseList = jsonMap['warehouse'] != null ? Warehouse.fromJSON(jsonMap['warehouse']) : new Warehouse();
+      created_by_obj = jsonMap['created_by'] != null ? CreatedBy.fromJson(jsonMap['created_by']) : new CreatedBy();
       // payment = jsonMap['payment_details'] != null ? Payment.fromJSON(jsonMap['payment_details']) : new Payment();
 
     } catch (e) {

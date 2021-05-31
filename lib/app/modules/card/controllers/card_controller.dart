@@ -42,7 +42,7 @@ var _cc_type=''.obs;
 String get cc_type=>_cc_type.value;
 var _isDineIn=0.obs;
 int get getIsDineIn=>_isDineIn.value;
-
+bool buttonActive = false;
   @override
   void onInit() {
     super.onInit();
@@ -56,31 +56,53 @@ int get getIsDineIn=>_isDineIn.value;
   @override
   void onReady() {
     super.onReady();
-
+    // discountTextController.addListener(_printLatestValue);
+     update();
   }
 
   @override
   void onClose() {
     print('on close card controller');
+    // discountTextController.dispose();
+    super.onClose();
   }
 @override
 void onPaused() {
   print('on close card controller');
 }
 void discountChange(String value){
-    if(value !=null){
-      _grandTotal.value+= int.parse(value) ;
-    }
+    // if(value !=null){
+    //   _grandTotal.value+= int.parse(value) ;
+    // }
 
 }
-void shippingChange(String value){
-    int inputData=int.parse(value);
+void shippingChange(String text){
+    /*int inputData=int.parse(text);
     print(shippingTextController.text);
     print('shippingTextController');
-    if(value !=null) {
+    if(text !=null) {
       _grandTotal.value =  grandTotal - double.parse(shippingTextController.text);
-    }
+    }*/
+    // if text field has a value and button is inactive
+    if(text != null && text.length > 0 && !buttonActive){
+        buttonActive = true;
+        _grandTotal.value =  grandTotal - double.parse(shippingTextController.text);
+        print(text);
+        print('text====');
+          update();
+          }else if((text == null || text.length == 0) && buttonActive){
+                 buttonActive = false;
+                 print(text);
+                 print('====text====');
+                 update();
+      }
 
+}
+void _printLatestValue() {
+  print('Second text field: ${discountTextController.text}');
+  if(discountTextController.text !=null){
+    _grandTotal.value+= int.parse(discountTextController.text) ;
+  }
 }
   void changeShowNoteField(bool value,int index){
 

@@ -73,8 +73,6 @@ class Payment {
     if (objectList != null) {
       for (Payment data in objectList) {
         if (data != null) {
-          print(objectList);
-          print('objectList');
           mapList.add(data.toMap());
         }
       }

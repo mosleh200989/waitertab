@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/global_widgets/DrawerWidget.dart';
+import 'package:waiter/app/modules/home/controllers/app_controller.dart';
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:waiter/app/modules/order_details/views/local_widgets/all_order_card_page.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/cancel_order.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/complete_order.dart';
@@ -22,129 +25,139 @@ class OrderView extends GetView<OrderListController> {
       ),
       body: SingleChildScrollView(
         child: SafeArea(
-          child: Wrap(
-            children: <Widget>[
-              Card(
+          child: GetX<OrderListController>(
+            builder: (_con) {
+              print(_con.sales.biller);
+              print('_con.sales.biller');
+              if (_con.isLoading.value)
+                return Center(child: CircularProgressIndicator());
+              else
+              return Card(
                 margin: EdgeInsets.all(5),
-                elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children:<Widget>[
-                      Expanded(child: Text('Cart Info',textAlign: TextAlign.center,style: labelTextStyle,)),
-                      Expanded(child: Text('Size',textAlign: TextAlign.center,style: labelTextStyle,)),
-                      Expanded(child: Text('Unit Price',textAlign: TextAlign.center,style: labelTextStyle,)),
-                      Expanded(child: Text('Quantity',textAlign: TextAlign.center,style: labelTextStyle,)),
-                      Expanded(child: Text('Total Price',textAlign: TextAlign.center,style: labelTextStyle,)),
-                      Expanded(child: Text('Status',textAlign: TextAlign.center,style: labelTextStyle,)),
-                    ],),
-                ),
-              ),
-              SizedBox(height: 10,),
-              Container(
-                height: 250,
-                child: ListView.builder(
-                  itemCount: 2,
-                  itemBuilder: (context, index) {
-                    return  Card(
-                      margin: EdgeInsets.all(5),
+                elevation: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text('Sale Number: ${_con.sales.id}',style: labelTextStyle,),
+                    Text('Date: ${_con.sales.date}',style: labelTextStyle,),
+                    Text('Sale Reference: ${_con.sales.reference_no}',style: labelTextStyle,),
+                    Text('Sales Associate: ${Get.find<AuthController>().currentUser.username}',style: labelTextStyle,),
+                    SizedBox(height: 5,),
+                    Text('Customer: ${_con.sales.customer}',style: labelTextStyle,),
+
+                    SizedBox(height:20,),
+                  Container(
+                    height: 300,
+                    child: ListView.builder(
+                      itemCount: _con.sales.items.length,
+                        itemBuilder: (context, index) {
+                        Basket items=_con.sales.items.elementAt(index);
+                          return   Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children:<Widget>[
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children:<Widget> [
+                                  Text('#$index ${items.product_name}',style: labelTextStyle,),
+                                  Text('${items.serial_no}',style: labelTextStyle,),
+                                  Text('${double.parse(items.quantity).toStringAsFixed(2).toString()} X ${double.parse(items.unit_price).toStringAsFixed(2).toString()}',style: labelTextStyle,),
+                               Container(color: Colors.black,width:Get.width*.48,height: 10,)
+                                ],
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children:<Widget> [
+                                    Text(''),
+                                    Text(''),
+                                    Text('${double.parse(items.subtotal).toStringAsFixed(2).toString()}',style: labelTextStyle,),
+                                    Container(color: Colors.black,width: Get.width*.48,height: 10,)
+                                  ],
+                                ),
+                              ),
+                            ],);
+                        },),
+                  ),
+
+                    Card(
                       elevation: 5,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children:<Widget> [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children:<Widget>[
-                                Expanded(child: Text('Bangla Rice Boart',textAlign: TextAlign.center,style: labelTextStyle,)),
-                                Expanded(child: Text('50',textAlign: TextAlign.center,style: labelTextStyle,)),
-                                Expanded(child: Text('Tk 25.00',textAlign: TextAlign.center,style: labelTextStyle,)),
-                                Expanded(child: Text('1',textAlign: TextAlign.center,style: labelTextStyle)),
-                                Expanded(child: Text('Tk 25.00',textAlign: TextAlign.center,style: labelTextStyle,)),
-                                Expanded(child: Text('Status',textAlign: TextAlign.center,style: labelTextStyle)),
-                              ],),
+                        child: Row(
+                          children: <Widget>[
+                            Text('Select Table : '),
+                            Text('3'),
                           ],
                         ),
                       ),
-                    );
-                  },),
-              ),
-              Card(
-                elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: <Widget>[
-                      Text('Select Table : '),
-                      Text('3'),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
 
 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children:<Widget> [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children:<Widget> [
-                        Text('Customer Name'),
-                        Card(
-                          elevation: 5,
-                          child: Container(
-                              width: Get.width *.5,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
-                                child: Text('Walkin',textAlign: TextAlign.center,),
-                              )),
-                        )
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children:<Widget> [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children:<Widget> [
+                              Text('Customer Name'),
+                              Card(
+                                elevation: 5,
+                                child: Container(
+                                    width: Get.width *.5,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
+                                      child: Text('Walkin',textAlign: TextAlign.center,),
+                                    )),
+                              )
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children:<Widget> [
+                              Text('Vat/Tax'),
+                              Card(
+                                elevation: 5,
+                                child: Container(
+                                    width: Get.width *.5,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
+                                      child: Text('Tk 15',textAlign: TextAlign.center,),
+                                    )),
+                              )
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children:<Widget> [
+                              Text('Grand Total'),
+                              Card(
+                                elevation: 5,
+                                child: Container(
+                                    width: Get.width *.5,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
+                                      child: Text('Tk 750.0',textAlign: TextAlign.center,),
+                                    )),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children:<Widget> [
-                        Text('Vat/Tax'),
-                        Card(
-                          elevation: 5,
-                          child: Container(
-                              width: Get.width *.5,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
-                                child: Text('Tk 15',textAlign: TextAlign.center,),
-                              )),
-                        )
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children:<Widget> [
-                        Text('Grand Total'),
-                        Card(
-                          elevation: 5,
-                          child: Container(
-                              width: Get.width *.5,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
-                                child: Text('Tk 750.0',textAlign: TextAlign.center,),
-                              )),
-                        )
-                      ],
-                    )
+
+
+
+
+
                   ],
                 ),
-              ),
-
-
-
-
-
-            ],
+              );
+            }
           ),
         ),
       ),

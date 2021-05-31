@@ -398,6 +398,14 @@ class CardView extends StatelessWidget {
                                           onChanged: (value) {
                                             controller.shippingChange(value);
                                           },
+
+                                            onFieldSubmitted: (value){
+                                              print(value);
+                                              print('value======');
+                                              // or do whatever you want when you are done editing
+                                              // call your method/print values etc
+                                            },
+
                                           decoration: InputDecoration(
                                             contentPadding: EdgeInsets.all(12),
                                             hintText: 'shipping cost',

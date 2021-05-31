@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/modules/home/controllers/home_controller.dart';
+import 'package:waiter/app/modules/order_list/controllers/order_list_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
 
 
@@ -57,6 +58,7 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             onTap: () {
               Get.back();
+              Get.reload<OrderListController>();
               Get.toNamed(Routes.ORDER_LIST);
             },
             leading: Icon(

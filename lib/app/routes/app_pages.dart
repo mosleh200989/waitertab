@@ -80,6 +80,8 @@ class AppPages {
     GetPage(
       name: _Paths.ORDER_VIEW,
       page: () => OrderView(),
+      fullscreenDialog: true,
+      binding: OrderListBinding(),
     ),
   ];
 }
