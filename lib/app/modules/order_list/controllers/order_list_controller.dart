@@ -26,7 +26,7 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
     myHandler.value = tabs[0];
     tabController.addListener(handleSelected);
     await getAllSales();
-    if(Get.arguments !=null && Get.arguments.length>0){
+    if(Get.arguments !=null && Get.arguments.length > 0){
       _reference.value=Get.arguments['reference'];
       print(reference);
       print('reference====');
