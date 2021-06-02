@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -122,13 +123,20 @@ class HomeView extends GetWidget<HomeController> {
                         Get.toNamed(Routes.ORDER_DETAILS,arguments: {'catId':controller.categoriesList.elementAt(index).id});
                       },
                       child: Card(
-                        elevation: 5,
+                        elevation: 2,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(height: 10,),
-                            Image(image: AssetImage('assets/images/burger_1.jpg'),  fit: BoxFit.fill,
+                            CachedNetworkImage(
+                              height: 100,
+                              width: 120,
+                              fit: BoxFit.fill,
+                              imageUrl:"${controller.categoriesList.elementAt(index).image??''}",
+                              errorWidget: (context, url, error) => Icon(Icons.error),
                             ),
+                            // Image(image: AssetImage('assets/images/burger_1.jpg'),  fit: BoxFit.fill,
+                            // ),
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),

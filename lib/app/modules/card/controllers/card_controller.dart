@@ -98,7 +98,12 @@ void shippingChange(String text){
                  print(text);
                  print('====text====');
                  update();
+      // shippingTextController.selection = new TextSelection(
+      //     baseOffset: shippingTextController.text.length,
+      //     extentOffset: shippingTextController.text.length
+      // );
       }
+
 
 }
 void _printLatestValue() {

@@ -345,6 +345,7 @@ class CardView extends StatelessWidget {
                                         child: TextFormField(
                                           controller: controller.discountTextController,
                                           keyboardType: TextInputType.numberWithOptions(signed: false, decimal: true),
+                                         textInputAction: TextInputAction.next,
                                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),],
                                           onChanged: (value) {
                                             controller.discountChange(value);
@@ -392,6 +393,7 @@ class CardView extends StatelessWidget {
                                         child: TextFormField(
                                           controller: controller.shippingTextController,
                                           keyboardType: TextInputType.number,
+                                          textInputAction: TextInputAction.done,
                                          inputFormatters:  <TextInputFormatter>[
                                            FilteringTextInputFormatter.digitsOnly
                                          ],
