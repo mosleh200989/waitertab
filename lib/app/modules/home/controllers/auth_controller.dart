@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:waiter/app/data/models/user_db.dart';
+import 'package:waiter/app/global_widgets/helpers.dart';
+import 'package:waiter/app/routes/app_pages.dart';
 
 class AuthController extends GetxController {
 final _currentUser=UserDb().obs;
@@ -35,4 +37,17 @@ UserDb get currentUser=>_currentUser.value;
     }
     return _currentUser.value;
   }
+void signOutUser() async {
+  try {
+    // await _authService.signOutUser();
+    _currentUser.value = new UserDb();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('current_user');
+    // setdbUser(new Userdb());
+    Get.offAllNamed(Routes.SPLASH);
+  } catch (e) {
+    print(e);
+    Helpers.showSnackbar(title: 'error'.tr, message: e.message);
+  }
+}
 }

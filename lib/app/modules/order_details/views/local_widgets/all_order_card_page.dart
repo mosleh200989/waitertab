@@ -48,7 +48,7 @@ class AllOrderCarPage extends StatelessWidget {
                                 Text('${controller.productList.elementAt(index).unit.name??''}'),
                                 // Text('${controller.productList.elementAt(index).options[0].quantity??''}'),
                                 // Text('Although the legendary Double Although the legendary Double Although the legendary Double' ),
-                                Text('Tk ${controller.productList.elementAt(index).price??''}',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.red),),
+                                Text('${controller.productList.elementAt(index).price??''} SAR',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Colors.red),),
                                 SizedBox(height: 10,),
                               ],),
                           ),
@@ -60,7 +60,7 @@ class AllOrderCarPage extends StatelessWidget {
                         } else{
                           controller.incrementOpenDialog(index);
                           Get.defaultDialog(
-                            title: 'Add Product',
+                            title: 'AddProduct'.tr,
                             titleStyle: TextStyle(fontSize: 24),
                             // backgroundColor: Colors.blueGrey,
                             // barrierDismissible: false,
@@ -71,7 +71,7 @@ class AllOrderCarPage extends StatelessWidget {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('${controller.productList.elementAt(index).name}'),
+                                    Expanded(child: Text('${controller.productList.elementAt(index).name}')),
                                     controller.dividerLabel,
                                     Visibility(
                                         visible: controller.productList.elementAt(index).option!=null,
@@ -145,7 +145,7 @@ class AllOrderCarPage extends StatelessWidget {
                             // cancelTextColor:Colors.white,
                             // onCancel: () {
                             // },
-                            textConfirm: 'ADD TO CART'.tr,
+                            textConfirm: 'ADD_TO_CART'.tr,
                             confirmTextColor:Colors.white,
                             onConfirm: () {
                               controller.addToBasketAndBuyClickEvent(index);

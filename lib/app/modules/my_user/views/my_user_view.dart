@@ -103,7 +103,7 @@ Widget build(BuildContext context) {
                           labelStyle:
                           TextStyle(color:  Get.theme.accentColor),
                           contentPadding: EdgeInsets.all(12),
-                          hintText: 'Password',
+                          hintText: 'password'.tr,
                           hintStyle: TextStyle(
                               color:  Get.theme
                                   .focusColor

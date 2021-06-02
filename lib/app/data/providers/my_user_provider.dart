@@ -15,11 +15,13 @@ class MyUserProvider extends GetConnect {
   Future<UserDb> postLogin(UserDb userDb) async {
     try
     {
-      Response response = await post("${MrConfig.base_app_url}resturant_bukhari/api/v1/login/checkLogin",userDb.toMap());
+      print(userDb);
+      String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/login/checkLogin";
+      Response response = await post(postUrl,userDb.toMap());
       var userData=json.decode(response.body);
       if (response.statusCode == 200 && userData['status']==true) {
         // print(jsonDecode(userData['data']));
-        print('decode');
+
         // print(jsonEncode(userData['data']));
         setCurrentUser(userData['data']);
         return UserDb.fromJSON(userData['data']);

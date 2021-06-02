@@ -13,6 +13,7 @@ import '../controllers/order_list_controller.dart';
 class OrderListView extends GetView<OrderListController> {
   @override
   Widget build(BuildContext context) {
+    // final controller=Get.find<OrderListController>();
     return Scaffold(
         drawer: DrawerWidget(),
       appBar: AppBar(

@@ -25,11 +25,11 @@ class DrawerWidget extends StatelessWidget {
                 color: Get.theme.hintColor.withOpacity(0.1),
 //              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(35)),
               ),
-              accountName: Text('User Name',
+              accountName: Text('${_userController.currentUser.username??''}',
                 style: Get.theme.textTheme.headline6,
               ),
               accountEmail: Text(
-                "demo@gmail.com",
+                "${_userController.currentUser.email??''}",
                 style: Get.theme.textTheme.caption,
               ),
               currentAccountPicture: CircleAvatar(
@@ -42,23 +42,25 @@ class DrawerWidget extends StatelessWidget {
 
             ListTile(
               onTap: () {
-                Get.back();
+
                 Get.reload<HomeController>();
+                Get.back();
                 Get.toNamed(Routes.HOME);
               },
               leading: Icon(
                 Icons.delivery_dining,
                 // color: Get.theme.focusColor.withOpacity(1),
               ),
-              title: Text( 'Menu'.tr,
-                // style:Get.theme.textTheme.subtitle1,
+              title: Text( 'Categories'.tr,
+                style:Get.theme.textTheme.subtitle1,
               ),
             ),
 
           ListTile(
             onTap: () {
-              Get.back();
+
               Get.reload<OrderListController>();
+              Get.back();
               Get.toNamed(Routes.ORDER_LIST);
             },
             leading: Icon(
@@ -66,7 +68,7 @@ class DrawerWidget extends StatelessWidget {
               color: Get.theme.focusColor.withOpacity(1),
             ),
             title: Text(
-              'Order List',
+              'OrderList'.tr,
               style:Get.theme.textTheme.subtitle1,
             ),
           ),
@@ -80,7 +82,7 @@ class DrawerWidget extends StatelessWidget {
               color: Get.theme.focusColor.withOpacity(1),
             ),
             title: Text(
-              'Order History',
+              'OrderHistory'.tr,
               style:Get.theme.textTheme.subtitle1,
             ),
           ),
@@ -131,7 +133,7 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             onTap: () {
               // Get.back();
-              // Get.find<AuthController>().signOutUser();
+             _userController.signOutUser();
             },
             leading: Icon(
               Icons.exit_to_app,

@@ -5,7 +5,6 @@ import 'package:waiter/app/routes/app_pages.dart';
 class PendingOrder  extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final OrderListController controller=Get.find();
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -23,12 +22,12 @@ class PendingOrder  extends StatelessWidget {
                 children: [
                   TableRow(
                     children: [
-                          Text('Order No.',textAlign: TextAlign.center,),
-                          Text('Customer Name',textAlign: TextAlign.center,),
-                          Text('Table',textAlign: TextAlign.center,),
-                          Text('Order Date',textAlign: TextAlign.center,),
-                          Text('Amount',textAlign: TextAlign.center,),
-                          Text('Action',textAlign: TextAlign.center,),
+                          Text('OrderNo'.tr,textAlign: TextAlign.center,),
+                          Text('CustomerName'.tr,textAlign: TextAlign.center,),
+                          Text('Table'.tr,textAlign: TextAlign.center,),
+                          Text('OrderDate'.tr,textAlign: TextAlign.center,),
+                          Text('Amount'.tr,textAlign: TextAlign.center,),
+                          Text('Action'.tr,textAlign: TextAlign.center,),
                     ]
                   ),
                 ],
@@ -45,26 +44,26 @@ class PendingOrder  extends StatelessWidget {
                               //table cells inside table row
                               TableCell(child: Padding(
                                   padding: EdgeInsets.all(5),
-                                  child:Text(salesData.id)
+                                  child:Text('${salesData.id??''}')
                               )
                               ),
                               TableCell(child: Padding(
                                   padding: EdgeInsets.all(5),
-                                  child:Text(salesData.customer)
+                                  child:Text('${salesData.customer??''}')
                               )
                               ),
                               TableCell(child: Padding(
                                   padding: EdgeInsets.all(5),
-                                  child:Text(salesData.table_no)
+                                  child:Text('${salesData.table_no??''}')
                               )
                               ),
                               TableCell(child: Padding(
                                   padding: EdgeInsets.all(5),
-                                  child:Text(salesData.date??'')
+                                  child:Text('${salesData.date??''}')
                               ),),
                               TableCell(child: Padding(
                                   padding: EdgeInsets.all(5),
-                                  child:Text('${double.parse(salesData.total).toStringAsFixed(2).toString()}')
+                                  child:Text('${double.parse(salesData.total).toStringAsFixed(2).toString()??""}')
                               ),),
                               TableCell(child: Padding(
                                   padding: EdgeInsets.all(5),
@@ -75,9 +74,7 @@ class PendingOrder  extends StatelessWidget {
                                         Get.reload<OrderListController>();
                                         Get.toNamed(Routes.ORDER_VIEW, arguments: {'reference':salesData.reference_no});
                                       },)),
-                                      Expanded(child: IconButton(icon:Icon(Icons.edit), onPressed:() {
-                                        Get.toNamed(Routes.CARD);
-                                      },))
+
                                     ],
                                   )
                               ),),

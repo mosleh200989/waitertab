@@ -20,7 +20,7 @@ class HomeView extends GetWidget<HomeController> {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        title: Text('Menu'),
+        title: Text('Categories'.tr),
         centerTitle: true,
         actions: [
           IconButton(
@@ -99,7 +99,7 @@ class HomeView extends GetWidget<HomeController> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 100,),
+          SizedBox(height: 10,),
         Obx(() {
       if (controller.isLoading.value)
         return Center(child: CircularProgressIndicator());

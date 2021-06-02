@@ -4,22 +4,23 @@ import 'package:get/get.dart';
 import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/global_widgets/DrawerWidget.dart';
 import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
+import 'package:waiter/app/modules/order_list/controllers/order_view_controller.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/label_and_text.dart';
 import '../controllers/order_list_controller.dart';
 
-class OrderView extends GetView<OrderListController> {
+class OrderView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextStyle labelTextStyle = TextStyle(fontWeight: FontWeight.w500,fontSize: 15.0,);
     return Scaffold(
-      drawer: DrawerWidget(),
+      // drawer: DrawerWidget(),
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        title:  Text('Order Details'),
+        title:  Text('OrderDetails'.tr),
       ),
       body: SingleChildScrollView(
         child: SafeArea(
-          child: GetX<OrderListController>(builder: (_con) {
+          child: GetX<OrderViewController>(builder: (_con) {
             if (_con.isLoading.value)
               return Center(child: CircularProgressIndicator());
             else
@@ -30,27 +31,24 @@ class OrderView extends GetView<OrderListController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(
-                      'Sale Number: ${_con.sales.id}',
+                    Text('SaleNumber'.tr+': ${_con.sales.id}',
+                      style: labelTextStyle,
+                    ),
+                    Text('Date'.tr+': ${_con.sales.date}',
+                      style: labelTextStyle,
+                    ),
+                    Text('SaleReference'.tr+': ${_con.sales.reference_no}',
                       style: labelTextStyle,
                     ),
                     Text(
-                      'Date: ${_con.sales.date}',
-                      style: labelTextStyle,
-                    ),
-                    Text(
-                      'Sale Reference: ${_con.sales.reference_no}',
-                      style: labelTextStyle,
-                    ),
-                    Text(
-                      'Sales Associate: ${Get.find<AuthController>().currentUser.username}',
+                      'SalesAssociate'.tr+': ${Get.find<AuthController>().currentUser.username}',
                       style: labelTextStyle,
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
-                      'Customer: ${_con.sales.customer}',
+                      'Customer'.tr+': ${_con.sales.customer}',
                       style: labelTextStyle,
                     ),
                     SizedBox(
@@ -99,7 +97,7 @@ class OrderView extends GetView<OrderListController> {
                       ),
                     ),
                     LabelAndText(
-                      title: 'Total Qty',
+                      title: 'TotalQty'.tr,
                       salesInfoText: '${_con.sales.total_items??""}',
                       fontWeight: FontWeight.bold,
                     ),
@@ -113,7 +111,7 @@ class OrderView extends GetView<OrderListController> {
                       indent: 5,
                     ),
                     LabelAndText(
-                      title: 'Total without vat',
+                      title: 'TotalWithoutVat'.tr,
                       salesInfoText:
                           '${double.parse(_con.sales.total).toStringAsFixed(2).toString()}SAR',
                       fontWeight: FontWeight.bold,
@@ -128,7 +126,7 @@ class OrderView extends GetView<OrderListController> {
                       indent: 5,
                     ),
                     LabelAndText(
-                      title: 'VAT',
+                      title: 'VAT'.tr,
                       salesInfoText:
                           '${double.parse(_con.sales.total_tax).toStringAsFixed(2).toString()}SAR',
                       fontWeight: FontWeight.bold,
@@ -143,7 +141,7 @@ class OrderView extends GetView<OrderListController> {
                       indent: 5,
                     ),
                     LabelAndText(
-                      title: 'Total with vat',
+                      title: 'TotalWithVat'.tr,
                       salesInfoText:
                           '${double.parse(_con.sales.grand_total).toStringAsFixed(2).toString()}SAR',
                       fontWeight: FontWeight.bold,
@@ -158,7 +156,7 @@ class OrderView extends GetView<OrderListController> {
                       indent: 5,
                     ),
                     LabelAndText(
-                      title: 'Grand Total',
+                      title: 'GrandTotal'.tr,
                       salesInfoText:
                           '${double.parse(_con.sales.grand_total).toStringAsFixed(2).toString()}SAR',
                       fontWeight: FontWeight.bold,
@@ -180,15 +178,15 @@ class OrderView extends GetView<OrderListController> {
                         mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
                           Text(
-                            'Paid by: ${_con.sales.paidby ?? ""}',
+                            'PaidBy'.tr+': ${_con.sales.paidby ?? ""}',
                             style: TextStyle(fontSize: 16),
                           ),
                           Text(
-                            'Paid Amount: ${double.parse(_con.sales.paid).toStringAsFixed(2).toString() ?? ''}SAR',
+                            'PaidAmount'.tr+': ${double.parse(_con.sales.paid).toStringAsFixed(2).toString() ?? ''}SAR',
                             style: TextStyle(fontSize: 16),
                           ),
                           Text(
-                            'Change: ${_con.sales.payment_term ?? ''}',
+                            'Change'.tr+': ${_con.sales.payment_term ?? ''}',
                             style: TextStyle(fontSize: 16),
                           ),
                         ],
@@ -197,7 +195,7 @@ class OrderView extends GetView<OrderListController> {
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Text(
-                        'Staff Note: ${_con.sales.staff_note ?? ''}',
+                        'StaffNote'.tr+': ${_con.sales.staff_note ?? ''}',
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),

@@ -177,7 +177,7 @@ class Sales {
     map['biller'] = biller;
     map['biller_id'] = biller_id;
     map['cgst'] = cgst;
-    map['created_by'] = created_by;
+    // map['created_by'] = created_by;
     map['customer'] = customer;
     map['customer_id'] = customer_id;
     map['customer_type'] = customer_type;

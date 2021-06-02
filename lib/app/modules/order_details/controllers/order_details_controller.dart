@@ -31,7 +31,7 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
 
   @override
   void onInit()async {
-    tabController = TabController(vsync: this, length: 3);
+    tabController = TabController(vsync: this, length: 2);
     bike.value = 'BMC';
     car.value = 'Ferrari';
     if(Get.arguments !=null && Get.arguments.length>0){

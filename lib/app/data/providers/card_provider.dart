@@ -17,9 +17,9 @@ class CardProvider extends GetConnect {
       print('===sales=====');
       Response response = await post(postUrl,sales.toMap());
 
-      print(response.body);
+      print(response.body['message6']);
       print('response.body');
-
+      print(response.body['sale']);
       // var returnData=json.decode(response.body);
       // print(returnData);
       // print('returnData');
@@ -27,7 +27,7 @@ class CardProvider extends GetConnect {
         // print(jsonDecode(userData['data']));
         print('decode');
         // print(jsonEncode(userData['data']));
-        return response.body;
+        return Sales.fromJSON(response.body['sale']);
       } else {
         return Future.error(response.statusText);
       }

@@ -19,8 +19,6 @@ import 'package:waiter/app/modules/order_list/views/order_list_view.dart';
 import 'package:waiter/app/modules/order_list/views/order_view.dart';
 import 'package:waiter/app/modules/splash/bindings/splash_binding.dart';
 import 'package:waiter/app/modules/splash/views/splash_view.dart';
-import 'package:waiter/app/modules/unknown/bindings/unknown_binding.dart';
-import 'package:waiter/app/modules/unknown/views/unknown_view.dart';
 
 part 'app_routes.dart';
 
@@ -80,8 +78,10 @@ class AppPages {
     GetPage(
       name: _Paths.ORDER_VIEW,
       page: () => OrderView(),
-      fullscreenDialog: true,
       binding: OrderListBinding(),
+      fullscreenDialog: true,
+      transition: Transition.downToUp,
+      transitionDuration: Duration(milliseconds: 300),
     ),
   ];
 }

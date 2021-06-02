@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:waiter/app/core/values/mr_config.dart';
 import 'package:waiter/app/data/models/user_db.dart';
 import 'package:waiter/app/data/providers/my_user_provider.dart';
+import 'package:waiter/app/global_widgets/loading_dialog.dart';
 import 'package:waiter/app/routes/app_pages.dart';
 
 class MyUserController extends GetxController {
@@ -32,11 +34,14 @@ class MyUserController extends GetxController {
     userDb.password = passwordController.text;
     userDb.apiKey = MrConfig.mr_api_key;
     try{
-      isProcessing(true);
+      // isProcessing(true);
+      final ProgressDialog progressDialog = loadingDialog(Get.overlayContext);
+      progressDialog.show();
       MyUserProvider().postLogin(userDb).then((resp) {
         if (resp != null) {
+          progressDialog.hide();
           _user.value=resp;
-          isProcessing(false);
+          // isProcessing(false);
           Get.toNamed(Routes.HOME);
         } else {
           Get.snackbar("Login", "Login Failed");

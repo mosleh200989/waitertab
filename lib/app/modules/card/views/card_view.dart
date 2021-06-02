@@ -17,7 +17,7 @@ class CardView extends StatelessWidget {
     final TextStyle labelTextStyle=TextStyle(fontWeight: FontWeight.normal,);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Card'),
+        title: Text('Card'.tr),
         centerTitle: true,
         actions: [
           Container(
@@ -27,7 +27,7 @@ class CardView extends StatelessWidget {
                 onPressed: () {
                   // Get.reload();
                   Get.offNamed(Routes.HOME);
-            }, child: Text('Add New Item',textAlign:TextAlign.center,style: TextStyle(color: Colors.white),),
+            }, child: Text('AddNewItem'.tr,textAlign:TextAlign.center,style: TextStyle(color: Colors.white),),
               style: TextButton.styleFrom(
                 padding: EdgeInsets.all(10),
               ),
@@ -53,11 +53,11 @@ class CardView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children:<Widget>[
-                          Expanded(child: Text('Cart Info',style: labelTextStyle,)),
-                          Expanded(child: Text('Unit Price',style: labelTextStyle,)),
-                          Expanded(child: Text('Quantity',style: labelTextStyle,)),
-                          Expanded(child: Text('Total Price',style: labelTextStyle,)),
-                          Expanded(child: Text('Action',style: labelTextStyle,textAlign: TextAlign.end,)),
+                          Expanded(child: Text('CartInfo'.tr,style: labelTextStyle,)),
+                          Expanded(child: Text('UnitPrice'.tr,style: labelTextStyle,)),
+                          Expanded(child: Text('Quantity'.tr,style: labelTextStyle,)),
+                          Expanded(child: Text('TotalPrice'.tr,style: labelTextStyle,)),
+                          Expanded(child: Text('Action'.tr,style: labelTextStyle,textAlign: TextAlign.end,)),
                       ],),
                     ),
                   ),
@@ -83,7 +83,7 @@ class CardView extends StatelessWidget {
                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                    children:<Widget>[
                                      Expanded(child: Text('${appController.basketItems.elementAt(index).product_name} ${productOption!=''?"(":""} ${productOption} ${productOption!=''?")":""}',style: labelTextStyle,)),
-                                     Expanded(child: Text('Tk ${appController.basketItems.elementAt(index).real_unit_price??''}',style: labelTextStyle,)),
+                                     Expanded(child: Text('${appController.basketItems.elementAt(index).real_unit_price??''}SAR',style: labelTextStyle,)),
                                      GetBuilder<CardController>(
                                        builder: (controller) {
                                          return Expanded(
@@ -120,7 +120,7 @@ class CardView extends StatelessWidget {
                                      ),
                                      GetBuilder<CardController>(
                                        builder: (_) {
-                                         return Expanded(child: Text('Tk ${appController.basketItems.elementAt(index).subtotal??''}',style: labelTextStyle,textAlign: TextAlign.center,));
+                                         return Expanded(child: Text('${appController.basketItems.elementAt(index).subtotal??''}SAR',style: labelTextStyle,textAlign: TextAlign.center,));
                                        }
                                      ),
                                      Expanded(child: IconButton(
@@ -140,7 +140,7 @@ class CardView extends StatelessWidget {
                                          controller.changeShowNoteField(true,index);
                                        },
                                        icon: Icon(Icons.arrow_drop_down,),
-                                       label: Text('Notes',style: labelTextStyle,)),
+                                       label: Text('Notes'.tr,style: labelTextStyle,)),
                                  ),
                                       GetBuilder<CardController>(
                                         builder: (_) {
@@ -226,7 +226,7 @@ class CardView extends StatelessWidget {
                             child: TextButton(
                                 onPressed: () {
                               _cont.changeOrderMethod(true);
-                            }, child: Text('Dine In',style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
+                            }, child: Text('DineIn'.tr,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
                           ),
                         ),
                         Card(
@@ -236,7 +236,7 @@ class CardView extends StatelessWidget {
                             child: TextButton(
                                 onPressed: () {
                               _cont.changeOrderMethod(false);
-                            }, child: Text('Parcel',style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
+                            }, child: Text('Parcel'.tr,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
                           ),
                         ),
                         Visibility(
@@ -263,7 +263,7 @@ class CardView extends StatelessWidget {
                               children: <Widget>[
                                 Icon(Icons.account_balance),
                                 SizedBox(height: 10,),
-                                Expanded(child: Text('Table No: $index',textAlign: TextAlign.center,))
+                                Expanded(child: Text('TableNo'.tr +': $index',textAlign: TextAlign.center,))
                               ],
                             ),
                           ),
@@ -285,7 +285,7 @@ class CardView extends StatelessWidget {
                      keyboardType: TextInputType.text,
                      decoration: InputDecoration(
                        contentPadding: EdgeInsets.all(12),
-                       hintText: 'Order Notes'.tr,
+                       hintText: 'OrderNotes'.tr,
                        hintStyle: TextStyle(
                            color: Get.theme
                                .focusColor
@@ -319,7 +319,7 @@ class CardView extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children:<Widget> [
-                                Text('Customer Name'),
+                                Text('CustomerName'.tr),
                                 Card(
                                   elevation: 1,
                                   child: Container(
@@ -334,7 +334,7 @@ class CardView extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children:<Widget> [
-                                Text('Discount'),
+                                Text('Discount'.tr),
                                 Card(
                                   elevation: 0.0,
                                   child: Container(
@@ -351,7 +351,7 @@ class CardView extends StatelessWidget {
                                           },
                                           decoration: InputDecoration(
                                             contentPadding: EdgeInsets.all(12),
-                                            hintText: 'Discount',
+                                            hintText: 'Discount'.tr,
                                             hintStyle: TextStyle(
                                                 color: Get.theme
                                                     .focusColor
@@ -381,7 +381,7 @@ class CardView extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children:<Widget> [
-                                Text('Shipping Cost'),
+                                Text('ShippingCost'.tr),
                                 Card(
                                   elevation: 0.0,
                                   child: Container(
@@ -408,7 +408,7 @@ class CardView extends StatelessWidget {
 
                                           decoration: InputDecoration(
                                             contentPadding: EdgeInsets.all(12),
-                                            hintText: 'shipping cost',
+                                            hintText: 'ShippingCost'.tr,
                                             hintStyle: TextStyle(
                                                 color: Get.theme
                                                     .focusColor
@@ -468,14 +468,14 @@ class CardView extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children:<Widget> [
-                                Text('Grand Total'),
+                                Text('GrandTotal'.tr),
                                 Card(
                                   elevation: 1,
                                   child: Container(
                                       width: Get.width *.5,
                                       child: Padding(
                                         padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
-                                        child: Text('Tk ${_.grandTotal??0.0}',textAlign: TextAlign.center,),
+                                        child: Text('${_.grandTotal??0.0} SAR',textAlign: TextAlign.center,),
                                       )),
                                 )
                               ],
@@ -489,7 +489,7 @@ class CardView extends StatelessWidget {
                                     child: TextButton(
                                         onPressed: () {
                                           _.changePaymentMethod(true);
-                                        }, child: Text('Cash',style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
+                                        }, child: Text('Cash'.tr,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
                                   ),
                                 ),
                                 Card(
@@ -499,7 +499,7 @@ class CardView extends StatelessWidget {
                                     child: TextButton(
                                         onPressed: () {
                                           _.changePaymentMethod(false);
-                                        }, child: Text('CC',style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
+                                        }, child: Text('CC'.tr,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
                                   ),
                                 ),
                               ],
@@ -517,7 +517,7 @@ class CardView extends StatelessWidget {
                                         child: TextButton(
                                             onPressed: () {
                                               _.changeCCMethod(true);
-                                            }, child: Text('Mada',style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
+                                            }, child: Text('Mada'.tr,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
                                       ),
                                     ),
                                     Card(
@@ -527,7 +527,7 @@ class CardView extends StatelessWidget {
                                         child: TextButton(
                                             onPressed: () {
                                               _.changeCCMethod(false);
-                                            }, child: Text('Visa',style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
+                                            }, child: Text('Visa'.tr,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
                                       ),
                                     ),
                                   ],
@@ -554,20 +554,22 @@ class CardView extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-               Expanded(
-                 child: ElevatedButton(onPressed: () { 
+                 Expanded(
+                   child: ElevatedButton(onPressed: () {
+                  Get.find<CardController>().removeAllList();
 
-                  }, child: Text('Cancel'),
-                 style: ElevatedButton.styleFrom(
-                   primary: Colors.red
+                    }, child: Text('Cancel'.tr),
+                   style: ElevatedButton.styleFrom(
+                     primary: Colors.red
 
-                 ),),
+                   ),
+                 ),
                ),
                 SizedBox(width: 10,),
                 Expanded(
                   child: ElevatedButton(onPressed: () {
                     Get.find<CardController>().postSalesOrder();
-                  }, child: Text('Place Order'),
+                  }, child: Text('PlaceOrder'.tr),
                   style: ElevatedButton.styleFrom(
                     primary: Colors.green
                   ),),

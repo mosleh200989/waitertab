@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:waiter/app/core/values/mr_config.dart';
 import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/data/models/billerdetails.dart';
 import 'package:waiter/app/data/models/payment.dart';
 import 'package:waiter/app/data/models/sales.dart';
 import 'package:waiter/app/data/providers/card_provider.dart';
+import 'package:waiter/app/global_widgets/helpers.dart';
+import 'package:waiter/app/global_widgets/loading_dialog.dart';
 import 'package:waiter/app/modules/home/controllers/app_controller.dart';
 import 'package:waiter/app/modules/order_details/controllers/order_details_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
@@ -224,10 +227,10 @@ void addNotes(int index,String value){
 }
 
   void postSalesOrder() async {
-
-
     try{
-      isProcessing(true);
+      // isProcessing(true);
+      final ProgressDialog progressDialog = loadingDialog(Get.overlayContext);
+      progressDialog.show();
       Sales sales=Sales();
       double total = 0.0;
       double totalBalance = 0.0;
@@ -337,16 +340,24 @@ void addNotes(int index,String value){
         print(result);
         print('result===');
         if (result != null) {
+          progressDialog.hide();
           // isProcessing(false);
-          // Get.toNamed(Routes.HOME);
+          removeAllList();
         } else {
-          Get.snackbar("Login", "Login Failed");
+          Helpers.showSnackbar(title:"error".tr,message:"Failed".tr,);
         }
       });
     }catch(e){
-      Get.snackbar("Login", "Failed to Login");
+      Helpers.showSnackbar(title:"error".tr,message:"Failed".tr,);
       print(e);
     }
+  }
+  void removeAllList(){
+    appController.basketItems.clear();
+    if(appController.basketItems.length==0){
+      Get.offAllNamed(Routes.HOME);
+    }
+
   }
 
 
