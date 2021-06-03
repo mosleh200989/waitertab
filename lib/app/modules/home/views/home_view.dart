@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:waiter/app/core/values/mr_url.dart';
 import 'package:waiter/app/global_widgets/DrawerWidget.dart';
 import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:waiter/app/modules/home/controllers/dialogcontroller_controller.dart';
@@ -133,7 +134,7 @@ class HomeView extends GetWidget<HomeController> {
                               width: 120,
                               fit: BoxFit.fill,
                               imageUrl:"${controller.categoriesList.elementAt(index).image??''}",
-                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              errorWidget: (context, url, error) => Image.network('${MrUrl.get_no_image_url}'),
                             ),
                             // Image(image: AssetImage('assets/images/burger_1.jpg'),  fit: BoxFit.fill,
                             // ),

@@ -15,4 +15,5 @@ class MrUrl {
   // static const String ps_update_order_offer_post_url ='${MrConfig.ps_app_url_node}rest/edit_order_offer';
   // static const String ps_contact_us_url ='${MrConfig.base_app_url}rest/contacts/add/api_key/${MrConfig.base_app_url}';
   static const String get_categories_list_url ='${MrConfig.base_app_url}resturant_bukhari/api/v1/system_settings/';
+  static const String get_no_image_url ='${MrConfig.base_app_url}resturant_bukhari/assets/uploads/thumbs/no_image.png';
 }
