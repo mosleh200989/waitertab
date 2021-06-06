@@ -11,10 +11,16 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
      MyTabModel(title: "ProcessingOrder".tr,color: Colors.orange[200]),
      MyTabModel(title: "CompleteOrder".tr,color: Colors.blueGrey[200]),
      MyTabModel(title: "CancelOrder".tr,color: Colors.transparent),
-  ];
+   ];
   final myHandler=MyTabModel().obs;
   var isLoading = true.obs;
+  var isLoadingProcessing = true.obs;
+  var isLoadingComplete = true.obs;
+  var isLoadingCancel = true.obs;
   var salesList = <Sales>[].obs;
+  var salesListProcessing = <Sales>[].obs;
+  var salesListComplete = <Sales>[].obs;
+  var salesListCancel = <Sales>[].obs;
 
   @override
   void onInit()  async {
@@ -22,8 +28,9 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
     myHandler.value = tabs[0];
     tabController.addListener(handleSelected);
     await getAllSales();
-
-
+    await getAllProcessingOrder();
+    await getAllCompleteOrder();
+    await getAllCancelOrder();
     super.onInit();
   }
 
@@ -34,7 +41,10 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
   }
 
   @override
-  void onClose() {}
+  void onClose() {
+    super.onClose();
+    tabController.dispose();
+  }
   void handleSelected() {
       myHandler.value= tabs[tabController.index];
   }
@@ -48,6 +58,46 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
       }
     } finally {
       isLoading(false);
+    }
+  }
+  Future<void> getAllProcessingOrder() async {
+    try {
+      isLoadingProcessing(true);
+      var salesValue = await OrderListProvider().getProcessingSales();
+      if (salesValue != null) {
+        salesListProcessing.assignAll(salesValue);
+        // salesList.value = salesValue;
+      }else{
+        salesListProcessing.value=[];
+      }
+    } finally {
+      isLoadingProcessing(false);
+    }
+  }
+  Future<void> getAllCompleteOrder() async {
+    try {
+      isLoadingComplete(true);
+      var salesValue = await OrderListProvider().getCompleteSales();
+      if (salesValue != null) {
+        salesListComplete.assignAll(salesValue);
+        // salesList.value = salesValue;
+      }else{
+        salesListComplete.value=[];
+      }
+    } finally {
+      isLoadingComplete(false);
+    }
+  }
+  Future<void> getAllCancelOrder() async {
+    try {
+      isLoadingCancel(true);
+      var salesValue = await OrderListProvider().getCancelSales();
+      if (salesValue != null) {
+        salesListCancel.assignAll(salesValue);
+        // salesList.value = salesValue;
+      }
+    } finally {
+      isLoadingCancel(false);
     }
   }
 

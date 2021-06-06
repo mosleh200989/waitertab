@@ -344,7 +344,7 @@ void addNotes(int index,String value){
       CardProvider().postSales(sales).then((result) {
         print(result);
         print('result===');
-        if (result != null) {
+        if (result != null ) {
           progressDialog.hide();
           // isProcessing(false);
           removeAllList();

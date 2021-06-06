@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 class Helpers {
   static showDialog() {}
-
   static showSnackbar({
     String title = '',
     String message = '',

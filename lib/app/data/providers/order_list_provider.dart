@@ -10,26 +10,68 @@ class OrderListProvider extends GetConnect {
   void onInit() {
     httpClient.baseUrl = 'YOUR-API-URL';
   }
-  // https://eshtri.net/resturant_bukhari/api/v1/sales?include=items,%20warehouse,%20biller&start=0&limit=10&api-key=ggsk4wkssoc4sccgskggssws04gc4gokc4g4gokw
   Future<List<Sales>> getSales() async {
-    final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?include=items,warehouse,biller&start=0&limit=10&&api-key=${MrConfig.mr_api_key}";
+    final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=1&include=items,warehouse,biller&start=0&limit=10&&api-key=${MrConfig.mr_api_key}";
+    print(salesUrl);
+    print('pending order url');
+    Response response = await get(salesUrl);
+    // print(response.body);
+    // print("response.body");
+    print(response.body);
+    print('responseee');
+    if (response.statusCode == 200 && response.body['data'] !=null) {
+      return salesFromJson(response.body['data']);
+    } else {
+      // return Future.error(response.statusText);
+      return [];
+    }
+  }
+  Future<List<Sales>> getProcessingSales() async {
+    final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=2&include=items,warehouse,biller&start=0&limit=10&&api-key=${MrConfig.mr_api_key}";
+    print(salesUrl);
+    print('processing order url');
+    Response response = await get(salesUrl);
+    // print(response.body);
+    // print("response.body");
+    // print(response.body['data']);
+    if (response.statusCode == 200 && response.body['data'] !=null) {
+      return salesFromJson(response.body['data']);
+    } else {
+      // return Future.error(response.statusText);
+      return [];
+    }
+  }
+  Future<List<Sales>> getCancelSales() async {
+    final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=3&include=items,warehouse,biller&start=0&limit=10&&api-key=${MrConfig.mr_api_key}";
     print(salesUrl);
     Response response = await get(salesUrl);
     // print(response.body);
     // print("response.body");
     // print(response.body['data']);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && response.body['data'] !=null) {
       return salesFromJson(response.body['data']);
     } else {
       // return Future.error(response.statusText);
-      return null;
+      return [];
+    }
+  }
+  Future<List<Sales>> getCompleteSales() async {
+    final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=5&include=items,warehouse,biller&start=0&limit=10&&api-key=${MrConfig.mr_api_key}";
+    print(salesUrl);
+    print('complete order url');
+    Response response = await get(salesUrl);
+    // print(response.body);
+    // print("response.body");
+    // print(response.body['data']);
+    if (response.statusCode == 200 && response.body['data'] !=null) {
+      return salesFromJson(response.body['data']);
+    } else {
+      // return Future.error(response.statusText);
+      return [];
     }
   }
   Future<Sales> getOneSales(String reference) async {
-    print(reference);
-    print('=====reference');
     final String salesSingleUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?include=items,warehouse,biller,payment&reference=$reference&api-key=${MrConfig.mr_api_key}";
-    print(salesSingleUrl);
     Response response = await get(salesSingleUrl);
     // print(response.body);
     // print("response.body");

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:waiter/app/data/models/my_tab.dart';
 import 'package:waiter/app/global_widgets/DrawerWidget.dart';
 import 'package:waiter/app/modules/order_details/views/local_widgets/all_order_card_page.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/cancel_order.dart';

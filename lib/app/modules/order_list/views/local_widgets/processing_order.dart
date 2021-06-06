@@ -40,8 +40,8 @@ class ProcessingOrder  extends StatelessWidget {
                           border: TableBorder.all(width: 0.0,),
                           defaultVerticalAlignment :TableCellVerticalAlignment.middle,
                           // border: TableBorder.all(width:1, color:Colors.black45),
-                          children: _con.salesList.map((salesData){
-                            return TableRow( //return table row in every loop
+                          children:  _con?.salesListProcessing?.map((salesData){
+                            return   TableRow( //return table row in every loop
                                 children: [
                                   //table cells inside table row
                                   TableCell(child: Padding(
@@ -82,7 +82,7 @@ class ProcessingOrder  extends StatelessWidget {
                                   ),),
                                 ]
                             );
-                          }).toList(),
+                          })?.toList()??[],
                         )
                     ),
                   ],

@@ -40,7 +40,7 @@ class CompleteOrder  extends StatelessWidget {
                           border: TableBorder.all(width: 0.0,),
                           defaultVerticalAlignment :TableCellVerticalAlignment.middle,
                           // border: TableBorder.all(width:1, color:Colors.black45),
-                          children: _con.salesList.map((salesData){
+                          children: _con?.salesListComplete?.map((salesData){
                             return TableRow( //return table row in every loop
                                 children: [
                                   //table cells inside table row
@@ -82,7 +82,7 @@ class CompleteOrder  extends StatelessWidget {
                                   ),),
                                 ]
                             );
-                          }).toList(),
+                          })?.toList()??[],
                         )
                     ),
                   ],

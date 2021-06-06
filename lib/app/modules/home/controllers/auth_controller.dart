@@ -10,8 +10,6 @@ class AuthController extends GetxController {
 final _currentUser=UserDb().obs;
 UserDb get currentUser=>_currentUser.value;
 
-
-  final count = 0.obs;
   @override
   void onInit()async {
     super.onInit();
@@ -25,7 +23,7 @@ UserDb get currentUser=>_currentUser.value;
 
   @override
   void onClose() {}
-  void increment() => count.value++;
+
   Future<UserDb> getCurrentUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('current_user')) {
