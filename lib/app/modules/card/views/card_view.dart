@@ -12,9 +12,11 @@ import '../controllers/card_controller.dart';
 class CardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final AppController appController=Get.find();
-    final OrderDetailsController orderDetailsController=Get.find();
-    final TextStyle labelTextStyle=TextStyle(fontWeight: FontWeight.normal,);
+    final AppController appController = Get.find();
+    final OrderDetailsController orderDetailsController = Get.find();
+    final TextStyle labelTextStyle = TextStyle(
+      fontWeight: FontWeight.normal,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text('Card'.tr),
@@ -24,183 +26,235 @@ class CardView extends StatelessWidget {
             height: 20,
             width: 80,
             child: TextButton(
-                onPressed: () {
-                  // Get.reload();
-                  Get.offNamed(Routes.HOME);
-            }, child: Text('AddNewItem'.tr,textAlign:TextAlign.center,style: TextStyle(color: Colors.white),),
+              onPressed: () {
+                // Get.reload();
+                Get.offNamed(Routes.HOME);
+              },
+              child: Text(
+                'AddNewItem'.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
               style: TextButton.styleFrom(
                 padding: EdgeInsets.all(10),
               ),
             ),
           )
         ],
-
       ),
       backgroundColor: Colors.grey.shade200,
-      body:GetX<CardController>(
-        builder: (controller) {
-          return SingleChildScrollView(
-            reverse: controller.isReverse,
-            child: SafeArea(
-              child: Wrap(
-                children: <Widget>[
-                  Card(
-                    margin: EdgeInsets.all(5),
-                    elevation: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children:<Widget>[
-                          Expanded(child: Text('CartInfo'.tr,style: labelTextStyle,)),
-                          Expanded(child: Text('UnitPrice'.tr,style: labelTextStyle,)),
-                          Expanded(child: Text('Quantity'.tr,style: labelTextStyle,)),
-                          Expanded(child: Text('TotalPrice'.tr,style: labelTextStyle,)),
-                          Expanded(child: Text('Action'.tr,style: labelTextStyle,textAlign: TextAlign.end,)),
-                      ],),
+      body: GetX<CardController>(builder: (controller) {
+        return SingleChildScrollView(
+          reverse: controller.isReverse,
+          child: SafeArea(
+            child: Wrap(
+              children: <Widget>[
+                Card(
+                  margin: EdgeInsets.all(5),
+                  elevation: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                            child: Text(
+                          'CartInfo'.tr,
+                          style: labelTextStyle,
+                        )),
+                        Expanded(
+                            child: Text(
+                          'UnitPrice'.tr,
+                          style: labelTextStyle,
+                        )),
+                        Expanded(
+                            child: Text(
+                          'Quantity'.tr,
+                          style: labelTextStyle,
+                        )),
+                        Expanded(
+                            child: Text(
+                          'TotalPrice'.tr,
+                          style: labelTextStyle,
+                        )),
+                        Expanded(
+                            child: Text(
+                          'Action'.tr,
+                          style: labelTextStyle,
+                          textAlign: TextAlign.end,
+                        )),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 10,),
-                 GetX<AppController>(
-                   builder: (appController) {
-                     return Container(
-                       height: 200,
-                       child: ListView.builder(
-                         reverse: controller.isReverse,
-                         itemCount: appController.basketItems.length,
-                         itemBuilder: (context, index) {
-                         final  String productOption="${appController?.basketItems?.elementAt(index)?.product_option??''}";
-                         return  Card(
-                           margin: EdgeInsets.all(5),
-                           elevation: 0,
-                           child: Padding(
-                             padding: const EdgeInsets.all(5.0),
-                             child: Wrap(
-                               children:<Widget> [
-                                 Row(
-                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                   children:<Widget>[
-                                     Expanded(child: Text('${appController.basketItems.elementAt(index).product_name} ${productOption!=''?"(":""} ${productOption} ${productOption!=''?")":""}',style: labelTextStyle,)),
-                                     Expanded(child: Text('${appController.basketItems.elementAt(index).real_unit_price??''}SAR',style: labelTextStyle,)),
-                                     GetBuilder<CardController>(
-                                       builder: (controller) {
-                                         return Expanded(
-                                           child: Row(
-                                           children: [
-                                             InkWell(
-                                               onTap: () {
-                                                 controller.increment(index);
-                                               },
-                                               child: CircleAvatar(
-                                                   radius: 12,
-                                                   backgroundColor:Colors.grey,
-                                                   child: Icon(Icons.add,color: Colors.black,)),
-                                             ),
-                                              Expanded(
-                                               child: Padding(
-                                                 padding: const EdgeInsets.all(5.0),
-                                                 child: Text('${appController.basketItems.elementAt(index).quantity}',textAlign: TextAlign.center,),
-                                               ),
-                                             ),
-                                             InkWell(
-                                               onTap: () {
-                                                 controller.decrement(index);
-                                               },
-                                               child: CircleAvatar(
-                                                   radius: 12,
-                                                   backgroundColor:Colors.grey,
-                                                   child: Icon(Icons.remove,color: Colors.black,)),
-                                             ),
-
-                                           ],
-                                         ),);
-                                       }
-                                     ),
-                                     GetBuilder<CardController>(
-                                       builder: (_) {
-                                         return Expanded(child: Text('${appController.basketItems.elementAt(index).subtotal??''}SAR',style: labelTextStyle,textAlign: TextAlign.center,));
-                                       }
-                                     ),
-                                     Expanded(child: IconButton(
-                                       icon:Align(
-                                        alignment :Alignment.topRight,
-                                           child: Icon(Icons.delete,color: Colors.red.shade500,)),
-                                       onPressed:() =>  controller.removeSingleOrder(index)
-                                     ,))
-                                   ],),
-                                 Container(
-                                   height: 30,
-                                   child: TextButton.icon(
-                                       style: TextButton.styleFrom(
-                                         shape:StadiumBorder(),
-                                       ),
-                                       onPressed: () {
-                                         controller.changeShowNoteField(true,index);
-                                       },
-                                       icon: Icon(Icons.arrow_drop_down,),
-                                       label: Text('Notes'.tr,style: labelTextStyle,)),
-                                 ),
-                                      GetBuilder<CardController>(
-                                        builder: (_) {
-                                          return Visibility(
-                                               visible:_.appController.basketItems[index].isNotes==true,
-                                               child: TextFormField(
-                                                 controller: appController.basketItems[index].textEditContNotes,
-                                                 keyboardType: TextInputType.text,
-                                                /* controller: TextEditingController.fromValue(
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                GetX<AppController>(builder: (appController) {
+                  return Container(
+                    height: 200,
+                    child: ListView.builder(
+                      reverse: controller.isReverse,
+                      itemCount: appController.basketItems.length,
+                      itemBuilder: (context, index) {
+                        final String productOption =
+                            "${appController?.basketItems?.elementAt(index)?.product_option ?? ''}";
+                        return Card(
+                          margin: EdgeInsets.all(5),
+                          elevation: 0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Wrap(
+                              children: <Widget>[
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Expanded(
+                                        child: Text(
+                                      '${appController.basketItems.elementAt(index).product_name} ${productOption != '' ? "(" : ""} ${productOption} ${productOption != '' ? ")" : ""}',
+                                      style: labelTextStyle,
+                                    )),
+                                    Expanded(
+                                        child: Text(
+                                      '${appController.basketItems.elementAt(index).real_unit_price ?? ''}SAR',
+                                      style: labelTextStyle,
+                                    )),
+                                    GetBuilder<CardController>(
+                                        builder: (controller) {
+                                      return Expanded(
+                                        child: Row(
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                controller.increment(index);
+                                              },
+                                              child: CircleAvatar(
+                                                  radius: 12,
+                                                  backgroundColor: Colors.grey,
+                                                  child: Icon(
+                                                    Icons.add,
+                                                    color: Colors.black,
+                                                  )),
+                                            ),
+                                            Expanded(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
+                                                child: Text(
+                                                  '${appController.basketItems.elementAt(index).quantity}',
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                            InkWell(
+                                              onTap: () {
+                                                controller.decrement(index);
+                                              },
+                                              child: CircleAvatar(
+                                                  radius: 12,
+                                                  backgroundColor: Colors.grey,
+                                                  child: Icon(
+                                                    Icons.remove,
+                                                    color: Colors.black,
+                                                  )),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                                    GetBuilder<CardController>(builder: (_) {
+                                      return Expanded(
+                                          child: Text(
+                                        '${appController.basketItems.elementAt(index).subtotal ?? ''}SAR',
+                                        style: labelTextStyle,
+                                        textAlign: TextAlign.center,
+                                      ));
+                                    }),
+                                    Expanded(
+                                        child: IconButton(
+                                      icon: Align(
+                                          alignment: Alignment.topRight,
+                                          child: Icon(
+                                            Icons.delete,
+                                            color: Colors.red.shade500,
+                                          )),
+                                      onPressed: () =>
+                                          controller.removeSingleOrder(index),
+                                    ))
+                                  ],
+                                ),
+                                Container(
+                                  height: 30,
+                                  child: TextButton.icon(
+                                      style: TextButton.styleFrom(
+                                        shape: StadiumBorder(),
+                                      ),
+                                      onPressed: () {
+                                        controller.changeShowNoteField(
+                                            true, index);
+                                      },
+                                      icon: Icon(
+                                        Icons.arrow_drop_down,
+                                      ),
+                                      label: Text(
+                                        'Notes'.tr,
+                                        style: labelTextStyle,
+                                      )),
+                                ),
+                                GetBuilder<CardController>(builder: (_) {
+                                  return Visibility(
+                                    visible: _.appController.basketItems[index]
+                                            .isNotes ==
+                                        true,
+                                    child: TextFormField(
+                                      controller: appController
+                                          .basketItems[index].textEditContNotes,
+                                      keyboardType: TextInputType.text,
+                                      /* controller: TextEditingController.fromValue(
                                                      TextEditingValue(
                                                          text: appController.basketItems[index].product_name??'',
                                                          selection: new TextSelection.collapsed(
                                                              offset: appController.basketItems.length),
                                                      )),*/
 
-                                                 onChanged: (value) {
-                                                   controller.addNotes(index,value);
-                                                   // controller.textEditNoteList[index].text=value;
-                                                 },
-                                                 decoration: InputDecoration(
-                                                   contentPadding: EdgeInsets.all(12),
-                                                   hintText: 'Notes'.tr,
-                                                   hintStyle: TextStyle(
-                                                       color: Get.theme
-                                                           .focusColor
-                                                           .withOpacity(0.7)),
-                                                   border: OutlineInputBorder(
-                                                       borderSide: BorderSide(
-                                                           color:Get.theme
-                                                               .focusColor
-                                                               .withOpacity(0.2))),
-                                                   focusedBorder: OutlineInputBorder(
-                                                       borderSide: BorderSide(
-                                                           color:Get.theme
-                                                               .focusColor
-                                                               .withOpacity(0.5))),
-                                                   enabledBorder: OutlineInputBorder(
-                                                       borderSide: BorderSide(
-                                                           color: Get.theme
-                                                               .focusColor
-                                                               .withOpacity(0.2))),
-
-                                                 ),
-                                               ),
-
-
-
-                                 );
-                                        }
+                                      onChanged: (value) {
+                                        controller.addNotes(index, value);
+                                        // controller.textEditNoteList[index].text=value;
+                                      },
+                                      decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.all(12),
+                                        hintText: 'Notes'.tr,
+                                        hintStyle: TextStyle(
+                                            color: Get.theme.focusColor
+                                                .withOpacity(0.7)),
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Get.theme.focusColor
+                                                    .withOpacity(0.2))),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Get.theme.focusColor
+                                                    .withOpacity(0.5))),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Get.theme.focusColor
+                                                    .withOpacity(0.2))),
                                       ),
-
-                               ],
-                             ),
-                           ),
-                         );
-                       },),
-                     );
-                   }
-                 ),
-                  /*Card(
+                                    ),
+                                  );
+                                }),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                }),
+                /*Card(
                     elevation: 1,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -214,124 +268,165 @@ class CardView extends StatelessWidget {
                     ),
                   ),*/
 
-                 GetBuilder<CardController>(
-                 init: controller,
-                  builder: (_cont) {
-                    return  Wrap(
-                      children: [
-                        Card(
-                          child: Container(
-                            height: 40,
-                            color: _cont.isDineIn==true?Colors.grey:null,
-                            child: TextButton(
-                                onPressed: () {
-                              _cont.changeOrderMethod(true);
-                            }, child: Text('DineIn'.tr,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
-                          ),
-                        ),
-                        Card(
-                          child: Container(
-                            height: 40,
-                            color:_cont.isParcel==true?Colors.grey:null,
-                            child: TextButton(
-                                onPressed: () {
-                              _cont.changeOrderMethod(false);
-                            }, child: Text('Parcel'.tr,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
-                          ),
-                        ),
-                        Visibility(
-                        visible:_cont.isDineIn==true,
-                          child: Container(
-                    height: 85,
-                    child:  ListView.builder(
-              itemCount: 10,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-              return  GestureDetector(
-                onTap: () {
-                  _cont.selectedItem(index);
-                },
-                child: Card(
-                  elevation: 1,
-                  color: _cont.selectedIndex == index ? Colors.grey.shade500 : null,
-                  child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Container(
-                            height: 40,
-                            width: 60,
-                            child: Column(
-                              children: <Widget>[
-                                Icon(Icons.account_balance),
-                                SizedBox(height: 10,),
-                                Expanded(child: Text('TableNo'.tr +': $index',textAlign: TextAlign.center,))
+                GetBuilder<CardController>(
+                    init: controller,
+                    builder: (_cont) {
+                      return Wrap(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 25, right: 25),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Card(
+                                    elevation: 5,
+                                    shadowColor: Colors.black12,
+                                    color: Colors.grey.shade500,
+                                    child: Container(
+                                      height: 40,
+                                      color: _cont.isDineIn == true
+                                          ? Colors.blueGrey
+                                          : null,
+                                      child: TextButton(
+                                          onPressed: () {
+                                            _cont.changeOrderMethod(true);
+                                          },
+                                          child: Text(
+                                            'DineIn'.tr,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 18),
+                                          )),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                                Expanded(
+                                  child: Card(
+                                    elevation: 5,
+                                    shadowColor: Colors.black12,
+                                    color: Colors.grey.shade500,
+                                    child: Container(
+                                      height: 40,
+                                      color: _cont.isParcel == true
+                                          ? Colors.blueGrey
+                                          : null,
+                                      child: TextButton(
+                                          onPressed: () {
+                                            _cont.changeOrderMethod(false);
+                                          },
+                                          child: Text(
+                                            'Parcel'.tr,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 18),
+                                          )),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
+                          Visibility(
+                            visible: _cont.isDineIn == true,
+                            child: Container(
+                              height: 85,
+                              child: ListView.builder(
+                                itemCount: 10,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      _cont.selectedItem(index);
+                                    },
+                                    child: Card(
+                                      elevation: 1,
+                                      color: _cont.selectedIndex == index
+                                          ? Colors.blueGrey
+                                          : null,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Container(
+                                          height: 40,
+                                          width: 60,
+                                          child: Column(
+                                            children: <Widget>[
+                                              Icon(Icons.account_balance),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              Expanded(
+                                                  child: Text(
+                                                'TableNo'.tr + ': $index',
+                                                textAlign: TextAlign.center,
+                                              ))
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
+                Card(
+                  elevation: 0.0,
+                  child: TextFormField(
+                    controller: controller.orderNoteController,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(12),
+                      hintText: 'OrderNotes'.tr,
+                      hintStyle: TextStyle(
+                          color: Get.theme.focusColor.withOpacity(0.7)),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Get.theme.focusColor.withOpacity(0.2))),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Get.theme.focusColor.withOpacity(0.5))),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Get.theme.focusColor.withOpacity(0.2))),
+                    ),
                   ),
                 ),
-              ) ;
-            },),
-    ),
+                GetX<CardController>(builder: (_) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('CustomerName'.tr),
+                            Card(
+                              elevation: 1,
+                              child: Container(
+                                  width: Get.width * .5,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 7.0, bottom: 7.0),
+                                    child: Text(
+                                      '${Get.find<AuthController>().currentUser.username}',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )),
+                            )
+                          ],
                         ),
-                      ],
-                    );
-  }
-),
-
-                  Card(
-                    elevation: 0.0,
-                   child:TextFormField(
-                     controller: controller.orderNoteController,
-                     keyboardType: TextInputType.text,
-                     decoration: InputDecoration(
-                       contentPadding: EdgeInsets.all(12),
-                       hintText: 'OrderNotes'.tr,
-                       hintStyle: TextStyle(
-                           color: Get.theme
-                               .focusColor
-                               .withOpacity(0.7)),
-                       border: OutlineInputBorder(
-                           borderSide: BorderSide(
-                               color:Get.theme
-                                   .focusColor
-                                   .withOpacity(0.2))),
-                       focusedBorder: OutlineInputBorder(
-                           borderSide: BorderSide(
-                               color:Get.theme
-                                   .focusColor
-                                   .withOpacity(0.5))),
-                       enabledBorder: OutlineInputBorder(
-                           borderSide: BorderSide(
-                               color: Get.theme
-                                   .focusColor
-                                   .withOpacity(0.2))),
-
-                     ),
-                   ),
-                  ),
-
-                  GetX<CardController>(
-                    builder: (_) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children:<Widget> [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children:<Widget> [
-                                Text('CustomerName'.tr),
-                                Card(
-                                  elevation: 1,
-                                  child: Container(
-                                    width: Get.width *.5,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
-                                        child: Text('${Get.find<AuthController>().currentUser.username}',textAlign: TextAlign.center,),
-                                      )),
-                                )
-                              ],
-                            ),
-                            Row(
+                        /*      Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children:<Widget> [
                                 Text('Discount'.tr),
@@ -436,8 +531,8 @@ class CardView extends StatelessWidget {
                                       )),
                                 )
                               ],
-                            ),
-                    /*        Row(
+                            ),*/
+                        /*        Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children:<Widget> [
                                 Text('Vat/Tax'),
@@ -452,7 +547,7 @@ class CardView extends StatelessWidget {
                                 )
                               ],
                             ),*/
-                          /*  Row(
+                        /*  Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children:<Widget> [
                                 Text('Service Charge'),
@@ -467,87 +562,130 @@ class CardView extends StatelessWidget {
                                 )
                               ],
                             ),*/
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children:<Widget> [
-                                Text('GrandTotal'.tr),
-                                Card(
-                                  elevation: 1,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text('GrandTotal'.tr),
+                            Card(
+                              elevation: 1,
+                              child: Container(
+                                  width: Get.width * .5,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 7.0, bottom: 7.0),
+                                    child: Text(
+                                      '${_.grandTotal ?? 0.0} SAR',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )),
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 25,right: 25),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Card(
+                                  elevation: 5,
+                                  shadowColor: Colors.black12,
+                                  color: Colors.grey.shade500,
                                   child: Container(
-                                      width: Get.width *.5,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
-                                        child: Text('${_.grandTotal??0.0} SAR',textAlign: TextAlign.center,),
-                                      )),
-                                )
-                              ],
-                            ),
-                            Row(
+                                    height: 40,
+                                    color: _.isCash == true ? Colors.blueGrey : null,
+                                    child: TextButton(
+                                        onPressed: () {
+                                          _.changePaymentMethod(true);
+                                        },
+                                        child: Text(
+                                          'Cash'.tr,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal,fontSize: 18),
+                                        )),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 25,),
+                              Expanded(
+                                child: Card(
+                                  elevation: 5,
+                                  shadowColor: Colors.white,
+                                  color: Colors.grey.shade500,
+                                  child: Container(
+                                    height: 40,
+                                    color: _.isCC == true ? Colors.blueGrey : null,
+                                    child: TextButton(
+                                        onPressed: () {
+                                          _.changePaymentMethod(false);
+                                        },
+                                        child: Text(
+                                          'CC'.tr,
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.normal,fontSize: 18),
+                                        )),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Visibility(
+                          visible: _.isCC == true,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 30, right: 30),
+                            child: Row(
                               children: <Widget>[
                                 Card(
                                   child: Container(
                                     height: 40,
-                                    color: _.isCash==true?Colors.grey:null,
+                                    width: 100,
+                                    color:
+                                        _.isMada == true ? Colors.blueGrey : null,
                                     child: TextButton(
                                         onPressed: () {
-                                          _.changePaymentMethod(true);
-                                        }, child: Text('Cash'.tr,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
+                                          _.changeCCMethod(true);
+                                        },
+                                        child: Text(
+                                          'Mada'.tr,
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.normal),
+                                        )),
                                   ),
                                 ),
                                 Card(
                                   child: Container(
                                     height: 40,
-                                    color: _.isCC==true?Colors.grey:null,
+                                    width: 100,
+                                    color:
+                                        _.isVisa == true ? Colors.grey : null,
                                     child: TextButton(
                                         onPressed: () {
-                                          _.changePaymentMethod(false);
-                                        }, child: Text('CC'.tr,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
+                                          _.changeCCMethod(false);
+                                        },
+                                        child: Text(
+                                          'Visa'.tr,
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.normal),
+                                        )),
                                   ),
                                 ),
                               ],
                             ),
-                            Visibility(
-                              visible: _.isCC==true,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left:60,right: 60),
-                                child: Row(
-                                  children: <Widget>[
-                                    Card(
-                                      child: Container(
-                                        height: 40,
-                                        color: _.isMada==true?Colors.grey:null,
-                                        child: TextButton(
-                                            onPressed: () {
-                                              _.changeCCMethod(true);
-                                            }, child: Text('Mada'.tr,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
-                                      ),
-                                    ),
-                                    Card(
-                                      child: Container(
-                                        height: 40,
-                                        color: _.isVisa==true?Colors.grey:null,
-                                        child: TextButton(
-                                            onPressed: () {
-                                              _.changeCCMethod(false);
-                                            }, child: Text('Visa'.tr,style: TextStyle(color: Colors.black87,fontWeight: FontWeight.normal),)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-
-                          ],
-                        ),
-                      );
-                    }
-                  ),
-                ],
-              ),
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                }),
+              ],
             ),
-          );
-        }
-      ),
+          ),
+        );
+      }),
       bottomNavigationBar: GestureDetector(
         child: Container(
           height: 50,
@@ -556,25 +694,26 @@ class CardView extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                 Expanded(
-                   child: ElevatedButton(onPressed: () {
-                  Get.find<CardController>().removeAllList();
-
-                    }, child: Text('Cancel'.tr),
-                   style: ElevatedButton.styleFrom(
-                     primary: Colors.red
-
-                   ),
-                 ),
-               ),
-                SizedBox(width: 10,),
                 Expanded(
-                  child: ElevatedButton(onPressed: () {
-                    Get.find<CardController>().postSalesOrder();
-                  }, child: Text('PlaceOrder'.tr),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.green
-                  ),),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Get.find<CardController>().removeAllList();
+                    },
+                    child: Text('Cancel'.tr),
+                    style: ElevatedButton.styleFrom(primary: Colors.red),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Get.find<CardController>().postSalesOrder();
+                    },
+                    child: Text('PlaceOrder'.tr),
+                    style: ElevatedButton.styleFrom(primary: Colors.green),
+                  ),
                 ),
               ],
             ),
@@ -582,7 +721,6 @@ class CardView extends StatelessWidget {
         ),
         onTap: () {
           // Get.toNamed(Routes.CARD);
-
         },
       ),
     );

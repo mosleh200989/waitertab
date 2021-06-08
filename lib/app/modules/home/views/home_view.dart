@@ -20,7 +20,7 @@ class HomeView extends GetWidget<HomeController> {
     double height = Get.size.height;
     double width = Get.size.width;
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: Colors.grey.shade300,
       appBar: AppBar(
         title: Text('Categories'.tr),
         centerTitle: true,
@@ -121,7 +121,10 @@ class HomeView extends GetWidget<HomeController> {
                     return InkWell(
                       onTap: () {
                         Get.reload<OrderDetailsController>();
-                        Get.toNamed(Routes.ORDER_DETAILS,arguments: {'catId':controller.categoriesList.elementAt(index).id});
+                        Get.toNamed(Routes.ORDER_DETAILS,arguments: {'catId':controller.categoriesList.elementAt(index).id,
+                          'image_url':controller.categoriesList.elementAt(index).image,
+                          'product_name':controller.categoriesList.elementAt(index).name,
+                        });
                       },
                       child: Card(
                         elevation: 2,

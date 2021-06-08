@@ -19,14 +19,15 @@ class MyUserProvider extends GetConnect {
       String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/login/checkLogin";
       Response response = await post(postUrl,userDb.toMap());
       var userData=json.decode(response.body);
+      print(userData);
+      print('userData');
       if (response.statusCode == 200 && userData['status']==true) {
         // print(jsonDecode(userData['data']));
-
         // print(jsonEncode(userData['data']));
         setCurrentUser(userData['data']);
         return UserDb.fromJSON(userData['data']);
       } else {
-        return Future.error(response.statusText);
+        return null;
       }
     }
     catch(exception)

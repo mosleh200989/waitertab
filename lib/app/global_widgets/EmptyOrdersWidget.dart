@@ -36,7 +36,7 @@ class _EmptyOrdersWidgetState extends State<EmptyOrdersWidget> {
           Container(
             alignment: AlignmentDirectional.center,
             padding: EdgeInsets.symmetric(horizontal: 30),
-            height: Get.height,
+            // height: Get.height * .2,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,

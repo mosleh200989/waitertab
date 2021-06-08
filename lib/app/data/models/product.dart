@@ -51,7 +51,7 @@ class Product {
       this.name = json['name'] != null ? json['name'] : null;
       this.net_price = json['net_price'] != null ? json['net_price'] : null;
 
-      this.options = json['options'] != null ? json['options'] : null;
+      // this.options = json['options'] != null ? json['options'] : null;
       this.optiontext = json['optiontext'] != null ? json['optiontext'] : null;
       this.price = json['price'] != null ? json['price'] : null;
       this.slug = json['slug'] != null ? json['slug'] : null;

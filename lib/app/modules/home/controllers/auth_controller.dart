@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:waiter/app/data/models/user_db.dart';
@@ -46,6 +47,21 @@ void signOutUser() async {
   } catch (e) {
     print(e);
     Helpers.showSnackbar(title: 'error'.tr, message: e.message);
+  }
+}
+Future<bool> checkInternetConnectivity() async {
+  final ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+  if (connectivityResult == ConnectivityResult.mobile) {
+    // print('Mobile');
+    return true;
+  } else if (connectivityResult == ConnectivityResult.wifi) {
+    // print('Wifi');
+    return true;
+  } else if (connectivityResult == ConnectivityResult.none) {
+    print('No Connection');
+    return false;
+  } else {
+    return false;
   }
 }
 }

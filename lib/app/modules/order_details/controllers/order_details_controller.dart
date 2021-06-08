@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/data/models/product.dart';
 import 'package:waiter/app/data/providers/order_details_provider.dart';
+import 'package:waiter/app/global_widgets/helpers.dart';
 import 'package:waiter/app/modules/home/controllers/app_controller.dart';
+import 'package:waiter/app/routes/app_pages.dart';
 
-class OrderDetailsController extends GetxController  with SingleGetTickerProviderMixin{
+class OrderDetailsController extends GetxController {
  final AppController appController=Get.find();
   var isLoading = true.obs;
   var productList = <Product>[].obs;
@@ -14,11 +16,14 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
   var product=Product().obs;
   var counter = <int>[].obs;
   TabController tabController;
+  var _busketTotal=0.0.obs;
+  double get busketTotal=> _busketTotal.value;
+
   final count = 1.obs;
-  final bike = ''.obs;
-  final car = ''.obs;
   final agreedToOrder = false.obs;
   final catId=''.obs;
+  final imageUrl=''.obs;
+  final productName=''.obs;
   final _quantity = 0.obs;
   set quantity(int value) => _quantity.value = value;
   int get quantity => _quantity.value;
@@ -31,14 +36,21 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
 
   @override
   void onInit()async {
-    tabController = TabController(vsync: this, length: 2);
-    bike.value = 'BMC';
-    car.value = 'Ferrari';
     if(Get.arguments !=null && Get.arguments.length>0){
       catId.value=Get.arguments['catId'];
+      imageUrl.value=Get.arguments['image_url'];
+      productName.value=Get.arguments['product_name'];
+      print(catId);
+      print('catId');
       await getAllProducts();
     }
     // incrementGrandTotal();
+    for(var i=0; i<appController.basketItems.length;i++){
+      print(appController.basketItems[i].unit_price);
+      _busketTotal.value =_busketTotal.value + double.parse(appController.basketItems[i].subtotal);
+    }
+    print("busketTotal==");
+    print(busketTotal);
     super.onInit();
   }
 
@@ -77,12 +89,10 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
        if(appController.basketItems[i].product_id==productList[index].id){
          print(appController.basketItems[i].net_price??'0.0');
          productList[index].isOrder = newValue;
-         _grandTotal.value -= double.parse(appController.basketItems[i].subtotal);
+         _busketTotal.value -= double.parse(appController.basketItems[i].subtotal);
          appController.basketItems.removeAt(i);
          productList.refresh();
          appController.basketItems.refresh();
-
-
        }
      }
    }else{
@@ -101,6 +111,8 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
       if (products != null) {
         productList.assignAll(products);
         // categoriesList.value = categories;
+      }else{
+        print('product null');
       }
     } finally {
       isLoading(false);
@@ -140,14 +152,42 @@ class OrderDetailsController extends GetxController  with SingleGetTickerProvide
       item_discount: '0.0',
       subtotal: productList[index].totalPrice.toString() ?? productList[index].price,
     );
-    setAgreedToOrder(true, index);
-    appController.basketItems.add(basket);
-    for(var i=0; i< appController.basketItems.length; i++){
-      if(i==index){
-        _grandTotal.value+= double.parse(appController.basketItems[i].subtotal);
+    // setAgreedToOrder(true, index);
+      if(appController.basketItems.length>0) {
+        for (var i = 0; i < appController.basketItems.length; i++) {
+          if (appController.basketItems[i].product_id == productList[index].id) {
+            // print('if contains');
+            // Helpers.showSnackbar(message: 'warning_dialog__input_password'.tr);
+            // Get.toNamed(Routes.CARD);
+            appController.basketItems[i].quantity=(int.parse(appController.basketItems[i].quantity)+productList.elementAt(index).counter).toString();
+            appController.basketItems[i].product_base_quantity=(int.parse(appController.basketItems[i].product_base_quantity)+productList.elementAt(index).counter).toString();
+            appController.basketItems[i].subtotal =(int.parse(appController.basketItems[i].quantity) * double.parse(productList[index].price)).toString() ;
+            // appController.basketItems.canUpdate;
+            appController.basketItems.refresh();
+          } else {
+            print('else contains');
+            appController.basketItems.add(basket);
+            appController.basketItems.refresh();
+          }
+        }
+      }else{
+        appController.basketItems.add(basket);
+
       }
+
+    _busketTotal.value=0.0;
+    for(var i=0; i< appController.basketItems.length; i++){
+      // if(i==index){
+        // _busketTotal.value+= double.parse(appController.basketItems[i].subtotal);
+        // _busketTotal.value
+        print(appController.basketItems[i].unit_price);
+        _busketTotal.value =_busketTotal.value + double.parse(appController.basketItems[i].subtotal);
+      // }
       update();
     }
+    // for(var i=0; i<appController.basketItems.length;i++){
+    //
+    // }
   /*  if(cartQuantity > 0 && cartQuantity !=0){
     for (var i=0; i<appController.basketItems.length; i++) {
       if(appController.basketItems[i].product_id==productList.elementAt(index).id){

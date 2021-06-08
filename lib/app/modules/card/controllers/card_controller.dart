@@ -23,7 +23,7 @@ final AppController appController=Get.find();
   final  discountTextController=TextEditingController();
   final  shippingTextController=TextEditingController();
   int selectedIndex;
-  bool isDineIn=false;
+  bool isDineIn=true;
   bool isParcel=false;
   final _isCash=false.obs;
   final _isCC=false.obs;
@@ -50,10 +50,12 @@ bool buttonActive = false;
   void onInit() {
     super.onInit();
     for(var i=0; i<appController.basketItems.length; i++){
-      _grandTotal.value+=double.parse(appController.basketItems[i].subtotal);
+      _grandTotal.value = _grandTotal.value+double.parse(appController.basketItems[i].subtotal);
     }
-    shippingTextController.text='10';
-    discountTextController.text='5';
+    print(grandTotal);
+    print('grandTotal card');
+    shippingTextController.text='0';
+    discountTextController.text='0';
   }
 
   @override
@@ -87,7 +89,7 @@ void shippingChange(String text){
       _grandTotal.value =  grandTotal - double.parse(shippingTextController.text);
     }*/
     // if text field has a value and button is inactive
-    if(text != null && text.length > 0 && !buttonActive){
+/*    if(text != null && text.length > 0 && !buttonActive){
         buttonActive = true;
         _grandTotal.value =  grandTotal - double.parse(shippingTextController.text);
         print(text);
@@ -102,7 +104,7 @@ void shippingChange(String text){
       //     baseOffset: shippingTextController.text.length,
       //     extentOffset: shippingTextController.text.length
       // );
-      }
+      }*/
 
 
 }

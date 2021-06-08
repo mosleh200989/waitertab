@@ -208,7 +208,9 @@ const Map<String, String> en ={
   'phone_signin__back_login':'BACK TO LOGIN?',
   'phone_signin__title1':'You\'ve just received phone message containing OTP Code on',
   'add_address__phone_10_digit_error':'Please input correct mobile number',
-  'warning_dialog__input_name':'Please input Name',
+  'warning_dialog__input_name':'Please input User Name',
+  'warning_dialog__input_password':'Please input Password',
+  'pleas_correct_username_or_password':'Please input correct user name or password',
   'loading_dialog__loading':'Please wait...',
   'error_dialog__no_internet':'No internet connection !',
   'skip':'Skip',
@@ -470,5 +472,8 @@ const Map<String, String> en ={
   "OrderHistory": "Order History",
   "user_name": "User Name",
   "Failed": "Failed",
+  "AlreadyAdded": "Remove Product",
+  "warning_dialog_please_add_to_card": "Please Add To Card",
+  "already_added_to_basket": "This product already added to basket",
 
 };

@@ -4,10 +4,14 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:waiter/app/core/values/mr_config.dart';
 import 'package:waiter/app/data/models/user_db.dart';
 import 'package:waiter/app/data/providers/my_user_provider.dart';
+import 'package:waiter/app/global_widgets/helpers.dart';
 import 'package:waiter/app/global_widgets/loading_dialog.dart';
+import 'package:waiter/app/modules/home/controllers/app_controller.dart';
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
 
 class MyUserController extends GetxController {
+  final authController=Get.find<AuthController>();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   var _user=UserDb().obs;
@@ -35,20 +39,34 @@ class MyUserController extends GetxController {
     userDb.apiKey = MrConfig.mr_api_key;
     try{
       // isProcessing(true);
-      final ProgressDialog progressDialog = loadingDialog(Get.overlayContext);
-      progressDialog.show();
-      MyUserProvider().postLogin(userDb).then((resp) {
-        if (resp != null) {
-          progressDialog.hide();
-          _user.value=resp;
-          // isProcessing(false);
-          Get.toNamed(Routes.HOME);
+      if (nameController.text.isEmpty) {
+        Helpers.showSnackbar(message: 'warning_dialog__input_name'.tr);
+
+      }else if (passwordController.text.isEmpty) {
+        Helpers.showSnackbar(message: 'warning_dialog__input_password'.tr);
+
+      }else{
+        if (await authController.checkInternetConnectivity()) {
+          final ProgressDialog progressDialog = loadingDialog(Get.overlayContext);
+          progressDialog.show();
+          MyUserProvider().postLogin(userDb).then((resp) {
+            if (resp != null) {
+              progressDialog.hide();
+              _user.value=resp;
+              // isProcessing(false);
+              Get.toNamed(Routes.HOME);
+            } else {
+              progressDialog.hide();
+              Helpers.showSnackbar(message: 'pleas_correct_username_or_password'.tr);
+
+            }
+          });
         } else {
-          Get.snackbar("Login", "Login Failed");
+          Helpers.showSnackbar(message: 'error_dialog__no_internet'.tr);
         }
-      });
+      }
     }catch(e){
-      Get.snackbar("Login", "Failed to Login");
+      Helpers.showSnackbar(message: 'pleas_correct_username_or_password'.tr);
       print(e);
     }
   }

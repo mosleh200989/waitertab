@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mostafiz9900.waiter">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="waiter"
         android:icon="@mipmap/ic_launcher">
