@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/data/models/basket.dart';
+import 'package:waiter/app/data/models/pagination_filter.dart';
 import 'package:waiter/app/data/models/product.dart';
 import 'package:waiter/app/data/providers/order_details_provider.dart';
 import 'package:waiter/app/global_widgets/helpers.dart';
@@ -33,8 +34,15 @@ class OrderDetailsController extends GetxController {
  }
  final _grandTotal=0.0.obs;
  double get grandTotal=>_grandTotal.value;
-final _optionValue=''.obs;
+final _optionValue='test'.obs;
 String get optionValue=>_optionValue.value;
+
+// For Pagination
+  ScrollController scrollController = ScrollController();
+  var isMoreDataAvailable = true.obs;
+  final _paginationFilter = PaginationFilter().obs;
+  int get limit => _paginationFilter.value.limit;
+  int get offset => _paginationFilter.value.offset;
   @override
   void onInit()async {
     if(Get.arguments !=null && Get.arguments.length>0){
@@ -43,7 +51,9 @@ String get optionValue=>_optionValue.value;
       productName.value=Get.arguments['product_name'];
       print(catId);
       print('catId');
-      await getAllProducts();
+      // await getAllProducts();
+      ever(_paginationFilter, (_) async =>  await getAllProducts());
+      _changePaginationFilter(1, 5);
     }
     // incrementGrandTotal();
     for(var i=0; i<appController.basketItems.length;i++){
@@ -52,6 +62,8 @@ String get optionValue=>_optionValue.value;
     }
     print("busketTotal==");
     print(busketTotal);
+    //For Pagination
+    paginateProductList();
     super.onInit();
   }
 
@@ -63,6 +75,30 @@ String get optionValue=>_optionValue.value;
 
   @override
   void onClose() {}
+  void _changePaginationFilter(int offset, int limit) {
+    _paginationFilter.update((val) {
+      val.offset = offset;
+      val.limit = limit;
+    });
+
+  }
+  // For Pagination
+  void paginateProductList() {
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        print("reached end");
+        _changePaginationFilter(offset + limit, limit);
+        // page++;
+        // getMoreTask(page);
+      }
+    });
+  }
+  Future<void> refreshProductList() async {
+    productList.clear();
+    _changePaginationFilter(1, 10);
+    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
+  }
   void increment(int i) {
     productList[i].counter++;
    productList[i].totalPrice=productList[i].counter * double.parse(productList[i].price);
@@ -113,7 +149,7 @@ void changedOption(String value){
   Future<void> getAllProducts() async {
     try {
       isLoading(true);
-      var products = await OrderDetailsProvider().getProduct(catId.value);
+      var products = await OrderDetailsProvider().getProduct(catId.value,_paginationFilter.value);
       if (products != null) {
         productList.assignAll(products);
         // categoriesList.value = categories;

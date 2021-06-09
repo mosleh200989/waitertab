@@ -25,13 +25,6 @@ class HomeView extends GetWidget<HomeController> {
         title: Text('Categories'.tr),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.rice_bowl),
-            color: Colors.white,
-            onPressed: () {
-              print('android');
-            },
-          ),
           TextButton(
             onPressed: () {
               // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);

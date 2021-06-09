@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/data/models/basket.dart';
+import 'package:waiter/app/data/models/table.dart';
+import 'package:waiter/app/global_widgets/EmptyOrdersWidget.dart';
 import 'package:waiter/app/modules/home/controllers/app_controller.dart';
 import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:waiter/app/modules/order_details/controllers/order_details_controller.dart';
@@ -23,20 +25,22 @@ class CardView extends StatelessWidget {
         centerTitle: true,
         actions: [
           Container(
-            height: 20,
-            width: 80,
+            height: 30,
+            width: 100,
             child: TextButton(
               onPressed: () {
                 // Get.reload();
                 Get.offNamed(Routes.HOME);
               },
-              child: Text(
-                'AddNewItem'.tr,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white),
-              ),
+
+                child: Text(
+                  'AddNewItem'.tr,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
+                ),
+
               style: TextButton.styleFrom(
-                padding: EdgeInsets.all(10),
+                padding: EdgeInsets.all(5),
               ),
             ),
           )
@@ -95,7 +99,7 @@ class CardView extends StatelessWidget {
                   return Container(
                     height: 200,
                     child: ListView.builder(
-                      reverse: controller.isReverse,
+                      // reverse: controller.isReverse,
                       itemCount: appController.basketItems.length,
                       itemBuilder: (context, index) {
                         final String productOption =
@@ -187,10 +191,11 @@ class CardView extends StatelessWidget {
                                   ],
                                 ),
                                 Container(
-                                  height: 30,
+                                  height: 35,
                                   child: TextButton.icon(
                                       style: TextButton.styleFrom(
                                         shape: StadiumBorder(),
+                                        primary: Colors.black
                                       ),
                                       onPressed: () {
                                         controller.changeShowNoteField(
@@ -268,6 +273,19 @@ class CardView extends StatelessWidget {
                     ),
                   ),*/
 
+                 Row(
+                   children: [
+                     Expanded(
+                       child: Divider(
+                         thickness:1,
+                         endIndent: 5,
+                         indent: 5,
+                         height: 2,
+                         color: Colors.black,
+                       ),
+                     )
+                   ],
+                 ),
                 GetBuilder<CardController>(
                     init: controller,
                     builder: (_cont) {
@@ -281,55 +299,45 @@ class CardView extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                  child: Card(
-                                    elevation: 5,
-                                    shadowColor: Colors.black12,
-                                    color: Colors.grey.shade500,
-                                    child: Container(
-                                      height: 40,
-                                      color: _cont.isDineIn == true
-                                          ? Colors.blueGrey
-                                          : null,
-                                      child: TextButton(
-                                          onPressed: () {
-                                            _cont.changeOrderMethod(true);
-                                          },
-                                          child: Text(
-                                            'DineIn'.tr,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.normal,
-                                                fontSize: 18),
-                                          )),
-                                    ),
-                                  ),
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        _cont.changeOrderMethod(true);
+                                      },
+                                      style:ElevatedButton.styleFrom(
+                                        primary:  _cont.isDineIn == true
+                                            ? Colors.blueGrey
+                                            : Colors.white
+
+                                      ),
+                                      child: Text(
+                                        'DineIn'.tr,
+                                        style: TextStyle(
+                                            color:_cont.isDineIn == true?Colors.white: Colors.black,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 18),
+                                      )),
                                 ),
                                 SizedBox(
                                   width: 20,
                                 ),
                                 Expanded(
-                                  child: Card(
-                                    elevation: 5,
-                                    shadowColor: Colors.black12,
-                                    color: Colors.grey.shade500,
-                                    child: Container(
-                                      height: 40,
-                                      color: _cont.isParcel == true
-                                          ? Colors.blueGrey
-                                          : null,
-                                      child: TextButton(
-                                          onPressed: () {
-                                            _cont.changeOrderMethod(false);
-                                          },
-                                          child: Text(
-                                            'Parcel'.tr,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.normal,
-                                                fontSize: 18),
-                                          )),
-                                    ),
-                                  ),
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        _cont.changeOrderMethod(false);
+                                      },
+                                      style:ElevatedButton.styleFrom(
+                                          primary:_cont.isParcel == true
+                                              ? Colors.blueGrey
+                                              :  Colors.white
+
+                                      ),
+                                      child: Text(
+                                        'Parcel'.tr,
+                                        style: TextStyle(
+                                            color: _cont.isParcel == true?Colors.white:Colors.black,
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 18),
+                                      )),
                                 ),
                               ],
                             ),
@@ -337,14 +345,15 @@ class CardView extends StatelessWidget {
                           Visibility(
                             visible: _cont.isDineIn == true,
                             child: Container(
-                              height: 85,
-                              child: ListView.builder(
-                                itemCount: 10,
+                              height: 120,
+                              child: controller.tableList.isEmpty?EmptyOrdersWidget(): ListView.builder(
+                                itemCount: controller.tableList.length,
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (context, index) {
+                                final  TableModel tableModel=controller.tableList[index];
                                   return GestureDetector(
                                     onTap: () {
-                                      _cont.selectedItem(index);
+                                      _cont.selectedItem(index,controller.tableList[index]);
                                     },
                                     child: Card(
                                       elevation: 1,
@@ -353,22 +362,34 @@ class CardView extends StatelessWidget {
                                           : null,
                                       child: Padding(
                                         padding: const EdgeInsets.all(5.0),
-                                        child: Container(
-                                          height: 40,
-                                          width: 60,
-                                          child: Column(
-                                            children: <Widget>[
-                                              Icon(Icons.account_balance),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Expanded(
-                                                  child: Text(
-                                                'TableNo'.tr + ': $index',
-                                                textAlign: TextAlign.center,
-                                              ))
-                                            ],
-                                          ),
+                                        child: Column(
+                                          children: <Widget>[
+                                           Expanded(
+                                             flex:5,
+                                               child: Image.asset('assets/images/res_table.jpg')) ,
+                                            // Expanded(
+                                            //     child: Text(
+                                            //   'TableNo'.tr + ': ${tableModel.id??''}',
+                                            //   textAlign: TextAlign.center,style: TextStyle(color: _cont.selectedIndex == index?Colors.white:Colors.black),
+                                            // )),
+                                            Expanded(
+                                                flex:2,
+                                                child: Text(
+                                              '${tableModel.name??''}',
+                                              textAlign: TextAlign.center,style: TextStyle(color: _cont.selectedIndex == index?Colors.white:Colors.black),
+                                            )),
+                                            Expanded(
+                                                flex:2,
+                                                child: Text(
+                                                  'Capacity'.tr + ': ${tableModel.capacity??''}',
+                                                  textAlign: TextAlign.center,style: TextStyle(color: _cont.selectedIndex == index?Colors.white:Colors.black),
+                                                )),
+                                            // Expanded(
+                                            //     child: Text(
+                                            //       'floor'.tr + ': ${tableModel.floor??''}',
+                                            //       textAlign: TextAlign.center,style: TextStyle(color: _cont.selectedIndex == index?Colors.white:Colors.black),
+                                            //     ))
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -407,7 +428,7 @@ class CardView extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: <Widget>[
-                        Row(
+                      /*  Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text('CustomerName'.tr),
@@ -425,7 +446,7 @@ class CardView extends StatelessWidget {
                                   )),
                             )
                           ],
-                        ),
+                        ),*/
                         /*      Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children:<Widget> [
@@ -586,46 +607,38 @@ class CardView extends StatelessWidget {
                           child: Row(
                             children: <Widget>[
                               Expanded(
-                                child: Card(
-                                  elevation: 5,
-                                  shadowColor: Colors.black12,
-                                  color: Colors.grey.shade500,
-                                  child: Container(
-                                    height: 40,
-                                    color: _.isCash == true ? Colors.blueGrey : null,
-                                    child: TextButton(
-                                        onPressed: () {
-                                          _.changePaymentMethod(true);
-                                        },
-                                        child: Text(
-                                          'Cash'.tr,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.normal,fontSize: 18),
-                                        )),
-                                  ),
-                                ),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      _.changePaymentMethod(true);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      primary:_.isCash == true? Colors.blueGrey:Colors.white
+                                    ),
+                                    child: Text(
+                                      'Cash'.tr,
+                                      style: TextStyle(
+                                          color:_.isCash == true? Colors.white:Colors.black,
+                                          fontWeight: FontWeight.normal,fontSize: 18),
+                                    )),
                               ),
                               SizedBox(width: 25,),
                               Expanded(
-                                child: Card(
-                                  elevation: 5,
-                                  shadowColor: Colors.white,
-                                  color: Colors.grey.shade500,
-                                  child: Container(
-                                    height: 40,
-                                    color: _.isCC == true ? Colors.blueGrey : null,
-                                    child: TextButton(
-                                        onPressed: () {
-                                          _.changePaymentMethod(false);
-                                        },
-                                        child: Text(
-                                          'CC'.tr,
-                                          style: TextStyle(
-                                              color: Colors.black87,
-                                              fontWeight: FontWeight.normal,fontSize: 18),
-                                        )),
-                                  ),
+                                child: Container(
+                                  height: 40,
+                                  color: _.isCC == true ? Colors.blueGrey : null,
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        _.changePaymentMethod(false);
+                                      },
+                                      style:ElevatedButton.styleFrom(
+                                        primary: _.isCC == true?Colors.blueGrey:Colors.white
+                                      ),
+                                      child: Text(
+                                        'CC'.tr,
+                                        style: TextStyle(
+                                            color: _.isCC == true?Colors.white:Colors.black87,
+                                            fontWeight: FontWeight.normal,fontSize: 18),
+                                      )),
                                 ),
                               ),
                             ],
@@ -634,44 +647,39 @@ class CardView extends StatelessWidget {
                         Visibility(
                           visible: _.isCC == true,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 30, right: 30),
+                            padding: const EdgeInsets.only(left: 40, right: 40),
                             child: Row(
                               children: <Widget>[
-                                Card(
-                                  child: Container(
-                                    height: 40,
-                                    width: 100,
-                                    color:
-                                        _.isMada == true ? Colors.blueGrey : null,
-                                    child: TextButton(
-                                        onPressed: () {
-                                          _.changeCCMethod(true);
-                                        },
-                                        child: Text(
-                                          'Mada'.tr,
-                                          style: TextStyle(
-                                              color: Colors.black87,
-                                              fontWeight: FontWeight.normal),
-                                        )),
-                                  ),
+                                Expanded(
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        _.changeCCMethod(true);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        primary:  _.isMada == true ? Colors.blueGrey:Colors.white
+                                      ),
+                                      child: Text(
+                                        'Mada'.tr,
+                                        style: TextStyle(
+                                            color:  _.isMada == true ?Colors.white:Colors.black87,
+                                            fontWeight: FontWeight.normal),
+                                      )),
                                 ),
-                                Card(
-                                  child: Container(
-                                    height: 40,
-                                    width: 100,
-                                    color:
-                                        _.isVisa == true ? Colors.grey : null,
-                                    child: TextButton(
-                                        onPressed: () {
-                                          _.changeCCMethod(false);
-                                        },
-                                        child: Text(
-                                          'Visa'.tr,
-                                          style: TextStyle(
-                                              color: Colors.black87,
-                                              fontWeight: FontWeight.normal),
-                                        )),
-                                  ),
+                                SizedBox(width: 20,),
+                                Expanded(
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        _.changeCCMethod(false);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        primary:   _.isVisa == true ? Colors.blueGrey:Colors.white
+                                      ),
+                                      child: Text(
+                                        'Visa'.tr,
+                                        style: TextStyle(
+                                            color:  _.isVisa == true ?Colors.white:Colors.black87,
+                                            fontWeight: FontWeight.normal),
+                                      )),
                                 ),
                               ],
                             ),

@@ -475,5 +475,11 @@ const Map<String, String> en ={
   "AlreadyAdded": "Remove Product",
   "warning_dialog_please_add_to_card": "Please Add To Card",
   "already_added_to_basket": "This product already added to basket",
+  "refreshed_successfully_completed": "Refreshed Successfully Completed",
+  "your_order_has_been_successfully_submitted": "Your order has been successfully submitted",
+  "please_add_item": "Please Add Item",
+  "please_select_table": "Please Select Table",
+  "please_select_payment_method": "Please Select Payment Method",
+  "please_select_payment_method_type": "Please Select Payment Method Type",
 
 };

@@ -6,16 +6,21 @@ import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/data/models/billerdetails.dart';
 import 'package:waiter/app/data/models/payment.dart';
 import 'package:waiter/app/data/models/sales.dart';
+import 'package:waiter/app/data/models/table.dart';
 import 'package:waiter/app/data/providers/card_provider.dart';
 import 'package:waiter/app/global_widgets/helpers.dart';
 import 'package:waiter/app/global_widgets/loading_dialog.dart';
 import 'package:waiter/app/modules/home/controllers/app_controller.dart';
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:waiter/app/modules/order_details/controllers/order_details_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
 
 class CardController extends GetxController  {
 final OrderDetailsController orderDetailsController=Get.find();
 final AppController appController=Get.find();
+final AuthController authController=Get.find();
+var isLoading = true.obs;
+var tableList = <TableModel>[].obs;
   final count = 1.obs;
   final _showNote=false.obs;
   bool get showNote=>_showNote.value;
@@ -23,8 +28,9 @@ final AppController appController=Get.find();
   final  discountTextController=TextEditingController();
   final  shippingTextController=TextEditingController();
   int selectedIndex;
-  bool isDineIn=true;
-  bool isParcel=false;
+  String  tableId;
+  bool isDineIn=false;
+  bool isParcel=true;
   final _isCash=false.obs;
   final _isCC=false.obs;
   bool get isCash =>_isCash.value;
@@ -47,8 +53,9 @@ var _isDineIn=0.obs;
 int get getIsDineIn=>_isDineIn.value;
 bool buttonActive = false;
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    await getTableList();
     for(var i=0; i<appController.basketItems.length; i++){
       _grandTotal.value = _grandTotal.value+double.parse(appController.basketItems[i].subtotal);
     }
@@ -56,6 +63,7 @@ bool buttonActive = false;
     print('grandTotal card');
     shippingTextController.text='0';
     discountTextController.text='0';
+
   }
 
   @override
@@ -124,8 +132,11 @@ void _printLatestValue() {
       update();
     }
   }
-  void selectedItem(int index){
+  void selectedItem(int index,TableModel tableModel)async{
     selectedIndex = index;
+    tableId=tableModel.id;
+    print(tableId);
+    print('tableId');
     update();
   }
 
@@ -197,6 +208,10 @@ void decrement(int index){
       isDineIn=false;
       isParcel=true;
       _isDineIn.value=2;
+      // selectedIndex = 0;
+      tableId='';
+      print(tableId);
+      print('tableId');
       update();
     }
   }
@@ -228,16 +243,14 @@ void changeCCMethod(bool newValue){
 }
 void addNotes(int index,String value){
   // appController.basketItems[index].textEditContNotes.text=value;
-    print( appController.basketItems[index].textEditContNotes.text??'');
+  //   print( appController.basketItems[index].textEditContNotes.text??'');
     // appController.basketItems.elementAt(index).notes=textEditNoteList[index].text;
     // print(appController.basketItems[index].notes);
 }
 
   void postSalesOrder() async {
+    final ProgressDialog progressDialog = loadingDialog(Get.overlayContext);
     try{
-      // isProcessing(true);
-      final ProgressDialog progressDialog = loadingDialog(Get.overlayContext);
-      progressDialog.show();
       Sales sales=Sales();
       double total = 0.0;
       double totalBalance = 0.0;
@@ -251,8 +264,6 @@ void addNotes(int index,String value){
       // String order_tax = txtOrderTaxId;
       // String discount = txtDiscountAmnt;
       // String shipping = txtExtraChargeAmount;
-
-
       BillerDetails billerdetails=BillerDetails();
       billerdetails.id='3';
       billerdetails.group_name='biller';
@@ -260,103 +271,125 @@ void addNotes(int index,String value){
       billerdetails.email='saleem@alama360.com';
 
       Basket basket;
+      TableModel tableModel=TableModel(id: tableId);
       List<Basket> items = [];
       int serial;
-      for(var i=0; i<appController.basketItems.length;i++){
-        print(appController.basketItems.length);
-        print('appController.basketItems.length');
-        serial=1+i;
-        basket=Basket(
-          product_id:appController.basketItems[i].product_id,
-          product_name:appController.basketItems[i].product_name,
-          quantity:appController.basketItems[i].quantity,
-          product_base_quantity:appController.basketItems[i].quantity,
-          product_code:appController.basketItems[i].product_code,
-          product_unit:appController.basketItems[i].product_unit,
-          product_type: "standard",
-          product_option:appController.basketItems[i].product_option,
-          product_discount:appController.basketItems[i].product_discount,
-          product_tax:appController.basketItems[i].product_tax,
-          net_price:appController.basketItems[i].net_price,
-          unit_price:appController.basketItems[i].unit_price,
-          real_unit_price:appController.basketItems[i].real_unit_price,
-          subtotal:appController.basketItems[i].subtotal,
-          product_comment:'',
-          serial:serial.toString(),
-        );
-        // print(basket.toMap());
-        // print('===basket====');
-        items.add(basket);
-      }
-      List<Payment> paymentList = [];
+     if(appController.basketItems.length==0 || appController.basketItems.isEmpty){
+       Helpers.showSnackbar(title:'error'.tr,message: 'please_add_item'.tr);
+     }else if(isDineIn == true && tableId == null){
+       Helpers.showSnackbar(title:'error'.tr,message: 'please_select_table'.tr);
+     }else if( _paid_by.value== ''){
+       Helpers.showSnackbar(title:'error'.tr,message: 'please_select_payment_method'.tr);
+     }else if(_isCC.value==true&&_cc_type.value== ''){
+       Helpers.showSnackbar(title:'error'.tr,message: 'please_select_payment_method_type'.tr);
+     }else{
+       if (await authController.checkInternetConnectivity()) {
+         progressDialog.show();
+         for(var i=0; i<appController.basketItems.length;i++){
+           print(appController.basketItems.length);
+           print('appController.basketItems.length');
+           serial=1+i;
+           basket=Basket(
+             product_id:appController.basketItems[i].product_id,
+             product_name:appController.basketItems[i].product_name,
+             quantity:appController.basketItems[i].quantity,
+             product_base_quantity:appController.basketItems[i].quantity,
+             product_code:appController.basketItems[i].product_code,
+             product_unit:appController.basketItems[i].product_unit,
+             product_type: "standard",
+             product_option:appController.basketItems[i].product_option,
+             product_discount:appController.basketItems[i].product_discount,
+             product_tax:appController.basketItems[i].product_tax,
+             net_price:appController.basketItems[i].net_price,
+             unit_price:appController.basketItems[i].unit_price,
+             real_unit_price:appController.basketItems[i].real_unit_price,
+             subtotal:appController.basketItems[i].subtotal,
+             product_comment:'',
+             serial:serial.toString(),
+           );
+           items.add(basket);
+         }
+         List<Payment> paymentList = [];
 
-      for(var i=0; i<5;i++){
-        Payment paymentObj=Payment();
-        if(i==0){
-          paymentObj.amount=grandTotal.toString();
-          paymentObj.balance_amount=grandTotal.toString();
-          paymentObj.paid_by=paid_by;
-          paymentObj.cc_no='';
-          paymentObj.paying_gift_card_no='';
-          paymentObj.cc_holder='';
-          paymentObj.cheque_no='';
-          paymentObj.cc_month='';
-          paymentObj.cc_year='';
-          paymentObj.cc_type=cc_type;
-          paymentObj.cc_cvv2='';
-          paymentObj.payment_note='';
-        }else{
-          paymentObj.amount='';
-          paymentObj.balance_amount='';
-          paymentObj.paid_by='';
-          paymentObj.cc_no='';
-          paymentObj.paying_gift_card_no='';
-          paymentObj.cc_holder='';
-          paymentObj.cheque_no='';
-          paymentObj.cc_month='';
-          paymentObj.cc_year='';
-          paymentObj.cc_type='';
-          paymentObj.cc_cvv2='';
-          paymentObj.payment_note='';
-        }
-        paymentList.add(paymentObj);
-      }
-      sales.payment=paymentList;
-      sales.billerdetails=billerdetails;
-      sales.apiKey=MrConfig.mr_api_key;
-      sales.customer=customer;
-      sales.warehouse=warehouse;
-      sales.biller=biller;
-      sales.biller_id=biller;
-      sales.note=pos_note;
-      sales.staff_note=orderNoteController.text;
-      sales.order_tax='';
-      sales.discount=discountTextController.text;
-      sales.shipping=shippingTextController.text;
-      sales.total_items=appController.basketItems.length.toString();
-      sales.user_id='1';
-      sales.is_dine_in=getIsDineIn.toString();
-      sales.table_no="Table No "+selectedIndex.toString();
-      sales.paidby=paid_by;
-      // sales.payment.cc_type=cc_type;
-      sales.items=items;
-      int subTotalCal=int.parse(shippingTextController.text) - int.parse(discountTextController.text);
-      double grandTotalCal=grandTotal + subTotalCal;
-      sales.grand_total=grandTotal.toString();
-      CardProvider().postSales(sales).then((result) {
-        print(result);
-        print('result===');
-        if (result != null ) {
-          progressDialog.hide();
-          // isProcessing(false);
-          removeAllList();
-        } else {
-          Helpers.showSnackbar(title:"error".tr,message:"Failed".tr,);
-        }
-      });
+         for(var i=0; i<5;i++){
+           Payment paymentObj=Payment();
+           if(i==0){
+             paymentObj.amount=grandTotal.toString();
+             paymentObj.balance_amount=grandTotal.toString();
+             paymentObj.paid_by=paid_by;
+             paymentObj.cc_no='';
+             paymentObj.paying_gift_card_no='';
+             paymentObj.cc_holder='';
+             paymentObj.cheque_no='';
+             paymentObj.cc_month='';
+             paymentObj.cc_year='';
+             paymentObj.cc_type=cc_type;
+             paymentObj.cc_cvv2='';
+             paymentObj.payment_note='';
+           }else{
+             paymentObj.amount='';
+             paymentObj.balance_amount='';
+             paymentObj.paid_by='';
+             paymentObj.cc_no='';
+             paymentObj.paying_gift_card_no='';
+             paymentObj.cc_holder='';
+             paymentObj.cheque_no='';
+             paymentObj.cc_month='';
+             paymentObj.cc_year='';
+             paymentObj.cc_type='';
+             paymentObj.cc_cvv2='';
+             paymentObj.payment_note='';
+           }
+           paymentList.add(paymentObj);
+         }
+         sales.payment=paymentList;
+         sales.billerdetails=billerdetails;
+         sales.apiKey=MrConfig.mr_api_key;
+         sales.customer=customer;
+         sales.warehouse=warehouse;
+         sales.biller=biller;
+         sales.biller_id=biller;
+         sales.note=pos_note;
+         sales.staff_note=orderNoteController.text;
+         sales.order_tax='';
+         sales.discount=discountTextController.text;
+         sales.shipping=shippingTextController.text;
+         sales.total_items=appController.basketItems.length.toString();
+         sales.user_id='1';
+         sales.is_dine_in=getIsDineIn.toString();
+         sales.table_no=isParcel==true?'':tableId??'';
+         sales.paidby=paid_by;
+         // sales.payment.cc_type=cc_type;
+         sales.items=items;
+         // sales.tableModel=tableModel;
+         int subTotalCal=int.parse(shippingTextController.text) - int.parse(discountTextController.text);
+         double grandTotalCal=grandTotal + subTotalCal;
+         sales.grand_total=grandTotal.toString();
+         CardProvider().postSales(sales).then((result) {
+           print(result);
+           print('result===');
+           if (result != null ) {
+             progressDialog.hide();
+             // isProcessing(false);
+             removeAllListAndGoToOrderList();
+             Helpers.showSnackbar(title:'success'.tr,message: 'your_order_has_been_successfully_submitted'.tr);
+
+           } else {
+             progressDialog.hide();
+             Helpers.showSnackbar(title:"error".tr,message:"Failed".tr,);
+
+           }
+         });
+       }else {
+        Helpers.showSnackbar(message: 'error_dialog__no_internet'.tr);
+     }
+     }
     }catch(e){
+      progressDialog.hide();
       Helpers.showSnackbar(title:"error".tr,message:"Failed".tr,);
       print(e);
+    }finally{
+      progressDialog.hide();
     }
   }
   void removeAllList(){
@@ -366,6 +399,26 @@ void addNotes(int index,String value){
     }
 
   }
+void removeAllListAndGoToOrderList(){
+  appController.basketItems.clear();
+  if(appController.basketItems.length==0){
+    Get.offAllNamed(Routes.ORDER_LIST);
+  }
+
+}
+
+Future<void> getTableList() async {
+  try {
+    isLoading(true);
+    var tablesData = await CardProvider().getTables();
+    if (tablesData != null) {
+      tableList.assignAll(tablesData);
+      // categoriesList.value = categories;
+    }
+  } finally {
+    isLoading(false);
+  }
+}
 
 
 }

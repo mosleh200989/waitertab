@@ -487,4 +487,10 @@ const Map<String, String> ar = {
   "AlreadyAdded": "إزالة المنتج",
   "warning_dialog_please_add_to_card": "الرجاء الإضافة إلى البطاقة",
   "already_added_to_basket": "تمت إضافة هذا المنتج بالفعل في العربة",
+  "refreshed_successfully_completed": "تم التحديث بنجاح",
+  "your_order_has_been_successfully_submitted": "تم تقديم طلبك بنجاح",
+  "please_add_item": "الرجاء إضافة عنصر",
+  "please_select_table": "يرجى تحديد الجدول",
+  "please_select_payment_method": "الرجاء تحديد طريقة الدفع",
+  "please_select_payment_method_type": "الرجاء تحديد نوع طريقة الدفع",
 };

@@ -3,6 +3,7 @@ import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/data/models/billerdetails.dart';
 import 'package:waiter/app/data/models/created_by.dart';
 import 'package:waiter/app/data/models/payment.dart';
+import 'package:waiter/app/data/models/table.dart';
 import 'package:waiter/app/data/models/warehouse.dart';
 
 List<Sales> salesFromJson(dynamic str) => List<Sales>.from((str as List<dynamic>).map((x) => Sales.fromJSON(x)));
@@ -59,6 +60,7 @@ class Sales {
   Warehouse warehouseList;
   List <Payment> payment = [];
   CreatedBy created_by_obj;
+  TableModel tableModel;
   Sales({
     this.biller,
     this.biller_id,
@@ -108,6 +110,7 @@ class Sales {
     this.paidby,
     this.payment,
     this.created_by_obj,
+    this.tableModel,
 });
 
   Sales.fromJSON(Map<String, dynamic> jsonMap) {
@@ -223,6 +226,7 @@ class Sales {
     map['paidby'] = paidby;
     // map["billerdetails"] = billerdetails?.toMap();
     map['details']=Basket().toMapList(items);
+    map['table']=TableModel()?.toMap();
     // map["warehouse"] = warehouse?.toMap();
     map["payment_details"] = Payment()?.toMapList(payment);
     return map;
