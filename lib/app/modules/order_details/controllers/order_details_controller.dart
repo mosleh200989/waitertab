@@ -33,7 +33,8 @@ class OrderDetailsController extends GetxController {
  }
  final _grandTotal=0.0.obs;
  double get grandTotal=>_grandTotal.value;
-
+final _optionValue=''.obs;
+String get optionValue=>_optionValue.value;
   @override
   void onInit()async {
     if(Get.arguments !=null && Get.arguments.length>0){
@@ -67,7 +68,12 @@ class OrderDetailsController extends GetxController {
    productList[i].totalPrice=productList[i].counter * double.parse(productList[i].price);
     update();
   }
-
+void changedOption(String value){
+    print(value);
+    print('value');
+  _optionValue.value=value;
+  update();
+}
  void incrementOpenDialog(int i) {
    productList[i].totalPrice= 1 * double.parse(productList[i].price);
    update();
