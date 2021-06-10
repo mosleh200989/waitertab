@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/data/models/basket.dart';
+import 'package:waiter/app/data/models/options.dart';
 import 'package:waiter/app/data/models/pagination_filter.dart';
 import 'package:waiter/app/data/models/product.dart';
 import 'package:waiter/app/data/providers/order_details_provider.dart';
@@ -12,7 +13,6 @@ class OrderDetailsController extends GetxController {
  final AppController appController=Get.find();
   var isLoading = true.obs;
   var productList = <Product>[].obs;
-  Basket basket;
   final Widget dividerLabel=  Container( height: 30.0,width: 2.0, color: Colors.grey,);
   var product=Product().obs;
   var counter = <int>[].obs;
@@ -34,8 +34,9 @@ class OrderDetailsController extends GetxController {
  }
  final _grandTotal=0.0.obs;
  double get grandTotal=>_grandTotal.value;
-final _optionValue='test'.obs;
+var _optionValue=''.obs;
 String get optionValue=>_optionValue.value;
+String optionData='';
 
 // For Pagination
   ScrollController scrollController = ScrollController();
@@ -104,11 +105,14 @@ String get optionValue=>_optionValue.value;
    productList[i].totalPrice=productList[i].counter * double.parse(productList[i].price);
     update();
   }
+  OptionModel optionModel;
 void changedOption(String value){
     print(value);
     print('value');
-  _optionValue.value=value;
-  update();
+  // _optionValue.value=value;
+    optionData=value;
+    // optionModel=value;
+  // update();
 }
  void incrementOpenDialog(int i) {
    productList[i].totalPrice= 1 * double.parse(productList[i].price);
@@ -186,7 +190,7 @@ void changedOption(String value){
       product_base_quantity: productList.elementAt(index).counter.toString(),
       real_unit_price: productList.elementAt(index).price,
       product_code: productList.elementAt(index).code,
-      product_option: productList.elementAt(index).option,
+      product_option: optionValue??'',
       product_tax: productList.elementAt(index).tax_rate.id,
       unit_price: productList.elementAt(index).unit_price,
       product_unit: productList.elementAt(index).unit.id,

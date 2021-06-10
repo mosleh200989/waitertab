@@ -112,6 +112,7 @@ class Basket {
       this.subtotal = json['subtotal'];
       this.tax = json['tax'];
       this.tax_rate_id = json['tax_rate_id'];
+
   }
 
   // Map<String, dynamic> toJson() => {'id':id,};

@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:waiter/app/core/values/mr_url.dart';
 import 'package:waiter/app/data/models/options.dart';
 import 'package:waiter/app/global_widgets/EmptyOrdersWidget.dart';
 import 'package:waiter/app/modules/home/controllers/app_controller.dart';
@@ -35,12 +36,17 @@ class AllOrderCarPage extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Card(
                           child: ListTile(
-                            leading: CachedNetworkImage(
-                              // height: 50,
-                              width: Get.width * .14,
-                              fit: BoxFit.fill,
-                              imageUrl:"${controller.productList.elementAt(index).image_url??''}",
-                              errorWidget: (context, url, error) => Icon(Icons.error),
+                            leading: GestureDetector(
+                              child: CachedNetworkImage(
+                                // height: 50,
+                                width: Get.width * .14,
+                                fit: BoxFit.fill,
+                                imageUrl:"${controller.productList.elementAt(index).image_url??''}",
+                                errorWidget: (context, url, error) => Icon(Icons.error),
+                              ),
+                              onTap: () {
+                                showCustomDialogForImage(context,controller.productList.elementAt(index).image_url,controller.productList.elementAt(index).name);
+                              },
                             ),
 
                             // CircleAvatar(
@@ -75,36 +81,70 @@ class AllOrderCarPage extends StatelessWidget {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
                                           // mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          // crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text('${controller.productList.elementAt(index).name}'),
+                                            // Align(
+                                            //   alignment:Get.locale.languageCode=='en'?Alignment.topLeft: Alignment.topRight,
+                                            //     child: Text('${controller.productList.elementAt(index).name}')),
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              // crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
                                                 // Visibility(
                                                 //     visible: controller.productList.elementAt(index).option!=null,
                                                 //     child: Text('${controller.productList.elementAt(index).option}')),
 
+                                                Obx(()=>
+                                                    DropdownButton(
+                                                      isExpanded: true,
+                                                      underline: SizedBox(),
+                                                      icon: Icon(
+                                                        Icons.arrow_drop_down_sharp,
+                                                      ),
+                                                      value:controller?.optionData??'',
+                                                      onChanged: (val) {
+                                                        print(val);
+                                                        controller.changedOption(val);
+                                                      },
+                                                      items:controller?.productList?.elementAt(index)?.optionsList?.length  !=null ? controller?.productList?.elementAt(index)?.optionsList?.map((lang) {
+                                                        return  DropdownMenuItem<dynamic>(
+                                                          child: Text(lang?.name??''),
+                                                          value:lang,
+                                                        );
+                                                      })?.toList(): null,
 
-                                                // DropdownButton<String>(
-                                                //     underline: SizedBox(),
-                                                //     icon: Icon(
-                                                //       Icons.arrow_drop_down_sharp,
-                                                //     ),
-                                                //   // value:controller.optionValue,
-                                                //   onChanged: (val) {
-                                                //     print(val);
-                                                //     controller.changedOption(val);
-                                                //
-                                                //   },
-                                                //     items:controller.productList.elementAt(index).optionsList.length !=null ? controller.productList.elementAt(index).optionsList.map((lang) {
-                                                //       return  DropdownMenuItem<String>(
-                                                //         child: Text(lang.name??''),
-                                                //         value:lang.name??"",
-                                                //       );
-                                                //     }).toList(): null,
-                                                //
-                                                //   ),
+                                                    ),
+                                              /*  DropdownButton<OptionModel>(
+                                                  // isDense: true,
+                                                  // iconSize: 30,
+                                                  // isExpanded: true,
+                                                  hint: Text(
+                                                    "Shop Name",
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                  value: controller.optionModel,
+                                                  onChanged: (OptionModel value) {
+                                                    controller.changedOption(value);
+                                                  },
+                                                  items: controller?.productList?.elementAt(index)?.optionsList?.map((OptionModel option) {
+                                                    return DropdownMenuItem<OptionModel>(
+                                                      value: option,
+                                                      child: Row(
+                                                        children: <Widget>[
+                                                          Text(
+                                                            option.name ?? '',
+                                                            style: TextStyle(
+                                                                color: Colors.black),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  })?.toList(),
+                                                ),*/
+                                                ),
+
 
                                                 controller.dividerLabel,
                                                 GetBuilder<OrderDetailsController>(
@@ -360,6 +400,86 @@ class AllOrderCarPage extends StatelessWidget {
           );
       }
     );
+  }
+  void showCustomDialogForImage(BuildContext context,String img,String name) {
+    Dialog fancyDialog = Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        height: 400.0,
+        width: Get.width,
+        child: Stack(
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              height: 350,
+              padding: EdgeInsets.only(top: 60,right: 20,left: 20),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              child:  ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child: CachedNetworkImage(
+                  height: 25,
+                  width:25,
+                  fit: BoxFit.fill,
+                  imageUrl:img,
+                  errorWidget: (context, url, error) => Image.network('${MrUrl.get_no_image_url}'),
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 50,
+              alignment: Alignment.bottomCenter,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(12),
+                  topRight: Radius.circular(12),
+                ),
+              ),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  name,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+            Align(
+              // These values are based on trial & error method
+              alignment: Alignment(1.05, -1.05),
+              child: InkWell(
+                onTap: () {
+                  Get.back();
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+        context: context, builder: (BuildContext context) => fancyDialog);
   }
 
 }
