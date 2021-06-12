@@ -3,6 +3,7 @@ import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/modules/home/controllers/home_controller.dart';
 import 'package:waiter/app/modules/order_list/controllers/order_list_controller.dart';
+import 'package:waiter/app/modules/tasks/controllers/tasks_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
 
 
@@ -74,6 +75,22 @@ class DrawerWidget extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
+
+              Get.reload<TasksController>();
+              Get.back();
+              Get.toNamed(Routes.TASKS);
+            },
+            leading: Icon(
+              Icons.task,
+              color: Get.theme.focusColor.withOpacity(1),
+            ),
+            title: Text(
+              'Tasks'.tr,
+              style:Get.theme.textTheme.subtitle1,
+            ),
+          ),
+          ListTile(
+            onTap: () {
               Get.back();
               Get.toNamed(Routes.ORDER_HISTORY);
             },
@@ -86,6 +103,7 @@ class DrawerWidget extends StatelessWidget {
               style:Get.theme.textTheme.subtitle1,
             ),
           ),
+
           ListTile(
             dense: true,
             title: Text(

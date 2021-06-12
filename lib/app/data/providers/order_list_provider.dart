@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:waiter/app/core/values/mr_config.dart';
 import 'package:waiter/app/core/values/mr_url.dart';
+import 'package:waiter/app/data/models/pagination_filter.dart';
 import 'package:waiter/app/data/models/sales.dart';
 
 class OrderListProvider extends GetConnect {
@@ -10,8 +11,8 @@ class OrderListProvider extends GetConnect {
   void onInit() {
     httpClient.baseUrl = 'YOUR-API-URL';
   }
-  Future<List<Sales>> getSales() async {
-    final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=1&include=items,warehouse,biller&start=0&limit=10&&api-key=${MrConfig.mr_api_key}";
+  Future<List<Sales>> getSales(PaginationFilter filter) async {
+    final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=1&include=items,warehouse,biller&start=${filter.offset}&limit=${filter.limit}&&api-key=${MrConfig.mr_api_key}";
     print(salesUrl);
     print('pending order url');
     Response response = await get(salesUrl);
@@ -19,12 +20,12 @@ class OrderListProvider extends GetConnect {
     // print("response.body");
     print(response.body);
     print('responseee');
-    if (response.statusCode == 200 && response.body['data'] !=null) {
+    if (response.statusCode == 200 && response.body['data'] !=null ) {
       return salesFromJson(response.body['data']);
-    } else {
+    } /*else {
       // return Future.error(response.statusText);
       return [];
-    }
+    }*/
   }
   Future<List<Sales>> getProcessingSales() async {
     final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=2&include=items,warehouse,biller&start=0&limit=10&&api-key=${MrConfig.mr_api_key}";

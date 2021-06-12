@@ -60,26 +60,29 @@ class OrderListView extends GetView<OrderListController> {
 
       body: Column(
         children:<Widget> [
-          Card(
-            elevation: 5,
-            child: Container(
-              height: 50,
-              color: Colors.white,
-              width: Get.width,
-              child: TabBar(
-                controller: controller.tabController,
-                // isScrollable: true,
-                labelColor: Colors.black,
-                indicatorColor: Colors.red,
-                automaticIndicatorColorAdjustment: true,
-                labelStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                // indicatorWeight: 10,
-                tabs:<Tab> [
-                  Tab(child:Text('${controller.tabs[0].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
-                  Tab(child:Text('${controller.tabs[1].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
-                  Tab(child:Text('${controller.tabs[2].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
-                  Tab(child:Text('${controller.tabs[3].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
-                ],
+          SizedBox(
+            height: 55,
+            child: Card(
+              elevation: 5,
+              child: Container(
+                height: 50,
+                color: Colors.white,
+                width: Get.width,
+                child: TabBar(
+                  controller: controller.tabController,
+                  // isScrollable: true,
+                  labelColor: Colors.black,
+                  indicatorColor: Colors.red,
+                  automaticIndicatorColorAdjustment: true,
+                  labelStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                  // indicatorWeight: 10,
+                  tabs:<Tab> [
+                    Tab(child:Text('${controller.tabs[0].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
+                    Tab(child:Text('${controller.tabs[1].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
+                    Tab(child:Text('${controller.tabs[2].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
+                    Tab(child:Text('${controller.tabs[3].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
+                  ],
+                ),
               ),
             ),
           ),
@@ -87,7 +90,30 @@ class OrderListView extends GetView<OrderListController> {
             child: TabBarView(
               controller: controller.tabController,
               children: [
-              PendingOrder(),
+                Column(
+                  children: [
+                    SizedBox(height: 20,
+                    child: Table(
+                      columnWidths: {0:FractionColumnWidth(.2)},
+                      border: TableBorder.all(width: 0.0,),
+                      defaultVerticalAlignment :TableCellVerticalAlignment.middle,
+                      children: [
+                        TableRow(
+                            children: [
+                              Text('OrderNo'.tr,textAlign: TextAlign.center,),
+                              Text('CustomerName'.tr,textAlign: TextAlign.center,),
+                              Text('Table'.tr,textAlign: TextAlign.center,),
+                              Text('OrderDate'.tr,textAlign: TextAlign.center,),
+                              Text('Amount'.tr,textAlign: TextAlign.center,),
+                              Text('Action'.tr,textAlign: TextAlign.center,),
+                            ]
+                        ),
+                      ],
+                    ),
+                    ),
+                    Expanded(child: PendingOrder()),
+                  ],
+                ),
               ProcessingOrder(),
               CompleteOrder(),
               CancelOrder(),

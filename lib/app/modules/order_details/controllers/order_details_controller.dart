@@ -55,6 +55,7 @@ String optionData='';
       // await getAllProducts();
       ever(_paginationFilter, (_) async =>  await getAllProducts());
       _changePaginationFilter(1, 5);
+      _optionValue.value='';
     }
     // incrementGrandTotal();
     for(var i=0; i<appController.basketItems.length;i++){
@@ -107,12 +108,10 @@ String optionData='';
   }
   OptionModel optionModel;
 void changedOption(String value){
-    print(value);
-    print('value');
-  // _optionValue.value=value;
-    optionData=value;
-    // optionModel=value;
-  // update();
+      _optionValue.value=value;
+}
+void clearOptionValue(){
+  _optionValue.value='';
 }
  void incrementOpenDialog(int i) {
    productList[i].totalPrice= 1 * double.parse(productList[i].price);

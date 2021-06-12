@@ -481,5 +481,6 @@ const Map<String, String> en ={
   "please_select_table": "Please Select Table",
   "please_select_payment_method": "Please Select Payment Method",
   "please_select_payment_method_type": "Please Select Payment Method Type",
+  "Tasks": "Tasks",
 
 };

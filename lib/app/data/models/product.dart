@@ -43,7 +43,10 @@ class Product {
     this.counter,
     this.isOrder,
   });
-
+  // @override
+  // String toString() {
+  //   return '${name} ${id}'.toLowerCase() + ' ${name} ${id}'.toUpperCase();
+  // }
   Product.fromJson(Map<String, dynamic> json){
       this.code = json['code'] != null ? json['code'] : null;
       this.id = json['id'] != null ? json['id'] : null;

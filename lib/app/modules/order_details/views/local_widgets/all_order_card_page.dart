@@ -68,7 +68,8 @@ class AllOrderCarPage extends StatelessWidget {
                               onPressed: () {
                                 if(controller.productList.elementAt(index).isOrder==true) {
                                   controller.setAgreedToOrder(false, index);
-                                } else{
+                                }else{
+                                  controller.clearOptionValue();
                                   controller.incrementOpenDialog(index);
                                   Get.defaultDialog(
                                     title: 'AddProduct'.tr,
@@ -80,83 +81,58 @@ class AllOrderCarPage extends StatelessWidget {
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
-                                          // mainAxisAlignment: MainAxisAlignment.start,
-                                          // crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            // Align(
-                                            //   alignment:Get.locale.languageCode=='en'?Alignment.topLeft: Alignment.topRight,
-                                            //     child: Text('${controller.productList.elementAt(index).name}')),
+
+                                            Align(
+                                              alignment:Get.locale.languageCode=='en'?Alignment.topLeft: Alignment.topRight,
+                                                child: Text('${controller.productList.elementAt(index).name}')),
                                             Row(
-                                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               // crossAxisAlignment: CrossAxisAlignment.center,
                                               children: [
+
                                                 // Visibility(
                                                 //     visible: controller.productList.elementAt(index).option!=null,
                                                 //     child: Text('${controller.productList.elementAt(index).option}')),
 
                                                 Obx(()=>
-                                                    DropdownButton(
-                                                      isExpanded: true,
+                                                    DropdownButton<dynamic>(
+                                                      // isExpanded: true,
                                                       underline: SizedBox(),
                                                       icon: Icon(
                                                         Icons.arrow_drop_down_sharp,
                                                       ),
-                                                      // value:controller?.optionData??'',
+
+                                                      items:controller?.productList?.elementAt(index)?.optionsList?.length  !=null ? controller?.productList?.elementAt(index)?.optionsList?.map((lang) {
+                                                        return  DropdownMenuItem<dynamic>(
+                                                          child: Text(lang?.name??''),
+                                                          value:lang.name,
+                                                        );
+                                                      })?.toList() : null,
+                                                      // value:controller.optionValue??null,
                                                       onChanged: (val) {
                                                         print(val);
                                                         controller.changedOption(val);
                                                       },
-                                                      items:controller?.productList?.elementAt(index)?.optionsList?.length  !=null ? controller?.productList?.elementAt(index)?.optionsList?.map((lang) {
-                                                        return  DropdownMenuItem<dynamic>(
-                                                          child: Text(lang?.name??''),
-                                                          value:lang,
-                                                        );
-                                                      })?.toList(): null,
-
                                                     ),
-                                              /*  DropdownButton<OptionModel>(
-                                                  // isDense: true,
-                                                  // iconSize: 30,
-                                                  // isExpanded: true,
-                                                  hint: Text(
-                                                    "Shop Name",
-                                                    style: TextStyle(
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                  value: controller.optionModel,
-                                                  onChanged: (OptionModel value) {
-                                                    controller.changedOption(value);
-                                                  },
-                                                  items: controller?.productList?.elementAt(index)?.optionsList?.map((OptionModel option) {
-                                                    return DropdownMenuItem<OptionModel>(
-                                                      value: option,
-                                                      child: Row(
-                                                        children: <Widget>[
-                                                          Text(
-                                                            option.name ?? '',
-                                                            style: TextStyle(
-                                                                color: Colors.black),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  })?.toList(),
-                                                ),*/
                                                 ),
+                                                Obx(()=> Text(controller.optionValue??controller.productList.elementAt(index).option)),
 
-
-                                                controller.dividerLabel,
                                                 GetBuilder<OrderDetailsController>(
                                                     builder: (_) {
                                                       // _.productList.elementAt(index).totalPrice=double.parse(_.productList.elementAt(index).price);
                                                       return Row(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        mainAxisAlignment: MainAxisAlignment.start,
                                                         children: [
+                                                          controller.dividerLabel,
                                                           Padding(
                                                             padding: const EdgeInsets.all(8.0),
                                                             child: Row(
-                                                              crossAxisAlignment: CrossAxisAlignment.end,
-                                                              mainAxisAlignment: MainAxisAlignment.end,
+                                                              // crossAxisAlignment: CrossAxisAlignment.end,
+                                                              // mainAxisAlignment: MainAxisAlignment.end,
                                                               children: [
                                                                 InkWell(
                                                                   onTap: () {
@@ -184,12 +160,14 @@ class AllOrderCarPage extends StatelessWidget {
                                                             ),
                                                           ),
                                                           controller.dividerLabel,
-                                                          Text('${_.productList.elementAt(index).totalPrice??_.productList.elementAt(index).price}'),
+                                                          Padding(
+                                                            padding: const EdgeInsets.all(8.0),
+                                                            child: Text('${_.productList.elementAt(index).totalPrice??_.productList.elementAt(index).price}',),
+                                                          ),
                                                         ],
                                                       );
                                                     }
                                                 ),
-
                                               ],
                                             ),
                                           ],

@@ -493,4 +493,5 @@ const Map<String, String> ar = {
   "please_select_table": "يرجى تحديد الجدول",
   "please_select_payment_method": "الرجاء تحديد طريقة الدفع",
   "please_select_payment_method_type": "الرجاء تحديد نوع طريقة الدفع",
+  "Tasks": "مهام",
 };
