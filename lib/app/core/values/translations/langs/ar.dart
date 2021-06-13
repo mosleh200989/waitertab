@@ -494,4 +494,8 @@ const Map<String, String> ar = {
   "please_select_payment_method": "الرجاء تحديد طريقة الدفع",
   "please_select_payment_method_type": "الرجاء تحديد نوع طريقة الدفع",
   "Tasks": "مهام",
+  "task_priority_low": "قليل",
+  "task_priority_medium": "متوسط",
+  "task_priority_high": "عالي",
+  "task_priority_urgent": "عاجل",
 };

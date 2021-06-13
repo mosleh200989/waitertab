@@ -17,4 +17,5 @@ class Helpers {
       snackPosition: SnackPosition.BOTTOM,
     );
   }
+
 }

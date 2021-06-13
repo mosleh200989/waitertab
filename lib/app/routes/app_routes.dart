@@ -15,6 +15,7 @@ abstract class Routes {
   static const ORDER_HISTORY = _Paths.ORDER_HISTORY;
   static const ORDER_VIEW = _Paths.ORDER_VIEW;
   static const TASKS = _Paths.TASKS;
+  static const TASK_DETAILS = _Paths.TASK_DETAILS;
 }
 
 abstract class _Paths {
@@ -31,4 +32,5 @@ abstract class _Paths {
   static const ORDER_HISTORY = '/order-history';
   static const ORDER_VIEW = '/order-view';
   static const TASKS = '/tasks';
+  static const TASK_DETAILS = '/task-details';
 }

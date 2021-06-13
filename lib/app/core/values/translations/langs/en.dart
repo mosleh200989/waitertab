@@ -482,5 +482,9 @@ const Map<String, String> en ={
   "please_select_payment_method": "Please Select Payment Method",
   "please_select_payment_method_type": "Please Select Payment Method Type",
   "Tasks": "Tasks",
+  "task_priority_low": "Low",
+  "task_priority_medium": "Medium",
+  "task_priority_high": "High",
+  "task_priority_urgent": "Urgent",
 
 };

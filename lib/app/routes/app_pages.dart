@@ -19,6 +19,8 @@ import 'package:waiter/app/modules/order_list/views/order_list_view.dart';
 import 'package:waiter/app/modules/order_list/views/order_view.dart';
 import 'package:waiter/app/modules/splash/bindings/splash_binding.dart';
 import 'package:waiter/app/modules/splash/views/splash_view.dart';
+import 'package:waiter/app/modules/task_details/bindings/task_details_binding.dart';
+import 'package:waiter/app/modules/task_details/views/task_details_view.dart';
 import 'package:waiter/app/modules/tasks/bindings/tasks_binding.dart';
 import 'package:waiter/app/modules/tasks/views/tasks_view.dart';
 
@@ -89,6 +91,14 @@ class AppPages {
       name: _Paths.TASKS,
       page: () => TasksView(),
       binding: TasksBinding(),
+    ),
+    GetPage(
+      name: _Paths.TASK_DETAILS,
+      page: () => TaskDetailsView(),
+      binding: TaskDetailsBinding(),
+      fullscreenDialog: true,
+      transition: Transition.downToUp,
+      transitionDuration: Duration(milliseconds: 300),
     ),
   ];
 }
