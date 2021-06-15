@@ -23,12 +23,17 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
   var salesListProcessing = <Sales>[].obs;
   var salesListComplete = <Sales>[].obs;
   var salesListCancel = <Sales>[].obs;
+
+  var isDataProcessing = false.obs;
 // For Pagination
   ScrollController scrollController = ScrollController();
   var isMoreDataAvailable = true.obs;
+
   final _paginationFilter = PaginationFilter().obs;
   int get limit => _paginationFilter.value.limit;
   int get offset => _paginationFilter.value.offset;
+  final _lastPage = false.obs;
+  bool get lastPage => _lastPage.value;
   @override
   void onInit()  async {
     tabController = TabController(vsync: this, length: tabs.length);
@@ -38,7 +43,7 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
     await getAllCompleteOrder();
     await getAllCancelOrder();
     ever(_paginationFilter, (_) async =>  await getAllSales());
-    _changePaginationFilter(1, 20);
+    _changePaginationFilter(1, 10);
     paginateProductList();
     super.onInit();
   }
@@ -54,6 +59,10 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
     super.onClose();
     tabController.dispose();
   }
+  // void loadNextPage() {
+  //   print('name====');
+  //   _changePaginationFilter(offset + limit, limit);
+  // }
   void _changePaginationFilter(int offset, int limit) {
     _paginationFilter.update((val) {
       val.offset = offset;
@@ -83,16 +92,71 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
   }
   Future<void> getAllSales() async {
     try {
-      isLoading(true);
+      isMoreDataAvailable(false);
+      isDataProcessing(true);
+      // isLoading(true);
       var salesValue = await OrderListProvider().getSales(_paginationFilter.value);
       if (salesValue != null) {
-        salesList.assignAll(salesValue);
-        // salesList.value = salesValue;
+        // salesList.assignAll(salesValue);
+        isDataProcessing(false);
+        salesList.addAll(salesValue);
+
       }
     } finally {
       isLoading(false);
     }
   }
+
+  // Fetch Data
+ /* void getTask(var page) {
+    try {
+      isMoreDataAvailable(false);
+      isDataProcessing(true);
+      TaskProvider().getTask(page).then((resp) {
+        isDataProcessing(false);
+        lstTask.addAll(resp);
+      }, onError: (err) {
+        isDataProcessing(false);
+        showSnackBar("Error", err.toString(), Colors.red);
+      });
+    } catch (exception) {
+      isDataProcessing(false);
+    }
+  }
+
+
+  // For Pagination
+  void paginateTask() {
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        print("reached end");
+        page++;
+        getMoreTask(page);
+      }
+    });
+  }
+
+  // Get More data
+  void getMoreTask(var page) {
+    try {
+      TaskProvider().getTask(page).then((resp) {
+        if (resp.length > 0) {
+          isMoreDataAvailable(true);
+        } else {
+          isMoreDataAvailable(false);
+          showSnackBar("Message", "No more items", Colors.lightBlueAccent);
+        }
+        lstTask.addAll(resp);
+      }, onError: (err) {
+        isMoreDataAvailable(false);
+        showSnackBar("Error", err.toString(), Colors.red);
+      });
+    } catch (exception) {
+      isMoreDataAvailable(false);
+      showSnackBar("Exception", exception.toString(), Colors.red);
+    }
+  }*/
   Future<void> getAllProcessingOrder() async {
     try {
       isLoadingProcessing(true);

@@ -14,7 +14,7 @@ class ListHeader extends StatelessWidget {
             child: Text('Name'.tr,textAlign: TextAlign.center,),),
           Expanded(
             flex:2,
-            child: Text('Priority'.tr,textAlign: TextAlign.center,),),
+            child: Text('Date'.tr,textAlign: TextAlign.center,),),
           Expanded(
             flex:2,
             child: Text('Status'.tr,textAlign: TextAlign.center,),),

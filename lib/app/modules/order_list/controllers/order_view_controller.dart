@@ -14,8 +14,6 @@ class OrderViewController extends GetxController {
     super.onInit();
     if(Get.arguments !=null && Get.arguments.length > 0){
       _reference.value=Get.arguments['reference'];
-      print(reference);
-      print('reference====');
       await getSingleSales(reference);
     }
   }

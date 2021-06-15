@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:waiter/app/data/models/sales.dart';
 import 'package:waiter/app/global_widgets/EmptyOrdersWidget.dart';
 import 'package:waiter/app/modules/order_list/controllers/order_list_controller.dart';
@@ -12,16 +13,16 @@ class PendingOrder  extends StatelessWidget {
       child: Wrap(
         children: [
           Obx(() {
-            if (_con.isLoading.value)
-          return Center(child: CircularProgressIndicator());
-        else
+        //     if (_con.isLoading.value)
+        //   return Center(child: CircularProgressIndicator());
+        // else
          return  Container(
            height: Get.height-50,
            child: _con.salesList.isEmpty
                ? EmptyOrdersWidget()
                : RefreshIndicator(
              onRefresh: _con.refreshPendingList,
-             child: ListView.builder(
+             child:  ListView.builder(
                controller: _con.scrollController,
                itemCount: _con.salesList.length,
                // shrinkWrap: true,

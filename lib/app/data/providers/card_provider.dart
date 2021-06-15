@@ -39,26 +39,7 @@ class CardProvider extends GetConnect {
     }
   }
 
-  /*//Save Data
-  Future<String> saveTask(Map data) async {
-    try
-    {
-      final response = await post(
-          "http://192.168.43.152:81/TodoApp/public/api/saveTask",data);
-      if (response.status.hasError) {
-        return Future.error(response.statusText);
-      } else {
-        return  response.body['result'];
-      }
-    }
-    catch(exception)
-    {
-      return Future.error(exception.toString());
-    }
-
-  }*/
-
-  Future<Response<Basket>> postCity(body) =>
+ /* Future<Response<Basket>> postCity(body) =>
       post<Basket>('http://192.168.0.101:3000/items', body,
-          decoder: (obj) => Basket.fromJson(obj));
+          decoder: (obj) => Basket.fromJson(obj));*/
 }

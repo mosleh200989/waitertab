@@ -12,7 +12,7 @@ class TasksView extends GetView<TasksController>  {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tasks'),
+        title: Text('Tasks'.tr),
         centerTitle: true,
       ),
       body: Column(
@@ -34,8 +34,8 @@ class TasksView extends GetView<TasksController>  {
                   labelStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
                   // indicatorWeight: 10,
                   tabs:<Tab> [
-                    Tab(child:Text('Pending',textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
-                    Tab(child:Text('Complete',textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
+                    Tab(child:Text('Pending'.tr,textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
+                    Tab(child:Text('Complete'.tr,textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
                   ],
                 ),
               ),
@@ -52,7 +52,14 @@ class TasksView extends GetView<TasksController>  {
                     Expanded(child: PendingTasks()),
                   ],
                 ),
-                CompleteTasks(),
+                Column(
+                  children: [
+                    ListHeader(),
+                    Divider(thickness: 1,indent: 1,endIndent: 2,height: 5,color: Colors.black,),
+                    Expanded(child: CompleteTasks()),
+                  ],
+                ),
+
 
               ],
             ),

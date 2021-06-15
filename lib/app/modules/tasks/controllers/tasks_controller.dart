@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:waiter/app/core/values/mr_config.dart';
-import 'package:waiter/app/data/models/Task.dart';
+import 'package:waiter/app/data/models/tasks.dart';
 import 'package:waiter/app/data/providers/tasks_provider.dart';
 import 'package:waiter/app/global_widgets/helpers.dart';
 import 'package:waiter/app/global_widgets/loading_dialog.dart';
@@ -14,10 +14,13 @@ class TasksController extends GetxController with SingleGetTickerProviderMixin {
   TabController tabController;
  final isLoadingPending=true.obs;
  final isLoadingCompleted=true.obs;
-  var taskListPending = <Task>[].obs;
-  var taskListCompleted = <Task>[].obs;
-  String statusData='Mr';
+  var taskListPending = <Tasks>[].obs;
+  var taskListCompleted = <Tasks>[].obs;
+  String taskId='';
+  String statusId='';
+  String statusData='';
   String priorityData='';
+  int statusIndex;
   @override
   void onInit()async {
     super.onInit();
@@ -33,32 +36,32 @@ class TasksController extends GetxController with SingleGetTickerProviderMixin {
 
   @override
   void onClose() {}
-void changeStatus(String value,int index){
-    taskListPending[index].statusValue=value;
-    if(value=='Not Started'){
-      taskListPending[index].statusValue=value;
-      taskListPending[index].status='1';
-      taskListPending.refresh();
-      updateTaskStatus(taskListPending[index].id,taskListPending[index].status);
-    }else if(value=='Awaiting Feedback'){
-      print(value);
-      taskListPending[index].statusValue=value;
-      taskListPending[index].status='2';
-      taskListPending.refresh();
-    }else if(value=='Testing'){
-      taskListPending[index].statusValue=value;
-      taskListPending[index].status='3';
-      taskListPending.refresh();
-    }else if(value=='In Progress'){
-      taskListPending[index].statusValue=value;
-      taskListPending[index].status='4';
-      taskListPending.refresh();
-    }else{
-      taskListPending[index].statusValue=value;
-      taskListPending[index].status='5';
-      taskListPending.refresh();
-    }
 
+void changeStatus(String value,int index,String id){
+    statusIndex=index;
+    if(value=='Not Started'){
+      taskId=id;
+      statusData=value;
+      statusId='1';
+    }else if(value=='Awaiting Feedback'){
+      statusData=value;
+      statusId='2';
+      taskId=id;
+    }else if(value=='Testing'){
+      statusData=value;
+      statusId='3';
+      taskId=id;
+    }else if(value=='In Progress'){
+      statusData=value;
+      statusId='4';
+      taskId=id;
+    }else{
+      statusData=value;
+      statusId='5';
+      taskId=id;
+
+    }
+update();
 }
   Future<void> getAllTasks() async {
     try {
@@ -91,37 +94,32 @@ void changeStatus(String value,int index){
     }
   }
 
-  void updateTaskStatus(String id,String status ) async {
+  void updateTaskStatus() async {
     final ProgressDialog progressDialog = loadingDialog(Get.overlayContext);
     try{
-      Task task=Task();
-      task.id=id;
-      task.status=status;
+      Tasks task=Tasks();
+      task.id=taskId;
+      task.status=statusId;
       task.user_id=authController.currentUser.id;
       task.apiKey=MrConfig.mr_api_key;
-      print(task.toMap());
-      print('.status');
-     if(task==null){
-        Helpers.showSnackbar(title:'error'.tr,message: 'please_select_payment_method'.tr);
-      }else{
         if (await authController.checkInternetConnectivity()) {
-          // progressDialog.show();
-       /*   TasksProvider().updateTask(task).then((result) {
-            print(result);
-            print('result===');
+          progressDialog.show();
+          TasksProvider().updateTask(task).then((result)async {
             if (result != null ) {
               progressDialog.hide();
-              // isProcessing(false);
-              Helpers.showSnackbar(title:'success'.tr,message: 'your_order_has_been_successfully_submitted'.tr);
+              Get.back();
+              await getAllTasks();
+              await getAllCompleted();
+              Helpers.showSnackbar(title:'success'.tr,message: 'your_tasks_has_been_successfully_update'.tr);
             } else {
               progressDialog.hide();
               Helpers.showSnackbar(title:"error".tr,message:"Failed".tr,);
             }
-          });*/
+          });
         }else {
           Helpers.showSnackbar(message: 'error_dialog__no_internet'.tr);
         }
-      }
+
     }catch(e){
       progressDialog.hide();
       Helpers.showSnackbar(title:"error".tr,message:"Failed".tr,);

@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:waiter/app/core/values/mr_config.dart';
-import 'package:waiter/app/data/models/Task.dart';
+import 'package:waiter/app/data/models/task_checkitem.dart';
+import 'package:waiter/app/data/models/tasks.dart';
 
 class TasksProvider extends GetConnect {
   @override
@@ -8,15 +11,9 @@ class TasksProvider extends GetConnect {
     httpClient.baseUrl = 'YOUR-API-URL';
   }
 
-  Future<List<Task>> getTasks() async {
-    // https://eshtri.net/resturant_bukhari/api/v1/tasks?status=1&start=0&limit=10&api-key=ggsk4wkssoc4sccgskggssws04gc4gokc4g4gokw
+  Future<List<Tasks>> getTasks() async {
     final String taskssUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks?status=1&start=0&limit=10&api-key=${MrConfig.mr_api_key}";
-    print(taskssUrl);
-    print('processing order url');
     Response response = await get(taskssUrl);
-    // print(response.body);
-    // print("response.body");
-    // print(response.body['data']);
     if (response.statusCode == 200 && response.body['data'] !=null) {
       return taskFromJson(response.body['data']);
     } else {
@@ -24,14 +21,11 @@ class TasksProvider extends GetConnect {
       return [];
     }
   }
-  Future<List<Task>> getTasksCompleted() async {
-    final String taskssUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks?status=1&start=0&limit=10&api-key=${MrConfig.mr_api_key}";
+  Future<List<Tasks>> getTasksCompleted() async {
+    final String taskssUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks?status=5&start=0&limit=10&api-key=${MrConfig.mr_api_key}";
     print(taskssUrl);
     print('processing order url');
     Response response = await get(taskssUrl);
-    // print(response.body);
-    // print("response.body");
-    // print(response.body['data']);
     if (response.statusCode == 200 && response.body['data'] !=null) {
       return taskFromJson(response.body['data']);
     } else {
@@ -39,16 +33,48 @@ class TasksProvider extends GetConnect {
       return [];
     }
   }
-  Future<Task> updateTask(Task task) async {
+  Future<Tasks> updateTask(Tasks task) async {
     try
     {
       final String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks/changetaskstatus";
       Response response = await post(postUrl,task.toMap());
       if (response.statusCode == 200 ) {
-        return Task.fromJSON(response.body['data']);
+        return Tasks.fromJSON(response.body['data']);
       } else {
         return Future.error(response.statusText);
       }
+    }
+    catch(exception)
+    {
+      return Future.error(exception.toString());
+    }
+
+  }
+
+  Future<Tasks> getOneTasks(String tasksId) async {
+    final String tasksSingleUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks?task_id=$tasksId&api-key=${MrConfig.mr_api_key}";
+
+    Response response = await get(tasksSingleUrl);
+       if (response.statusCode == 200 && response.body['data'] !=null ) {
+      return Tasks.fromJSON(response.body['data']);
+    } else {
+      // return Future.error(response.statusText);
+      return null;
+    }
+  }
+
+
+  Future<dynamic> updateTaskCheckItem(TaskCheckItemModel task) async {
+    try{
+      final String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks/changecheckliststatus";
+      print(postUrl);
+      Response response = await post(postUrl,task.toMap());
+      if (response.statusCode == 200 && response.body['data'] !=null) {
+        return response.body['status'];
+      } else {
+        return Future.error(response.statusText);
+      }
+
     }
     catch(exception)
     {
