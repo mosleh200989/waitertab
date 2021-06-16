@@ -512,4 +512,5 @@ const Map<String, String> ar = {
   "StartDate": "تاريخ البدء",
   "DueDate": "تاريخ الاستحقاق",
   "ChecklistItem": "قائمة مرجعية",
+  "No_more_items": "ليس هناك المزيد من العناصر",
 };

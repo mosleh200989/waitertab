@@ -24,7 +24,7 @@ var tableList = <TableModel>[].obs;
   final count = 1.obs;
   final _showNote=false.obs;
   bool get showNote=>_showNote.value;
-  final TextEditingController orderNoteController=TextEditingController();
+  final  orderNoteController=TextEditingController();
   final  discountTextController=TextEditingController();
   final  shippingTextController=TextEditingController();
   int selectedIndex;
@@ -41,7 +41,6 @@ var tableList = <TableModel>[].obs;
   bool get isVisa =>_isVisa.value;
   final _isReverse=false.obs;
   bool get isReverse => _isReverse.value;
-List<TextEditingController> textEditNoteList = [];
 final _grandTotal=0.0.obs;
 double get grandTotal=>_grandTotal.value;
 var isProcessing= false.obs;
@@ -59,8 +58,6 @@ bool buttonActive = false;
     for(var i=0; i<appController.basketItems.length; i++){
       _grandTotal.value = _grandTotal.value+double.parse(appController.basketItems[i].subtotal);
     }
-    print(grandTotal);
-    print('grandTotal card');
     shippingTextController.text='0';
     discountTextController.text='0';
 
@@ -116,12 +113,7 @@ void shippingChange(String text){
 
 
 }
-void _printLatestValue() {
-  print('Second text field: ${discountTextController.text}');
-  if(discountTextController.text !=null){
-    _grandTotal.value+= int.parse(discountTextController.text) ;
-  }
-}
+
   void changeShowNoteField(bool value,int index){
 
     if( appController.basketItems[index].isNotes==false){
@@ -132,11 +124,9 @@ void _printLatestValue() {
       update();
     }
   }
-  void selectedItem(int index,TableModel tableModel)async{
+  void selectedItem(int index,)async{
     selectedIndex = index;
-    tableId=tableModel.id;
-    print(tableId);
-    print('tableId');
+    tableId=tableList[index].id;
     update();
   }
 
@@ -201,17 +191,17 @@ void decrement(int index){
     if(isDineIn!=newValue){
       isDineIn=true;
       isParcel=false;
-      _isDineIn.value=1;
+      // _isDineIn.value=1;
+      selectedIndex=0;
+      tableId=tableList[0].id;
       update();
     }
     if(isParcel==newValue){
       isDineIn=false;
       isParcel=true;
-      _isDineIn.value=2;
-      // selectedIndex = 0;
+      // _isDineIn.value=2;
+      selectedIndex = 0;
       tableId='';
-      print(tableId);
-      print('tableId');
       update();
     }
   }
@@ -242,10 +232,9 @@ void changeCCMethod(bool newValue){
   }
 }
 void addNotes(int index,String value){
-  // appController.basketItems[index].textEditContNotes.text=value;
-  //   print( appController.basketItems[index].textEditContNotes.text??'');
-    // appController.basketItems.elementAt(index).notes=textEditNoteList[index].text;
-    // print(appController.basketItems[index].notes);
+  try {
+    appController.basketItems[index].notes = value;
+  } on FormatException {}
 }
 
   void postSalesOrder() async {
@@ -261,9 +250,7 @@ void addNotes(int index,String value){
       String biller = "3";
       String pos_note = "";
       String staff_note = "معجون سنسوداين 75 مل واقي";
-      // String order_tax = txtOrderTaxId;
-      // String discount = txtDiscountAmnt;
-      // String shipping = txtExtraChargeAmount;
+
       BillerDetails billerdetails=BillerDetails();
       billerdetails.id='3';
       billerdetails.group_name='biller';
@@ -304,7 +291,7 @@ void addNotes(int index,String value){
              unit_price:appController.basketItems[i].unit_price,
              real_unit_price:appController.basketItems[i].real_unit_price,
              subtotal:appController.basketItems[i].subtotal,
-             product_comment:'',
+             product_comment:appController.basketItems[i].notes,
              serial:serial.toString(),
            );
            items.add(basket);
@@ -315,7 +302,7 @@ void addNotes(int index,String value){
            Payment paymentObj=Payment();
            if(i==0){
              paymentObj.amount=grandTotal.toString();
-             paymentObj.balance_amount=grandTotal.toString();
+             paymentObj.balance_amount='0';
              paymentObj.paid_by=paid_by;
              paymentObj.cc_no='';
              paymentObj.paying_gift_card_no='';
@@ -342,6 +329,7 @@ void addNotes(int index,String value){
            }
            paymentList.add(paymentObj);
          }
+
          sales.payment=paymentList;
          sales.billerdetails=billerdetails;
          sales.apiKey=MrConfig.mr_api_key;
@@ -357,7 +345,8 @@ void addNotes(int index,String value){
          sales.total_items=appController.basketItems.length.toString();
          sales.user_id='1';
          sales.is_dine_in=getIsDineIn.toString();
-         sales.table_no=isParcel==true?'':tableId??'';
+         sales.table_no=isDineIn==true?tableId:'';
+         // isParcel==true?'':
          sales.paidby=paid_by;
          // sales.payment.cc_type=cc_type;
          sales.items=items;
@@ -387,9 +376,11 @@ void addNotes(int index,String value){
     }catch(e){
       progressDialog.hide();
       Helpers.showSnackbar(title:"error".tr,message:"Failed".tr,);
+      print('e===============');
       print(e);
     }finally{
       progressDialog.hide();
+      print('finally');
     }
   }
   void removeAllList(){

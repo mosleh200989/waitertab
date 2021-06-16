@@ -39,12 +39,18 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
     tabController = TabController(vsync: this, length: tabs.length);
     myHandler.value = tabs[0];
     tabController.addListener(handleSelected);
+    _changePaginationFilter(1, 10);
+    await getAllSales(_paginationFilter.value);
     await getAllProcessingOrder();
     await getAllCompleteOrder();
     await getAllCancelOrder();
-    ever(_paginationFilter, (_) async =>  await getAllSales());
-    _changePaginationFilter(1, 10);
+
+    // ever(_paginationFilter, (_) async =>  await getAllSales());
+    // once(_paginationFilter, (_) async => await getAllSales());
+    // debounce(_paginationFilter, (_) async => await getMoreSales(), time: Duration(seconds: 1));
+
     paginateProductList();
+    // interval(_paginationFilter, (_) => print("interval $_"), time: Duration(seconds: 1));
     super.onInit();
   }
 
@@ -59,10 +65,6 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
     super.onClose();
     tabController.dispose();
   }
-  // void loadNextPage() {
-  //   print('name====');
-  //   _changePaginationFilter(offset + limit, limit);
-  // }
   void _changePaginationFilter(int offset, int limit) {
     _paginationFilter.update((val) {
       val.offset = offset;
@@ -72,11 +74,12 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
   }
   // For Pagination
   void paginateProductList() {
-    scrollController.addListener(() {
+    scrollController.addListener(() async {
       if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
+          scrollController.position.maxScrollExtent)  {
         print("reached end");
         _changePaginationFilter(offset + limit, limit);
+         await getMoreSales(_paginationFilter.value);
         // page++;
         // getMoreTask(page);
       }
@@ -85,17 +88,19 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
   Future<void> refreshPendingList() async {
     salesList.clear();
     _changePaginationFilter(1, 20);
+    await getAllSales(_paginationFilter.value);
     Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
   }
   void handleSelected() {
       myHandler.value= tabs[tabController.index];
   }
-  Future<void> getAllSales() async {
+  Future<void> getAllSales(PaginationFilter filter) async {
+    print('get all sales');
     try {
       isMoreDataAvailable(false);
       isDataProcessing(true);
       // isLoading(true);
-      var salesValue = await OrderListProvider().getSales(_paginationFilter.value);
+      var salesValue = await OrderListProvider().getSales(filter);
       if (salesValue != null) {
         // salesList.assignAll(salesValue);
         isDataProcessing(false);
@@ -103,63 +108,30 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
 
       }
     } finally {
-      isLoading(false);
-    }
-  }
-
-  // Fetch Data
- /* void getTask(var page) {
-    try {
-      isMoreDataAvailable(false);
-      isDataProcessing(true);
-      TaskProvider().getTask(page).then((resp) {
-        isDataProcessing(false);
-        lstTask.addAll(resp);
-      }, onError: (err) {
-        isDataProcessing(false);
-        showSnackBar("Error", err.toString(), Colors.red);
-      });
-    } catch (exception) {
+      // isLoading(false);
       isDataProcessing(false);
     }
   }
-
-
-  // For Pagination
-  void paginateTask() {
-    scrollController.addListener(() {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        print("reached end");
-        page++;
-        getMoreTask(page);
-      }
-    });
-  }
-
-  // Get More data
-  void getMoreTask(var page) {
-    try {
-      TaskProvider().getTask(page).then((resp) {
-        if (resp.length > 0) {
-          isMoreDataAvailable(true);
-        } else {
-          isMoreDataAvailable(false);
-          showSnackBar("Message", "No more items", Colors.lightBlueAccent);
-        }
-        lstTask.addAll(resp);
-      }, onError: (err) {
+  Future<void> getMoreSales(PaginationFilter filter)async{
+    print('get more sales');
+    try{
+      var salesValue = await OrderListProvider().getSales(filter);
+      if (salesValue.length > 0) {
+        isMoreDataAvailable(true);
+      } else {
         isMoreDataAvailable(false);
-        showSnackBar("Error", err.toString(), Colors.red);
-      });
-    } catch (exception) {
-      isMoreDataAvailable(false);
-      showSnackBar("Exception", exception.toString(), Colors.red);
+      }
+      salesList.addAll(salesValue);
+    }catch (exception) {
+      isDataProcessing(false);
+    }finally{
+      isDataProcessing(false);
     }
-  }*/
+}
+
   Future<void> getAllProcessingOrder() async {
     try {
-      isLoadingProcessing(true);
+      isLoading(true);
       var salesValue = await OrderListProvider().getProcessingSales();
       if (salesValue != null) {
         salesListProcessing.assignAll(salesValue);
@@ -168,7 +140,7 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
         salesListProcessing.value=[];
       }
     } finally {
-      isLoadingProcessing(false);
+      isLoading(false);
     }
   }
   Future<void> getAllCompleteOrder() async {

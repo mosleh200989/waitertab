@@ -21,7 +21,6 @@ class Basket {
   bool isOrder;
   Product product;
   String notes;
-  TextEditingController textEditContNotes;
   bool isNotes=false;
   String cgst;
   String comment;
@@ -59,7 +58,6 @@ class Basket {
     this.isOrder,
     this.product,
     this.notes,
-    this.textEditContNotes,
     this.isNotes,
     this.cgst,
     this.comment,

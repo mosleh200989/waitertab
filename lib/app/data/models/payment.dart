@@ -53,7 +53,6 @@ class Payment {
 
   Map toMap() {
     var map = new Map<String, dynamic>();
-    map['id'] = id;
     map['amount'] = amount;
     map['balance_amount'] = balance_amount;
     map['paid_by'] = paid_by;

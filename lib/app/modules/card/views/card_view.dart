@@ -16,6 +16,7 @@ class CardView extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppController appController = Get.find();
     final OrderDetailsController orderDetailsController = Get.find();
+    final CardController cardController = Get.find();
     final TextStyle labelTextStyle = TextStyle(
       fontWeight: FontWeight.normal,
     );
@@ -104,6 +105,7 @@ class CardView extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final String productOption =
                             "${appController?.basketItems?.elementAt(index)?.product_option ?? ''}";
+                        appController.textEditNoteController.add(TextEditingController());
                         return Card(
                           margin: EdgeInsets.all(5),
                           elevation: 0,
@@ -214,41 +216,7 @@ class CardView extends StatelessWidget {
                                     visible: _.appController.basketItems[index]
                                             .isNotes ==
                                         true,
-                                    child: TextFormField(
-                                      controller: appController
-                                          .basketItems[index].textEditContNotes,
-                                      keyboardType: TextInputType.text,
-                                      /* controller: TextEditingController.fromValue(
-                                                     TextEditingValue(
-                                                         text: appController.basketItems[index].product_name??'',
-                                                         selection: new TextSelection.collapsed(
-                                                             offset: appController.basketItems.length),
-                                                     )),*/
-
-                                      onChanged: (value) {
-                                        controller.addNotes(index, value);
-                                        // controller.textEditNoteList[index].text=value;
-                                      },
-                                      decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.all(12),
-                                        hintText: 'Notes'.tr,
-                                        hintStyle: TextStyle(
-                                            color: Get.theme.focusColor
-                                                .withOpacity(0.7)),
-                                        border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Get.theme.focusColor
-                                                    .withOpacity(0.2))),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Get.theme.focusColor
-                                                    .withOpacity(0.5))),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: Get.theme.focusColor
-                                                    .withOpacity(0.2))),
-                                      ),
-                                    ),
+                                    child: singleItemText(index, _.appController.textEditNoteController[index]),
                                   );
                                 }),
                               ],
@@ -353,7 +321,7 @@ class CardView extends StatelessWidget {
                                 final  TableModel tableModel=controller.tableList[index];
                                   return GestureDetector(
                                     onTap: () {
-                                      _cont.selectedItem(index,controller.tableList[index]);
+                                      _cont.selectedItem(index);
                                     },
                                     child: Card(
                                       elevation: 1,
@@ -731,6 +699,73 @@ class CardView extends StatelessWidget {
           // Get.toNamed(Routes.CARD);
         },
       ),
+    );
+  }
+  Widget singleItemText(int index, TextEditingController controllertxt) {
+    final appController=Get.find<AppController>();
+    final cardController=Get.find<CardController>();
+    Basket item = appController.basketItems[index];
+print(controllertxt);
+print('controllertxt');
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
+      child:TextFormField(
+        controller:controllertxt,
+        keyboardType: TextInputType.text,
+        /* controller: TextEditingController.fromValue(
+                                                     TextEditingValue(
+                                                         text: appController.basketItems[index].product_name??'',
+                                                         selection: new TextSelection.collapsed(
+                                                             offset: appController.basketItems.length),
+                                                     )),*/
+
+        onChanged: (value) {
+          print(value);
+
+          cardController.addNotes(index, value);
+          // controller.textEditNoteList[index].text=value;
+        },
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.all(12),
+          hintText: 'Notes'.tr,
+          hintStyle: TextStyle(
+              color: Get.theme.focusColor
+                  .withOpacity(0.7)),
+          border: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: Get.theme.focusColor
+                      .withOpacity(0.2))),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: Get.theme.focusColor
+                      .withOpacity(0.5))),
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: Get.theme.focusColor
+                      .withOpacity(0.2))),
+        ),
+      ),
+
+     /* Row(
+        children: [
+          Expanded(flex: 1, child: Text("${index + 1}")),
+          Expanded(
+            flex: 3,
+            child:  TextField(
+              controller: controllertxt,
+              keyboardType: TextInputType.number,
+              onChanged: (text) {
+                // takeNumber(text, item.id);
+              },
+              decoration: InputDecoration(
+                labelText: "Qty",
+              ),
+            ),
+          ),
+        ],
+      ),*/
     );
   }
 }

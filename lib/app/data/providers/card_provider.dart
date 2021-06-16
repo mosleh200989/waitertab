@@ -16,6 +16,7 @@ class CardProvider extends GetConnect {
     {
       final String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales/postsales?api-key=${MrConfig.mr_api_key}";
       Response response = await post(postUrl,sales.toMap());
+      print(response.body);
       if (response.statusCode == 200 ) {
         return Sales.fromJSON(response.body['sale']);
       } else {
