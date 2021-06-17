@@ -501,5 +501,6 @@ const Map<String, String> en ={
   "DueDate": "Due Date",
   "ChecklistItem": "Check list Item",
   "No_more_items": "No more items",
+  "TableName": "Table Name",
 
 };

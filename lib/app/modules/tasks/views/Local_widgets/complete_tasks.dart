@@ -13,9 +13,7 @@ class CompleteTasks extends StatelessWidget {
       child: GetX<TasksController>(
           builder: (_con) {
             return RefreshIndicator(
-              onRefresh: () {
-                // print('work done');
-              },
+              onRefresh: _con.refreshCompletedTasks,
               child:_con.taskListCompleted.isEmpty ? EmptyOrdersWidget(): ListView.builder(
                 itemCount:_con.taskListCompleted.length ,
                 itemBuilder: (context, index) {

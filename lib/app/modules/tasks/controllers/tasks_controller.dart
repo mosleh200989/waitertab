@@ -128,5 +128,16 @@ update();
       progressDialog.hide();
     }
   }
+  Future<void> refreshPendingTasks() async {
+    taskListPending.clear();
+
+    await getAllTasks();
+    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
+  }
+  Future<void> refreshCompletedTasks() async {
+    taskListCompleted.clear();
+    await getAllCompleted();
+    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
+  }
 
 }

@@ -115,6 +115,7 @@ class Sales {
 
   Sales.fromJSON(Map<String, dynamic> jsonMap) {
     try {
+      print('sales model ache');
       biller = jsonMap['biller'] !=null ? jsonMap['biller'] : '';
       biller_id = jsonMap['biller_id'] !=null ? jsonMap['biller_id'] : '';
       cgst = jsonMap['cgst'] !=null ? jsonMap['cgst'] : '';
@@ -127,6 +128,7 @@ class Sales {
       var adddate=jsonMap["date"] != null ? dateFormate.substring(0, 10):'';
       // addTime = jsonMap["added_date"] != null ? date.substring(11, 19) :null;
       date =adddate;
+
       due_date = jsonMap['due_date'] !=null ? jsonMap['due_date'] : '';
       grand_total = jsonMap['grand_total'] !=null ? jsonMap['grand_total'] : '';
       id = jsonMap['id'] !=null ? jsonMap['id'] : '';
@@ -135,6 +137,7 @@ class Sales {
       local_id = jsonMap['local_id'] !=null ? jsonMap['local_id'] : '';
       manual_payment = jsonMap['manual_payment'] !=null ? jsonMap['manual_payment'] : '';
       note = jsonMap['note'] !=null ? jsonMap['note'] : '';
+
       online_id = jsonMap['online_id'] !=null ? jsonMap['online_id'] : '';
       order_discount = jsonMap['order_discount'] !=null ? jsonMap['order_discount'] : '';
       order_discount_id = jsonMap['order_discount_id'] !=null ? jsonMap['order_discount_id'] : '';
@@ -143,6 +146,7 @@ class Sales {
       order_tax = jsonMap['order_tax'] !=null ? jsonMap['order_tax'] : '';
       order_tax_id = jsonMap['order_tax_id'] !=null ? jsonMap['order_tax_id'] : '';
       paid = jsonMap['paid'] !=null ? jsonMap['paid'] : '';
+
       payment_method = jsonMap['payment_method'] !=null ? jsonMap['payment_method'] : '';
       payment_status = jsonMap['payment_status'] !=null ? jsonMap['payment_status'] : '';
       payment_term = jsonMap['payment_term'] !=null ? jsonMap['payment_term'] : '';
@@ -163,10 +167,12 @@ class Sales {
       discount = jsonMap['discount'] !=null ? jsonMap['discount'] : '';
       user_id = jsonMap['user_id'] !=null ? jsonMap['user_id'] : '';
       is_dine_in = jsonMap['is_dine_in'] !=null ? jsonMap['is_dine_in'] : '';
+
       billerdetails = jsonMap['billerdetails'] != null ? BillerDetails.fromJSON(jsonMap['billerdetails']) : new BillerDetails();
       items = jsonMap['items'] != null ? List.from(jsonMap['items']).map((element) => Basket.fromJson(element)).toList() : [];
       payment = jsonMap['payment_details'] != null ? List.from(jsonMap['payment_details']).map((element) => Payment.fromJSON(element)).toList() : [];
       warehouseList = jsonMap['warehouse'] != null ? Warehouse.fromJSON(jsonMap['warehouse']) : new Warehouse();
+      tableModel = jsonMap['restaurant_table'] != null ? TableModel.fromJson(jsonMap['restaurant_table']) : new TableModel();
       created_by_obj = jsonMap['created_by'] != null ? CreatedBy.fromJson(jsonMap['created_by']) : new CreatedBy();
       // payment = jsonMap['payment_details'] != null ? Payment.fromJSON(jsonMap['payment_details']) : new Payment();
 
@@ -226,7 +232,7 @@ class Sales {
     map['paidby'] = paidby;
     // map["billerdetails"] = billerdetails?.toMap();
     map['details']=Basket().toMapList(items);
-    map['table']=TableModel()?.toMap();
+    // map['table']=TableModel()?.toMap();
     // map["warehouse"] = warehouse?.toMap();
     map["payment_details"] = Payment()?.toMapList(payment);
     return map;

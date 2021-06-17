@@ -143,6 +143,7 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
       isLoading(false);
     }
   }
+
   Future<void> getAllCompleteOrder() async {
     try {
       isLoadingComplete(true);

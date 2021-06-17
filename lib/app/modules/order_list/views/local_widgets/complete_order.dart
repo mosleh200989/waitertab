@@ -56,7 +56,7 @@ class CompleteOrder  extends StatelessWidget {
                                   ),
                                   TableCell(child: Padding(
                                       padding: EdgeInsets.all(5),
-                                      child:Text(salesData.table_no)
+                                      child:Text(salesData?.tableModel?.name ?? '')
                                   )
                                   ),
                                   TableCell(child: Padding(
@@ -74,7 +74,7 @@ class CompleteOrder  extends StatelessWidget {
                                           Expanded(child: IconButton(icon:Icon(Icons.visibility,color: Colors.red,),
                                             onPressed:  () {
                                               Get.reload<OrderListController>();
-                                              Get.toNamed(Routes.ORDER_VIEW, arguments: {'reference':salesData.reference_no});
+                                              Get.toNamed(Routes.ORDER_VIEW, arguments: {'reference':salesData.id,'orderStatus':salesData.order_status});
                                             },)),
 
                                         ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/global_widgets/DrawerWidget.dart';
+import 'package:waiter/app/global_widgets/EmptyOrdersWidget.dart';
 import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:waiter/app/modules/order_list/controllers/order_view_controller.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/label_and_text.dart';
@@ -24,45 +25,55 @@ class OrderView extends StatelessWidget {
             if (_con.isLoading.value)
               return Center(child: CircularProgressIndicator());
             else
-              return Card(
-                margin: EdgeInsets.all(5),
-                elevation: 1,
-                child: Stack(
-                  children: [
-                    Positioned(
-                        right:  Get.locale.languageCode=="en"? 5:Get.width-40,
-                        top: 5,
-                        child: Container(
-                            child: Icon(Icons.print)
-                        )),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text('SaleNumber'.tr+': ${_con.sales.id}',
-                          style: labelTextStyle,
-                        ),
-                        Text('Date'.tr+': ${_con.sales.date}',
-                          style: labelTextStyle,
-                        ),
-                        Text('SaleReference'.tr+': ${_con.sales.reference_no}',
-                          style: labelTextStyle,
-                        ),
-                        Text(
-                          'SalesAssociate'.tr+': ${Get.find<AuthController>().currentUser.username}',
-                          style: labelTextStyle,
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          'Customer'.tr+': ${_con.sales.customer}',
-                          style: labelTextStyle,
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Visibility(
+              if(_con.sales == null){
+                return EmptyOrdersWidget();
+              }else{
+                return  Card(
+                  margin: EdgeInsets.all(5),
+                  elevation: 1,
+                  child: Stack(
+                    children: [
+                      Positioned(
+                          right:  Get.locale.languageCode=="en"? 5:Get.width-40,
+                          top: 5,
+                          child: Container(
+                              child: Icon(Icons.print)
+                          )),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text('SaleNumber'.tr+': ${_con.sales.id??""}',
+                            style: labelTextStyle,
+                          ),
+                          Text('Date'.tr+': ${_con.sales.date??""}',
+                            style: labelTextStyle,
+                          ),
+                          Text('SaleReference'.tr+': ${_con.sales.reference_no??""}',
+                            style: labelTextStyle,
+                          ),
+                          Visibility(
+                            visible: _con?.sales?.tableModel?.name !=null,
+                            child: Text(
+                              'TableName'.tr+': ${_con?.sales?.tableModel?.name??''}',
+                              style: labelTextStyle,
+                            ),
+                          ),
+                          Text(
+                            'SalesAssociate'.tr+': ${Get.find<AuthController>().currentUser.username??""}',
+                            style: labelTextStyle,
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            'Customer'.tr+': ${_con.sales.customer??""}',
+                            style: labelTextStyle,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                            Visibility(
                           visible: _con.sales.items.length !=0,
                           child: Container(
                             // height: 300,
@@ -104,118 +115,120 @@ class OrderView extends StatelessWidget {
                             ),
                           ),
                         ),
-                        LabelAndText(
-                          title: 'TotalQty'.tr,
-                          salesInfoText: '${_con.sales.total_items??""}',
-                          fontWeight: FontWeight.bold,
-                        ),
-                        SizedBox(
-                          height: 7,
-                        ),
-                        Divider(
-                          thickness: 1,
-                          height: 1,
-                          color: Colors.grey,
-                          indent: 5,
-                        ),
-                        LabelAndText(
-                          title: 'TotalWithoutVat'.tr,
-                          salesInfoText:
-                              '${double.parse(_con.sales.total).toStringAsFixed(2).toString()}SAR',
-                          fontWeight: FontWeight.bold,
-                        ),
-                        SizedBox(
-                          height: 7,
-                        ),
-                        Divider(
-                          thickness: 1,
-                          height: 1,
-                          color: Colors.grey,
-                          indent: 5,
-                        ),
-                        LabelAndText(
-                          title: 'VAT'.tr,
-                          salesInfoText:
-                              '${double.parse(_con.sales.total_tax).toStringAsFixed(2).toString()}SAR',
-                          fontWeight: FontWeight.bold,
-                        ),
-                        SizedBox(
-                          height: 7,
-                        ),
-                        Divider(
-                          thickness: 1,
-                          height: 1,
-                          color: Colors.grey,
-                          indent: 5,
-                        ),
-                        LabelAndText(
-                          title: 'TotalWithVat'.tr,
-                          salesInfoText:
-                              '${double.parse(_con.sales.grand_total).toStringAsFixed(2).toString()}SAR',
-                          fontWeight: FontWeight.bold,
-                        ),
-                        SizedBox(
-                          height: 7,
-                        ),
-                        Divider(
-                          thickness: 1,
-                          height: 1,
-                          color: Colors.grey,
-                          indent: 5,
-                        ),
-                        LabelAndText(
-                          title: 'GrandTotal'.tr,
-                          salesInfoText:
-                              '${double.parse(_con.sales.grand_total).toStringAsFixed(2).toString()}SAR',
-                          fontWeight: FontWeight.bold,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Divider(
-                          thickness: 1,
-                          height: 1,
-                          color: Colors.grey,
-                          indent: 5,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              Text(
-                                'PaidBy'.tr+': ${_con.sales.paidby ?? ""}',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Text(
-                                'PaidAmount'.tr+': ${double.parse(_con.sales.paid).toStringAsFixed(2).toString() ?? ''}SAR',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              Text(
-                                'Change'.tr+': ${_con.sales.payment_term ?? ''}',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            ],
+                          LabelAndText(
+                            title: 'TotalQty'.tr,
+                            salesInfoText: '${_con.sales.total_items??""}',
+                            fontWeight: FontWeight.bold,
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text(
-                            'StaffNote'.tr+': ${_con.sales.staff_note ?? ''}',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                          SizedBox(
+                            height: 7,
                           ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
+                          Divider(
+                            thickness: 1,
+                            height: 1,
+                            color: Colors.grey,
+                            indent: 5,
+                          ),
+                          LabelAndText(
+                            title: 'TotalWithoutVat'.tr,
+                            salesInfoText:
+                            '${double.parse(_con?.sales?.total??'0.0').toStringAsFixed(2).toString()}SAR',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          SizedBox(
+                            height: 7,
+                          ),
+                          Divider(
+                            thickness: 1,
+                            height: 1,
+                            color: Colors.grey,
+                            indent: 5,
+                          ),
+                          LabelAndText(
+                            title: 'VAT'.tr,
+                            salesInfoText:
+                            '${double.parse(_con?.sales?.total_tax??'0.0').toStringAsFixed(2).toString()}SAR',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          SizedBox(
+                            height: 7,
+                          ),
+                          Divider(
+                            thickness: 1,
+                            height: 1,
+                            color: Colors.grey,
+                            indent: 5,
+                          ),
+                          LabelAndText(
+                            title: 'TotalWithVat'.tr,
+                            salesInfoText: _con.sales.grand_total==''?'0.0':
+                            '${double.parse(_con?.sales?.grand_total).toStringAsFixed(2).toString()}SAR',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          SizedBox(
+                            height: 7,
+                          ),
+                          Divider(
+                            thickness: 1,
+                            height: 1,
+                            color: Colors.grey,
+                            indent: 5,
+                          ),
+                          LabelAndText(
+                            title: 'GrandTotal'.tr,
+                            salesInfoText: _con.sales.grand_total==''?'0.0':
+                            '${double.parse(_con?.sales?.grand_total).toStringAsFixed(2).toString()}SAR',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Divider(
+                            thickness: 1,
+                            height: 1,
+                            color: Colors.grey,
+                            indent: 5,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: <Widget>[
+                                Text(
+                                  'PaidBy'.tr+': ${_con.sales.paidby ?? ""}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Text( _con?.sales?.paid==''?'0.0':
+                                'PaidAmount'.tr+': ${double.parse(_con?.sales?.paid??"").toStringAsFixed(2).toString() ?? ''}SAR',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                Text(
+                                  'Change'.tr+': ${_con?.sales?.payment_term ?? ''}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              'StaffNote'.tr+': ${_con?.sales?.staff_note ?? ''}',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }
+
           }),
         ),
       ),

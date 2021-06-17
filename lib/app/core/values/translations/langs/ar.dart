@@ -513,4 +513,5 @@ const Map<String, String> ar = {
   "DueDate": "تاريخ الاستحقاق",
   "ChecklistItem": "قائمة مرجعية",
   "No_more_items": "ليس هناك المزيد من العناصر",
+  "TableName": "اسم الطاولة",
 };

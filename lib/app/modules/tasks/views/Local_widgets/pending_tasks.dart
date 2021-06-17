@@ -14,9 +14,7 @@ class PendingTasks extends StatelessWidget {
       child: GetX<TasksController>(
         builder: (_con) {
           return RefreshIndicator(
-            onRefresh: () {
-              // print('work done');
-            },
+            onRefresh:_con.refreshPendingTasks,
             child: _con.taskListPending.isEmpty ? EmptyOrdersWidget(): ListView.builder(
              itemCount:_con.taskListPending.length ,
               itemBuilder: (context, index) {

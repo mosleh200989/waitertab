@@ -12,6 +12,7 @@ import 'package:waiter/app/routes/app_pages.dart';
 class OrderDetailsController extends GetxController {
  final AppController appController=Get.find();
   var isLoading = true.obs;
+  var isDataProcessing = true.obs;
   var productList = <Product>[].obs;
   final Widget dividerLabel=  Container( height: 30.0,width: 2.0, color: Colors.grey,);
   var product=Product().obs;
@@ -46,15 +47,15 @@ String optionData='';
   int get offset => _paginationFilter.value.offset;
   @override
   void onInit()async {
+    _changePaginationFilter(1, 5);
     if(Get.arguments !=null && Get.arguments.length>0){
       catId.value=Get.arguments['catId'];
       imageUrl.value=Get.arguments['image_url'];
       productName.value=Get.arguments['product_name'];
       print(catId);
       print('catId');
-      // await getAllProducts();
-      ever(_paginationFilter, (_) async =>  await getAllProducts());
-      _changePaginationFilter(1, 5);
+      // ever(_paginationFilter, (_) async =>  await getAllProducts());
+      await getAllProducts(_paginationFilter.value);
       _optionValue.value='';
     }
     // incrementGrandTotal();
@@ -86,11 +87,12 @@ String optionData='';
   }
   // For Pagination
   void paginateProductList() {
-    scrollController.addListener(() {
+    scrollController.addListener(() async {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
         print("reached end");
         _changePaginationFilter(offset + limit, limit);
+      await getMoreProducts(_paginationFilter.value);
         // page++;
         // getMoreTask(page);
       }
@@ -99,6 +101,7 @@ String optionData='';
   Future<void> refreshProductList() async {
     productList.clear();
     _changePaginationFilter(1, 10);
+   await getAllProducts(_paginationFilter.value);
     Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
   }
   void increment(int i) {
@@ -149,18 +152,36 @@ void clearOptionValue(){
    }
 
   }
-  Future<void> getAllProducts() async {
+  Future<void> getAllProducts(PaginationFilter filter) async {
     try {
-      isLoading(true);
-      var products = await OrderDetailsProvider().getProduct(catId.value,_paginationFilter.value);
+      isMoreDataAvailable(false);
+      isDataProcessing(true);
+      var products = await OrderDetailsProvider().getProduct(catId.value,filter);
       if (products != null) {
-        productList.assignAll(products);
+        productList.addAll(products);
+        isDataProcessing(false);
         // categoriesList.value = categories;
       }else{
         print('product null');
       }
     } finally {
-      isLoading(false);
+      isDataProcessing(false);
+    }
+  }
+
+  Future<void> getMoreProducts(PaginationFilter filter) async {
+    try {
+      var products = await OrderDetailsProvider().getProduct(catId.value,filter);
+      if (products.length > 0) {
+        isMoreDataAvailable(true);
+      } else {
+        isMoreDataAvailable(false);
+      }
+        productList.addAll(products);
+    }catch (exception) {
+      isDataProcessing(false);
+    }finally{
+      isDataProcessing(false);
     }
   }
   // incrementQuantity() {
@@ -180,6 +201,7 @@ void clearOptionValue(){
   // }
 
   Future<void> addToBasketAndBuyClickEvent(int index) async {
+  print("index==$index");
   try{
     Basket basket=Basket(
       product_id: productList.elementAt(index).id,
@@ -199,8 +221,18 @@ void clearOptionValue(){
     );
     // setAgreedToOrder(true, index);
       if(appController.basketItems.length>0) {
-        for (var i = 0; i < appController.basketItems.length; i++) {
+        print("appController.basketItems.length=${appController.basketItems.length}");
+        int busketLength=appController.basketItems.length;
+        bool foundBusket=false;
+        for (var i = 0; i < busketLength; i++) {
+          print("looping i=$i");
+          print(appController.basketItems[i].product_id+"====="+productList[index].id);
+          print('prodic id=======');
+
           if (appController.basketItems[i].product_id == productList[index].id) {
+            print(appController.basketItems[i].product_id+"====="+productList[index].id);
+            print('inside if');
+
             // print('if contains');
             // Helpers.showSnackbar(message: 'warning_dialog__input_password'.tr);
             // Get.toNamed(Routes.CARD);
@@ -208,16 +240,20 @@ void clearOptionValue(){
             appController.basketItems[i].product_base_quantity=(int.parse(appController.basketItems[i].product_base_quantity)+productList.elementAt(index).counter).toString();
             appController.basketItems[i].subtotal =(int.parse(appController.basketItems[i].quantity) * double.parse(productList[index].price)).toString() ;
             // appController.basketItems.canUpdate;
-            appController.basketItems.refresh();
-          } else {
-            print('else contains');
-            appController.basketItems.add(basket);
-            appController.basketItems.refresh();
+            print('if contains');
+            // appController.basketItems.refresh();
+            foundBusket=true;
+            break;
           }
         }
+
+        if(!foundBusket){
+          appController.basketItems.add(basket);
+        }
+         appController.basketItems.refresh();
       }else{
         appController.basketItems.add(basket);
-
+        print('else =========contains');
       }
 
     _busketTotal.value=0.0;

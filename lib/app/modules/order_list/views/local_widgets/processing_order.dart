@@ -41,6 +41,8 @@ class ProcessingOrder  extends StatelessWidget {
                           defaultVerticalAlignment :TableCellVerticalAlignment.middle,
                           // border: TableBorder.all(width:1, color:Colors.black45),
                           children:  _con?.salesListProcessing?.map((salesData){
+                            print(salesData?.tableModel?.name);
+                            print('salesData?.tableModel?.name');
                             return   TableRow( //return table row in every loop
                                 children: [
                                   //table cells inside table row
@@ -56,7 +58,7 @@ class ProcessingOrder  extends StatelessWidget {
                                   ),
                                   TableCell(child: Padding(
                                       padding: EdgeInsets.all(5),
-                                      child:Text(salesData.table_no)
+                                      child:Text(salesData?.tableModel?.name ?? '')
                                   )
                                   ),
                                   TableCell(child: Padding(
@@ -74,7 +76,7 @@ class ProcessingOrder  extends StatelessWidget {
                                           Expanded(child: IconButton(icon:Icon(Icons.visibility,color: Colors.red,),
                                             onPressed:  () {
                                               Get.reload<OrderListController>();
-                                              Get.toNamed(Routes.ORDER_VIEW, arguments: {'reference':salesData.reference_no});
+                                              Get.toNamed(Routes.ORDER_VIEW, arguments: {'reference':salesData.id,'orderStatus':salesData.order_status});
                                             },)),
 
                                         ],

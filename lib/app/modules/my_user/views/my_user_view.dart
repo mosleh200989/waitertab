@@ -155,7 +155,7 @@ Widget build(BuildContext context) {
                         height: 10.0,
                       ),
 
-                      Container(
+                     /* Container(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
@@ -198,7 +198,7 @@ Widget build(BuildContext context) {
                             ),
                           ],
                         ),
-                      )
+                      )*/
                     ],
                   ),
                 ),

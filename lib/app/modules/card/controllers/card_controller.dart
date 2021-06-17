@@ -191,7 +191,7 @@ void decrement(int index){
     if(isDineIn!=newValue){
       isDineIn=true;
       isParcel=false;
-      // _isDineIn.value=1;
+      _isDineIn.value=1;
       selectedIndex=0;
       tableId=tableList[0].id;
       update();
@@ -199,7 +199,7 @@ void decrement(int index){
     if(isParcel==newValue){
       isDineIn=false;
       isParcel=true;
-      // _isDineIn.value=2;
+      _isDineIn.value=2;
       selectedIndex = 0;
       tableId='';
       update();
@@ -258,7 +258,7 @@ void addNotes(int index,String value){
       billerdetails.email='saleem@alama360.com';
 
       Basket basket;
-      TableModel tableModel=TableModel(id: tableId);
+      // TableModel tableModel=TableModel(id: tableId);
       List<Basket> items = [];
       int serial;
      if(appController.basketItems.length==0 || appController.basketItems.isEmpty){
@@ -291,7 +291,7 @@ void addNotes(int index,String value){
              unit_price:appController.basketItems[i].unit_price,
              real_unit_price:appController.basketItems[i].real_unit_price,
              subtotal:appController.basketItems[i].subtotal,
-             product_comment:appController.basketItems[i].notes,
+             product_comment:appController.basketItems[i].notes??"",
              serial:serial.toString(),
            );
            items.add(basket);
@@ -338,13 +338,13 @@ void addNotes(int index,String value){
          sales.biller=biller;
          sales.biller_id=biller;
          sales.note=pos_note;
-         sales.staff_note=orderNoteController.text;
+         sales.staff_note=orderNoteController.text??'';
          sales.order_tax='';
-         sales.discount=discountTextController.text;
-         sales.shipping=shippingTextController.text;
+         sales.discount=discountTextController.text??"";
+         sales.shipping=shippingTextController.text??"";
          sales.total_items=appController.basketItems.length.toString();
          sales.user_id='1';
-         sales.is_dine_in=getIsDineIn.toString();
+         sales.is_dine_in=getIsDineIn.toString()??'';
          sales.table_no=isDineIn==true?tableId:'';
          // isParcel==true?'':
          sales.paidby=paid_by;
@@ -368,6 +368,9 @@ void addNotes(int index,String value){
              Helpers.showSnackbar(title:"error".tr,message:"Failed".tr,);
 
            }
+         }, onError: (err) {
+           progressDialog.hide();
+           Helpers.showSnackbar(title:"error".tr,message: err.toString(),);
          });
        }else {
         Helpers.showSnackbar(message: 'error_dialog__no_internet'.tr);

@@ -21,15 +21,19 @@ class AllOrderCarPage extends StatelessWidget {
       builder: (controller) {
         print(controller.productList.length);
         print('controller.productList.length');
-          if (controller.isLoading.value)
+       /*   if (controller.isLoading.value)
             return Center(child: CircularProgressIndicator());
-          else
+          else*/
           return  controller.productList.isEmpty ? EmptyOrdersWidget():RefreshIndicator(
             onRefresh: controller.refreshProductList,
             child: ListView.builder(
               controller: controller.scrollController,
               itemCount: controller.productList.length,
                 itemBuilder: (context, index) {
+                  if (index == controller.productList.length - 1 &&
+                      controller.isMoreDataAvailable.value == true) {
+                    return Center(child: CircularProgressIndicator());
+                  }
                   return Stack(
                     children: [
                       Padding(

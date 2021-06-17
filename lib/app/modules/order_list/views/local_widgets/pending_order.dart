@@ -18,7 +18,7 @@ class PendingOrder  extends StatelessWidget {
           return Column(
             children: [
               Container(
-                  height: Get.height - 300,
+                  height: Get.height - 140,
                   child: _con.salesList.isEmpty
                       ? EmptyOrdersWidget()
                       : RefreshIndicator(
@@ -35,7 +35,7 @@ class PendingOrder  extends StatelessWidget {
                           return Center(child: CircularProgressIndicator());
                         }
                         return Container(
-                          // margin: EdgeInsets.only(bottom: 20),
+                          margin: EdgeInsets.only(bottom: 2.0),
                           child: Column(
                             children: [
                               Row(
@@ -60,7 +60,7 @@ class PendingOrder  extends StatelessWidget {
                                       flex: 2,
                                       child: Padding(
                                           padding: EdgeInsets.all(5),
-                                          child: Text('${salesData.table_no ?? ''}',
+                                          child: Text('${salesData?.tableModel?.name ?? ''}',
                                               textAlign: TextAlign.center)
                                       )),
                                   Expanded(
@@ -89,9 +89,7 @@ class PendingOrder  extends StatelessWidget {
                                               onPressed: () {
                                                 Get.reload<OrderListController>();
                                                 Get.toNamed(Routes.ORDER_VIEW,
-                                                    arguments: {
-                                                      'reference': salesData
-                                                          .reference_no
+                                                    arguments: {'reference': salesData.id,'orderStatus':salesData.order_status
                                                     });
                                               },)),
 
