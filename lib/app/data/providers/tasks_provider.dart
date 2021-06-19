@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:waiter/app/core/values/mr_config.dart';
+import 'package:waiter/app/data/models/pagination_filter.dart';
 import 'package:waiter/app/data/models/task_checkitem.dart';
 import 'package:waiter/app/data/models/tasks.dart';
 
@@ -11,8 +12,8 @@ class TasksProvider extends GetConnect {
     httpClient.baseUrl = 'YOUR-API-URL';
   }
 
-  Future<List<Tasks>> getTasks() async {
-    final String taskssUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks?status=1&start=0&limit=10&api-key=${MrConfig.mr_api_key}";
+  Future<List<Tasks>> getTasks(PaginationFilter filter) async {
+    final String taskssUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks?status=1&start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
     Response response = await get(taskssUrl);
     if (response.statusCode == 200 && response.body['data'] !=null) {
       return taskFromJson(response.body['data']);
@@ -21,8 +22,8 @@ class TasksProvider extends GetConnect {
       return [];
     }
   }
-  Future<List<Tasks>> getTasksCompleted() async {
-    final String taskssUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks?status=5&start=0&limit=10&api-key=${MrConfig.mr_api_key}";
+  Future<List<Tasks>> getTasksCompleted(PaginationFilter filter) async {
+    final String taskssUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks?status=5&start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
     print(taskssUrl);
     print('processing order url');
     Response response = await get(taskssUrl);

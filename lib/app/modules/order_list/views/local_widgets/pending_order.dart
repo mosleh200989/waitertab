@@ -18,7 +18,7 @@ class PendingOrder  extends StatelessWidget {
           return Column(
             children: [
               Container(
-                  height: Get.height - 140,
+                  height: Get.height - 200,
                   child: _con.salesList.isEmpty
                       ? EmptyOrdersWidget()
                       : RefreshIndicator(

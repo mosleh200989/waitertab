@@ -1,4 +1,4 @@
-package com.mostafiz9900.waiter
+package com.alama360.waiter
 
 import io.flutter.embedding.android.FlutterActivity
 

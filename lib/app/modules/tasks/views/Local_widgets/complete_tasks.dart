@@ -15,6 +15,7 @@ class CompleteTasks extends StatelessWidget {
             return RefreshIndicator(
               onRefresh: _con.refreshCompletedTasks,
               child:_con.taskListCompleted.isEmpty ? EmptyOrdersWidget(): ListView.builder(
+                controller: _con.scrollControllerComplete,
                 itemCount:_con.taskListCompleted.length ,
                 itemBuilder: (context, index) {
 
@@ -38,6 +39,10 @@ class CompleteTasks extends StatelessWidget {
                     _con.priorityData='task_priority_high'.tr;
                   }else if(task.priority=='4'){
                     _con.priorityData='task_priority_urgent'.tr;
+                  }
+                  if (index == _con.taskListCompleted.length - 1 &&
+                      _con.isMoreDataAvailableComplete.value == true) {
+                    return Center(child: CircularProgressIndicator());
                   }
                   return   Column(
                     children: [

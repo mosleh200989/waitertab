@@ -5,14 +5,12 @@ import 'package:get/get.dart';
 import 'package:waiter/app/core/values/mr_url.dart';
 import 'package:waiter/app/global_widgets/DrawerWidget.dart';
 import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
-import 'package:waiter/app/modules/home/controllers/dialogcontroller_controller.dart';
 import 'package:waiter/app/modules/order_details/controllers/order_details_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
 
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetWidget<HomeController> {
-  final DialogcontrollerController cond = Get.put(DialogcontrollerController());
   final AuthController authCont = Get.find<AuthController>();
 
   @override
@@ -25,7 +23,7 @@ class HomeView extends GetWidget<HomeController> {
         title: Text('Categories'.tr),
         centerTitle: true,
         actions: [
-          TextButton(
+       /*   TextButton(
             onPressed: () {
               // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
             },
@@ -51,7 +49,7 @@ class HomeView extends GetWidget<HomeController> {
               ],
             ),
             // color: Colors.transparent,
-          ),
+          ),*/
         ],
       ),
       drawer: DrawerWidget(),

@@ -6,6 +6,7 @@ import 'package:waiter/app/global_widgets/DrawerWidget.dart';
 import 'package:waiter/app/modules/order_details/views/local_widgets/all_order_card_page.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/cancel_order.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/complete_order.dart';
+import 'package:waiter/app/modules/order_list/views/local_widgets/header_title_text.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/pending_order.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/processing_order.dart';
 
@@ -20,7 +21,7 @@ class OrderListView extends GetView<OrderListController> {
       appBar: AppBar(
         title:Obx(()=> Text('${controller.myHandler.value.title}')),
         actions: [
-          IconButton(
+          /*IconButton(
             icon: const Icon(Icons.rice_bowl),
             color: Colors.white,
             onPressed: () {
@@ -53,36 +54,37 @@ class OrderListView extends GetView<OrderListController> {
               ],
             ),
             // color: Colors.transparent,
-          ),
+          ),*/
         ],
       ),
 
 
       body: Column(
         children:<Widget> [
-          SizedBox(
-            height: 55,
-            child: Card(
-              elevation: 5,
-              child: Container(
-                height: 50,
-                color: Colors.white,
-                width: Get.width,
-                child: TabBar(
-                  controller: controller.tabController,
-                  // isScrollable: true,
-                  labelColor: Colors.black,
-                  indicatorColor: Colors.red,
-                  automaticIndicatorColorAdjustment: true,
-                  labelStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                  // indicatorWeight: 10,
-                  tabs:<Tab> [
-                    Tab(child:Text('${controller.tabs[0].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
-                    Tab(child:Text('${controller.tabs[1].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
-                    Tab(child:Text('${controller.tabs[2].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
-                    Tab(child:Text('${controller.tabs[3].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: 15),),),
-                  ],
-                ),
+          Card(
+            elevation: 1,
+            child: Container(
+              // height: 50,
+              color: Colors.white,
+              width: Get.width,
+              child: TabBar(
+                controller: controller.tabController,
+                // isScrollable: true,
+                labelColor: Colors.black,
+                indicatorColor: Colors.red,
+
+                automaticIndicatorColorAdjustment: true,
+                labelStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                // indicatorWeight: 10,
+                // indicatorPadding: EdgeInsets.only(top: 20,bottom: 10),
+                labelPadding: EdgeInsets.only(bottom: 5),
+
+                tabs:<Tab> [
+                  Tab(child:Text('${controller.tabs[0].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: Get.theme.textTheme.caption.fontSize),),),
+                  Tab(child:Text('${controller.tabs[1].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: Get.theme.textTheme.caption.fontSize)),),
+                  Tab(child:Text('${controller.tabs[2].title}',textAlign: TextAlign.center,style: TextStyle(fontSize:  Get.theme.textTheme.caption.fontSize),),),
+                  Tab(child:Text('${controller.tabs[3].title}',textAlign: TextAlign.center,style: TextStyle(fontSize:  Get.theme.textTheme.caption.fontSize),),),
+                ],
               ),
             ),
           ),
@@ -92,31 +94,31 @@ class OrderListView extends GetView<OrderListController> {
               children: [
                 Column(
                   children: [
-                    SizedBox(height: 20,
-                    child: Table(
-                      columnWidths: {0:FractionColumnWidth(.2)},
-                      border: TableBorder.all(width: 0.0,),
-                      defaultVerticalAlignment :TableCellVerticalAlignment.middle,
-                      children: [
-                        TableRow(
-                            children: [
-                              Text('OrderNo'.tr,textAlign: TextAlign.center,),
-                              Text('CustomerName'.tr,textAlign: TextAlign.center,),
-                              Text('Table'.tr,textAlign: TextAlign.center,),
-                              Text('OrderDate'.tr,textAlign: TextAlign.center,),
-                              Text('Amount'.tr,textAlign: TextAlign.center,),
-                              Text('Action'.tr,textAlign: TextAlign.center,),
-                            ]
-                        ),
-                      ],
-                    ),
-                    ),
+                    HeaderTitleText(),
+                    Divider(thickness: 1,indent: 1,endIndent: 2,height: 5,color: Colors.black,),
                     Expanded(child: PendingOrder()),
                   ],
                 ),
-              ProcessingOrder(),
-              CompleteOrder(),
-              CancelOrder(),
+                Column(
+                  children: [
+                    HeaderTitleText(),
+                    Divider(thickness: 1,indent: 1,endIndent: 2,height: 5,color: Colors.black,),
+                    Expanded(child: ProcessingOrder()),
+                  ],
+                ),
+                Column(
+                  children: [
+                    HeaderTitleText(),
+                    Divider(thickness: 1,indent: 1,endIndent: 2,height: 5,color: Colors.black,),
+                    Expanded(child: CompleteOrder()),
+                  ],
+                ),  Column(
+                  children: [
+                    HeaderTitleText(),
+                    Divider(thickness: 1,indent: 1,endIndent: 2,height: 5,color: Colors.black,),
+                    Expanded(child: CancelOrder()),
+                  ],
+                ),
               ],
             ),
           ),

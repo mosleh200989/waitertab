@@ -88,7 +88,6 @@ class AllOrderCarPage extends StatelessWidget {
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-
                                             Align(
                                               alignment:Get.locale.languageCode=='en'?Alignment.topLeft: Alignment.topRight,
                                                 child: Text('${controller.productList.elementAt(index).name}')),
@@ -101,76 +100,83 @@ class AllOrderCarPage extends StatelessWidget {
                                                 //     visible: controller.productList.elementAt(index).option!=null,
                                                 //     child: Text('${controller.productList.elementAt(index).option}')),
 
-                                                Obx(()=>
-                                                    DropdownButton<dynamic>(
-                                                      // isExpanded: true,
-                                                      underline: SizedBox(),
-                                                      icon: Icon(
-                                                        Icons.arrow_drop_down_sharp,
+                                                Expanded(
+                                                  flex:2,
+                                                  child: Obx(()=>
+                                                      DropdownButton<dynamic>(
+                                                        isExpanded: true,
+                                                        underline: SizedBox(),
+                                                        icon: Icon(
+                                                          Icons.arrow_drop_down_sharp,
+                                                        ),
+                                                        hint: Text(controller.optionValue??controller.productList.elementAt(index).option),
+
+                                                        items:controller?.productList?.elementAt(index)?.optionsList?.length  !=null ? controller?.productList?.elementAt(index)?.optionsList?.map((lang) {
+                                                          return  DropdownMenuItem<dynamic>(
+                                                            child: Text(lang?.name??''),
+                                                            value:lang.name,
+                                                          );
+                                                        })?.toList() : null,
+                                                        // value:controller.optionValue??null,
+                                                        onChanged: (val) {
+                                                          print(val);
+                                                          controller.changedOption(val);
+                                                        },
                                                       ),
-
-                                                      items:controller?.productList?.elementAt(index)?.optionsList?.length  !=null ? controller?.productList?.elementAt(index)?.optionsList?.map((lang) {
-                                                        return  DropdownMenuItem<dynamic>(
-                                                          child: Text(lang?.name??''),
-                                                          value:lang.name,
-                                                        );
-                                                      })?.toList() : null,
-                                                      // value:controller.optionValue??null,
-                                                      onChanged: (val) {
-                                                        print(val);
-                                                        controller.changedOption(val);
-                                                      },
-                                                    ),
+                                                  ),
                                                 ),
-                                                Obx(()=> Text(controller.optionValue??controller.productList.elementAt(index).option)),
+                                                // Expanded(child: Obx(()=> Text(controller.optionValue??controller.productList.elementAt(index).option))),
 
-                                                GetBuilder<OrderDetailsController>(
-                                                    builder: (_) {
-                                                      // _.productList.elementAt(index).totalPrice=double.parse(_.productList.elementAt(index).price);
-                                                      return Row(
-                                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                                        mainAxisAlignment: MainAxisAlignment.start,
-                                                        children: [
-                                                          controller.dividerLabel,
-                                                          Padding(
-                                                            padding: const EdgeInsets.all(8.0),
-                                                            child: Row(
-                                                              // crossAxisAlignment: CrossAxisAlignment.end,
-                                                              // mainAxisAlignment: MainAxisAlignment.end,
-                                                              children: [
-                                                                InkWell(
-                                                                  onTap: () {
-                                                                    _.increment(index);
-                                                                  },
-                                                                  child: CircleAvatar(
-                                                                      radius: 12,
-                                                                      backgroundColor:Colors.grey,
-                                                                      child: Icon(Icons.add,color: Colors.black,)),
-                                                                ),
-                                                                Padding(
-                                                                  padding: const EdgeInsets.all(5.0),
-                                                                  child: Text('${controller.productList.elementAt(index).counter.toString()??''}',textAlign: TextAlign.center,),
-                                                                ),
-                                                                InkWell(
-                                                                  onTap: () {
-                                                                    _.decrement(index);
-                                                                  },
-                                                                  child: CircleAvatar(
-                                                                      radius: 12,
-                                                                      backgroundColor:Colors.grey,
-                                                                      child: Icon(Icons.remove,color: Colors.black,)),
-                                                                ),
-                                                              ],
+                                                Expanded(
+                                                  flex:3,
+                                                  child: GetBuilder<OrderDetailsController>(
+                                                      builder: (_) {
+                                                        // _.productList.elementAt(index).totalPrice=double.parse(_.productList.elementAt(index).price);
+                                                        return Row(
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          children: [
+                                                            controller.dividerLabel,
+                                                            Padding(
+                                                              padding: const EdgeInsets.all(8.0),
+                                                              child: Row(
+                                                                // crossAxisAlignment: CrossAxisAlignment.end,
+                                                                // mainAxisAlignment: MainAxisAlignment.end,
+                                                                children: [
+                                                                  InkWell(
+                                                                    onTap: () {
+                                                                      _.increment(index);
+                                                                    },
+                                                                    child: CircleAvatar(
+                                                                        radius: 12,
+                                                                        backgroundColor:Colors.grey,
+                                                                        child: Icon(Icons.add,color: Colors.black,)),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding: const EdgeInsets.all(5.0),
+                                                                    child: Text('${controller.productList.elementAt(index).counter.toString()??''}',textAlign: TextAlign.center,),
+                                                                  ),
+                                                                  InkWell(
+                                                                    onTap: () {
+                                                                      _.decrement(index);
+                                                                    },
+                                                                    child: CircleAvatar(
+                                                                        radius: 12,
+                                                                        backgroundColor:Colors.grey,
+                                                                        child: Icon(Icons.remove,color: Colors.black,)),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
-                                                          ),
-                                                          controller.dividerLabel,
-                                                          Padding(
-                                                            padding: const EdgeInsets.all(8.0),
-                                                            child: Text('${_.productList.elementAt(index).totalPrice??_.productList.elementAt(index).price}',),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    }
+                                                            controller.dividerLabel,
+                                                            Padding(
+                                                              padding: const EdgeInsets.all(8.0),
+                                                              child: Text('${_.productList.elementAt(index).totalPrice??_.productList.elementAt(index).price}',),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      }
+                                                  ),
                                                 ),
                                               ],
                                             ),

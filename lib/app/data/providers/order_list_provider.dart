@@ -24,8 +24,9 @@ class OrderListProvider extends GetConnect {
       Helpers.showSnackbar(title:'error'.tr,message: 'No_more_items'.tr);
     }
   }
-  Future<List<Sales>> getProcessingSales() async {
-    final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=2&include=items,warehouse,biller,restaurant_table&start=0&limit=10&api-key=${MrConfig.mr_api_key}";
+  Future<List<Sales>> getProcessingSales(PaginationFilter filter) async {
+    final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=2&include=items,warehouse,biller,restaurant_table&start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
+    print(salesUrl);
     Response response = await get(salesUrl);
     if (response.statusCode == 200 && response.body['data'] !=null) {
       return salesFromJson(response.body['data']);
@@ -35,8 +36,8 @@ class OrderListProvider extends GetConnect {
       return [];
     }
   }
-  Future<List<Sales>> getCancelSales() async {
-    final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=3&include=items,warehouse,biller,restaurant_table&start=0&limit=10&api-key=${MrConfig.mr_api_key}";
+  Future<List<Sales>> getCancelSales(PaginationFilter filter) async {
+    final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=3&include=items,warehouse,biller,restaurant_table&start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
      Response response = await get(salesUrl);
     if (response.statusCode == 200 && response.body['data'] !=null) {
       return salesFromJson(response.body['data']);
@@ -46,8 +47,9 @@ class OrderListProvider extends GetConnect {
       return [];
     }
   }
-  Future<List<Sales>> getCompleteSales() async {
-    final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=5&include=items,warehouse,biller,restaurant_table&start=0&limit=10&api-key=${MrConfig.mr_api_key}";
+  Future<List<Sales>> getCompleteSales(PaginationFilter filter) async {
+    final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=5&include=items,warehouse,biller,restaurant_table&start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
+    print(salesUrl);
     Response response = await get(salesUrl);
     if (response.statusCode == 200 && response.body['data'] !=null) {
       return salesFromJson(response.body['data']);

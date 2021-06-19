@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:waiter/app/core/values/mr_constants.dart';
 import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/data/models/options.dart';
 import 'package:waiter/app/data/models/pagination_filter.dart';
@@ -47,7 +48,7 @@ String optionData='';
   int get offset => _paginationFilter.value.offset;
   @override
   void onInit()async {
-    _changePaginationFilter(1, 5);
+    _changePaginationFilter(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
     if(Get.arguments !=null && Get.arguments.length>0){
       catId.value=Get.arguments['catId'];
       imageUrl.value=Get.arguments['image_url'];
@@ -100,7 +101,7 @@ String optionData='';
   }
   Future<void> refreshProductList() async {
     productList.clear();
-    _changePaginationFilter(1, 10);
+    _changePaginationFilter(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
    await getAllProducts(_paginationFilter.value);
     Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
   }
