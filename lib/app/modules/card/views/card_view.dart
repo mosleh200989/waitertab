@@ -6,8 +6,7 @@ import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/data/models/table.dart';
 import 'package:waiter/app/global_widgets/EmptyOrdersWidget.dart';
 import 'package:waiter/app/modules/home/controllers/app_controller.dart';
-import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
-import 'package:waiter/app/modules/order_details/controllers/order_details_controller.dart';
+import 'package:waiter/app/modules/product_list/controllers/product_list_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
 import '../controllers/card_controller.dart';
 
@@ -15,7 +14,7 @@ class CardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppController appController = Get.find();
-    final OrderDetailsController orderDetailsController = Get.find();
+    final ProductListController orderDetailsController = Get.find();
     final CardController cardController = Get.find();
     final TextStyle labelTextStyle = TextStyle(
       fontWeight: FontWeight.normal,

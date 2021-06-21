@@ -55,7 +55,7 @@ class Product {
       this.net_price = json['net_price'] != null ? json['net_price'] : null;
 
       // this.options = json['options'] != null ? json['options'] : null;
-      this.optiontext = json['optiontext'] != null ? json['optiontext'] : null;
+      // this.optiontext = json['optiontext'] != null ? json['optiontext'] : null;
       this.price = json['price'] != null ? json['price'] : null;
       this.slug = json['slug'] != null ? json['slug'] : null;
       this.tax_method = json['tax_method'] != null ? json['tax_method'] : null;
@@ -65,7 +65,10 @@ class Product {
       this.unit = json['unit'] != null ? UnitModel.fromJson(json['unit']) : null;
       if(json['options']==false){
         this.option = json['option'] != null ? json['option'] : null;
+        this.optiontext = json['optiontext'] != null ? json['optiontext'] : null;
       }else{
+        this.option = json['option'] != null ? json['option'] : null;
+        this.optiontext = json['optiontext'] != null ? json['optiontext'] : null;
         this.optionsList = json['options'] != null && (json['options'] as List).length > 0
             ? List.from(json['options']).map((element) => OptionModel.fromJson(element)).toList()
             : [];

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waiter/app/data/models/options.dart';
 import 'package:waiter/app/data/models/product.dart';
 
 class Basket {
@@ -11,6 +12,7 @@ class Basket {
   String product_code;
   String product_name;
   String product_option;
+  String optionValue;
   String product_discount;
   String product_tax;
   String net_price;
@@ -38,6 +40,7 @@ class Basket {
   String subtotal;
   String tax;
   String tax_rate_id;
+  List<OptionModel> optionsList;
   Basket({
     this.id,
     this.product_id,
@@ -48,6 +51,7 @@ class Basket {
     this.product_code,
     this.product_name,
     this.product_option,
+    this.optionValue,
     this.product_discount,
     this.product_tax,
     this.net_price,
@@ -161,6 +165,7 @@ class Basket {
     map['product_code'] = product_code;
     map['product_name'] = product_name;
     map['product_option'] = product_option;
+    map['optionValue'] = optionValue;
     map['product_discount'] = product_discount;
     map['product_tax'] = product_tax;
     map['net_price'] = net_price;

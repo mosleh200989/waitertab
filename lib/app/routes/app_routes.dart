@@ -5,7 +5,6 @@ abstract class Routes {
   static const SPLASH = _Paths.SPLASH;
   static const HOME = _Paths.HOME;
   static const UNKNOWN = _Paths.UNKNOWN;
-  static const ORDER_DETAILS = _Paths.ORDER_DETAILS;
   static const CARD = _Paths.CARD;
   static const ORDER_LIST = _Paths.ORDER_LIST;
   static const LANGUAGE = _Paths.LANGUAGE;
@@ -16,13 +15,13 @@ abstract class Routes {
   static const ORDER_VIEW = _Paths.ORDER_VIEW;
   static const TASKS = _Paths.TASKS;
   static const TASK_DETAILS = _Paths.TASK_DETAILS;
+  static const PRODUCT_LIST = _Paths.PRODUCT_LIST;
 }
 
 abstract class _Paths {
   static const SPLASH = '/';
   static const HOME = '/home';
   static const UNKNOWN = '/unknown';
-  static const ORDER_DETAILS = '/order-details';
   static const CARD = '/card';
   static const ORDER_LIST = '/order-list';
   static const LANGUAGE = '/language';
@@ -33,4 +32,5 @@ abstract class _Paths {
   static const ORDER_VIEW = '/order-view';
   static const TASKS = '/tasks';
   static const TASK_DETAILS = '/task-details';
+  static const PRODUCT_LIST = '/product-list';
 }

@@ -14,15 +14,21 @@ class OrderListProvider extends GetConnect {
   }
   Future<List<Sales>> getSales(PaginationFilter filter) async {
     final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=1&include=items,warehouse,biller,restaurant_table&start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
-
+   print(salesUrl);
     Response response = await get(salesUrl);
        if (response.statusCode == 200 && response.body['data'] !=null ) {
       return salesFromJson(response.body['data']);
-    } else {
+       } else {
       // return Future.error(response.statusText);
-      // return [];
-      Helpers.showSnackbar(title:'error'.tr,message: 'No_more_items'.tr);
+      //    print(Get.isSnackbarOpen);
+      //    print('Get.isSnackbarOpen');
+      //    if(!Get.isSnackbarOpen){
+      //      Helpers.showSnackbar(title:'error'.tr,message: 'No_more_items'.tr);
+      //    }
+      //
+      return [];
     }
+
   }
   Future<List<Sales>> getProcessingSales(PaginationFilter filter) async {
     final String salesUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?order_status=2&include=items,warehouse,biller,restaurant_table&start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
@@ -32,7 +38,7 @@ class OrderListProvider extends GetConnect {
       return salesFromJson(response.body['data']);
     } else {
       // return Future.error(response.statusText);
-      Helpers.showSnackbar(title:'error'.tr,message: 'No_more_items'.tr);
+      // Helpers.showSnackbar(title:'error'.tr,message: 'No_more_items'.tr);
       return [];
     }
   }
@@ -43,8 +49,8 @@ class OrderListProvider extends GetConnect {
       return salesFromJson(response.body['data']);
     } else {
       // return Future.error(response.statusText);
-      Helpers.showSnackbar(title:'error'.tr,message: 'No_more_items'.tr);
-      return [];
+      // Helpers.showSnackbar(title:'error'.tr,message: 'No_more_items'.tr);
+      return null;
     }
   }
   Future<List<Sales>> getCompleteSales(PaginationFilter filter) async {
@@ -55,7 +61,7 @@ class OrderListProvider extends GetConnect {
       return salesFromJson(response.body['data']);
     } else {
       // return Future.error(response.statusText);
-      Helpers.showSnackbar(title:'error'.tr,message: 'No_more_items'.tr);
+      // Helpers.showSnackbar(title:'error'.tr,message: 'No_more_items'.tr);
       return [];
     }
   }
@@ -66,7 +72,7 @@ class OrderListProvider extends GetConnect {
       return Sales.fromJSON(response.body);
     } else {
       // return Future.error(response.statusText);
-      Helpers.showSnackbar(title:'error'.tr,message: 'No_more_items'.tr);
+      // Helpers.showSnackbar(title:'error'.tr,message: 'No_more_items'.tr);
       return null;
     }
   }

@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 
 import 'package:waiter/app/modules/home/controllers/app_controller.dart';
-import 'package:waiter/app/modules/home/controllers/dialogcontroller_controller.dart';
 
 import '../controllers/home_controller.dart';
 

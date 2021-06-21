@@ -6,10 +6,12 @@ import 'package:waiter/app/data/models/pagination_filter.dart';
 import 'package:waiter/app/data/models/sales.dart';
 import 'package:waiter/app/data/providers/order_list_provider.dart';
 import 'package:waiter/app/global_widgets/helpers.dart';
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 
 class OrderListController extends GetxController  with SingleGetTickerProviderMixin {
   TabController tabController;
-  final List<MyTabModel> tabs = [
+  final authController=Get.find<AuthController>()
+;  final List<MyTabModel> tabs = [
      MyTabModel(title: "PendingOrder".tr, color: Colors.teal[200]),
      MyTabModel(title: "ProcessingOrder".tr,color: Colors.orange[200]),
      MyTabModel(title: "CompleteOrder".tr,color: Colors.blueGrey[200]),
@@ -50,6 +52,7 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
   int get offsetCancel => _paginationFilterCancel.value.offset;
   @override
   void onInit()  async {
+    print('on init order list controller===');
     tabController = TabController(vsync: this, length: tabs.length);
     myHandler.value = tabs[0];
     tabController.addListener(handleSelected);
@@ -76,7 +79,7 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
 
   @override
   void onReady() {
-    print('on init order list controller===');
+    print('on Ready order list controller===');
     super.onReady();
   }
 
@@ -84,6 +87,15 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
   void onClose() {
     super.onClose();
     tabController.dispose();
+    print('on close controller');
+  }
+
+  void reloadFunction()async{
+    print('reload Function call ');
+    await getAllSales(_paginationFilter.value);
+    await getAllProcessingOrder(_paginationFilterProcessing.value);
+    await getAllCompleteOrder(_paginationFilterComplete.value);
+    await getAllCancelOrder(_paginationFilterCancel.value);
   }
   void handleSelected() {
     myHandler.value= tabs[tabController.index];
@@ -157,15 +169,21 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
   }
   Future<void> getAllSales(PaginationFilter filter) async {
     try {
-      isMoreDataAvailable(false);
-      isDataProcessing(true);
-      // isLoading(true);
-      var salesValue = await OrderListProvider().getSales(filter);
-      if (salesValue != null) {
-        // salesList.assignAll(salesValue);
-        isDataProcessing(false);
-        salesList.addAll(salesValue);
-
+      if(await authController.checkInternetConnectivity()) {
+        isMoreDataAvailable(false);
+        isDataProcessing(true);
+        // isLoading(true);
+        var salesValue = await OrderListProvider().getSales(filter);
+        if (salesValue != null) {
+          // salesList.assignAll(salesValue);
+          isDataProcessing(false);
+          salesList.addAll(salesValue);
+        }else{
+          // salesList.addAll([]);
+          print('no items');
+        }
+      }else{
+        Helpers.showSnackbar(title:'error',message: 'error_dialog__no_internet'.tr);
       }
     } finally {
       // isLoading(false);
@@ -194,22 +212,26 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
       if (scrollControllerProcessing.position.pixels ==
           scrollControllerProcessing.position.maxScrollExtent)  {
         print("reached end");
-        _changePaginationFilterProcessing(offsetProcessing + limitProcessing, limit);
+        _changePaginationFilterProcessing(offsetProcessing + limitProcessing, limitProcessing);
         await getMoreProcessingOrder(_paginationFilterProcessing.value);
       }
     });
   }
   Future<void> getAllProcessingOrder(PaginationFilter filter) async {
     try {
-      isMoreDataAvailableProcessing(false);
-      isLoadingProcessing(true);
-      var salesValue = await OrderListProvider().getProcessingSales(filter);
-      if (salesValue != null) {
-        isLoadingProcessing(false);
-        salesListProcessing.assignAll(salesValue);
-        // salesList.value = salesValue;
+      if(await authController.checkInternetConnectivity()) {
+        isMoreDataAvailableProcessing(false);
+        isLoadingProcessing(true);
+        var salesValue = await OrderListProvider().getProcessingSales(filter);
+        if (salesValue != null) {
+          isLoadingProcessing(false);
+          salesListProcessing.assignAll(salesValue);
+          // salesList.value = salesValue;
+        } else {
+          salesListProcessing.value = [];
+        }
       }else{
-        salesListProcessing.value=[];
+        Helpers.showSnackbar(title:'error',message: 'error_dialog__no_internet'.tr);
       }
     } finally {
       isLoadingProcessing(false);
@@ -240,22 +262,26 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
     scrollControllerComplete.addListener(() async {
       if (scrollControllerComplete.position.pixels ==
           scrollControllerComplete.position.maxScrollExtent)  {
-        print("reached end");
-        _changePaginationFilterComplete(offsetComplete + offsetComplete, limit);
+        print("scrollControllerComplete");
+        _changePaginationFilterComplete(offsetComplete + limitComplete, limitComplete);
         await getMoreCompleteOrder(_paginationFilterComplete.value);
       }
     });
   }
   Future<void> getAllCompleteOrder(PaginationFilter filter) async {
     try {
-      isMoreDataAvailableComplete(false);
-      isLoadingComplete(true);
-      var salesValue = await OrderListProvider().getCompleteSales(filter);
-      if (salesValue != null) {
-        salesListComplete.assignAll(salesValue);
-        // salesList.value = salesValue;
+      if(await authController.checkInternetConnectivity()) {
+        isMoreDataAvailableComplete(false);
+        isLoadingComplete(true);
+        var salesValue = await OrderListProvider().getCompleteSales(filter);
+        if (salesValue != null) {
+          salesListComplete.addAll(salesValue);
+          // salesList.value = salesValue;
+        } else {
+          salesListComplete.value = [];
+        }
       }else{
-        salesListComplete.value=[];
+        Helpers.showSnackbar(title:'error',message: 'error_dialog__no_internet'.tr);
       }
     } finally {
       isLoadingComplete(false);
@@ -283,19 +309,23 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
     scrollControllerCancel.addListener(() async {
       if (scrollControllerCancel.position.pixels ==
           scrollControllerCancel.position.maxScrollExtent)  {
-        _changePaginationFilterCancel(offsetCancel + offsetCancel, limit);
+        _changePaginationFilterCancel(offsetCancel + limitComplete, limitCancel);
         await getMoreCancelOrder(_paginationFilterCancel.value);
       }
     });
   }
   Future<void> getAllCancelOrder(PaginationFilter filter) async {
     try {
-      isMoreDataAvailableCancel(false);
-      isLoadingCancel(true);
-      var salesValue = await OrderListProvider().getCancelSales(filter);
-      if (salesValue != null) {
-        salesListCancel.assignAll(salesValue);
-        // salesList.value = salesValue;
+      if(await authController.checkInternetConnectivity()) {
+        isMoreDataAvailableCancel(false);
+        isLoadingCancel(true);
+        var salesValue = await OrderListProvider().getCancelSales(filter);
+        if (salesValue != null) {
+          salesListCancel.addAll(salesValue);
+          // salesList.value = salesValue;
+        }
+      }else{
+        Helpers.showSnackbar(title:'error',message: 'error_dialog__no_internet'.tr);
       }
     } finally {
       isLoadingCancel(false);

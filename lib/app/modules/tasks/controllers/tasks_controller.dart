@@ -116,15 +116,19 @@ update();
 }
   Future<void> getAllTasks(PaginationFilter filter) async {
     try {
-      isMoreDataAvailablePending(false);
-      isLoadingPending(true);
-      var taskValue = await TasksProvider().getTasks(filter);
-      if (taskValue != null) {
-        isLoadingPending(false);
-        taskListPending.assignAll(taskValue);
-        // salesList.value = salesValue;
+      if(await authController.checkInternetConnectivity()) {
+        isMoreDataAvailablePending(false);
+        isLoadingPending(true);
+        var taskValue = await TasksProvider().getTasks(filter);
+        if (taskValue != null) {
+          isLoadingPending(false);
+          taskListPending.assignAll(taskValue);
+          // salesList.value = salesValue;
+        } else {
+          taskListPending.value = [];
+        }
       }else{
-        taskListPending.value=[];
+        Helpers.showSnackbar(title:'error',message: 'error_dialog__no_internet'.tr);
       }
     } finally {
       isLoadingPending(false);
@@ -150,17 +154,21 @@ update();
   Future<void> getAllCompleted(PaginationFilter filter) async {
     print('cal completed');
     try {
-      isMoreDataAvailableComplete(false);
-      isLoadingCompleted(true);
-      var taskValue = await TasksProvider().getTasksCompleted(filter);
-      print(taskValue.length);
-      print('taskValue.length');
-      if (taskValue != null) {
-        isLoadingCompleted(false);
-        taskListCompleted.assignAll(taskValue);
-        // salesList.value = salesValue;
+      if(await authController.checkInternetConnectivity()) {
+        isMoreDataAvailableComplete(false);
+        isLoadingCompleted(true);
+        var taskValue = await TasksProvider().getTasksCompleted(filter);
+        print(taskValue.length);
+        print('taskValue.length');
+        if (taskValue != null) {
+          isLoadingCompleted(false);
+          taskListCompleted.assignAll(taskValue);
+          // salesList.value = salesValue;
+        } else {
+          taskListCompleted.value = [];
+        }
       }else{
-        taskListCompleted.value=[];
+        Helpers.showSnackbar(title:'error',message: 'error_dialog__no_internet'.tr);
       }
     } finally {
       isLoadingCompleted(false);

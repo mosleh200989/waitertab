@@ -10,7 +10,7 @@ class OrderListBinding extends Bindings {
     Get.lazyPut<OrderViewController>(
       () => OrderViewController(),
     );
-    // Get.lazyPut<OrderListController>(()=> OrderListController());
-    Get.put(OrderListController(), permanent: true);
+    Get.lazyPut<OrderListController>(()=> OrderListController());
+    // Get.put(OrderListController(), permanent: true);
   }
 }

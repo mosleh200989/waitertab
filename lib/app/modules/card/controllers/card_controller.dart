@@ -12,11 +12,12 @@ import 'package:waiter/app/global_widgets/helpers.dart';
 import 'package:waiter/app/global_widgets/loading_dialog.dart';
 import 'package:waiter/app/modules/home/controllers/app_controller.dart';
 import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
-import 'package:waiter/app/modules/order_details/controllers/order_details_controller.dart';
+import 'package:waiter/app/modules/order_list/controllers/order_list_controller.dart';
+import 'package:waiter/app/modules/product_list/controllers/product_list_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
 
 class CardController extends GetxController  {
-final OrderDetailsController orderDetailsController=Get.find();
+final ProductListController productListController=Get.find();
 final AppController appController=Get.find();
 final AuthController authController=Get.find();
 var isLoading = true.obs;
@@ -167,7 +168,7 @@ void decrement(int index){
         print(appController.basketItems[i].net_price);
         _grandTotal.value -= double.parse(appController.basketItems[i].subtotal);
         appController.basketItems.removeAt(index);
-        orderDetailsController.productList.refresh();
+        productListController.productList.refresh();
         appController.basketItems.refresh();
 
       }
@@ -256,7 +257,6 @@ void addNotes(int index,String value){
       billerdetails.group_name='biller';
       billerdetails.phone='0596664927';
       billerdetails.email='saleem@alama360.com';
-
       Basket basket;
       // TableModel tableModel=TableModel(id: tableId);
       List<Basket> items = [];
@@ -344,8 +344,9 @@ void addNotes(int index,String value){
          sales.shipping=shippingTextController.text??"";
          sales.total_items=appController.basketItems.length.toString();
          sales.user_id='1';
-         sales.is_dine_in=getIsDineIn.toString()??'';
+         sales.is_dine_in=isDineIn==true?'2':'1';;
          sales.table_no=isDineIn==true?tableId:'';
+         // sales.customer_type=isDineIn==true?'2':'1';
          // isParcel==true?'':
          sales.paidby=paid_by;
          // sales.payment.cc_type=cc_type;
@@ -395,7 +396,10 @@ void addNotes(int index,String value){
   }
 void removeAllListAndGoToOrderList(){
   appController.basketItems.clear();
+  // Get.reload<OrderListController>();
   if(appController.basketItems.length==0){
+    Get.reload<OrderListController>();
+    // Get.put(OrderListController()).reloadFunction();
     Get.offAllNamed(Routes.ORDER_LIST);
   }
 

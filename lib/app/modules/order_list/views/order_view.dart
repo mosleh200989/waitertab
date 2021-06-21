@@ -196,17 +196,26 @@ class OrderView extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               mainAxisSize: MainAxisSize.max,
                               children: <Widget>[
-                                Text(
-                                  'PaidBy'.tr+': ${_con.sales.paidby ?? ""}',
-                                  style: TextStyle(fontSize: 16),
+                                Expanded(
+                                  flex:2,
+                                  child: Text(
+                                    'PaidBy'.tr+': ${_con.sales.paidby ?? ""}',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                 ),
-                                Text( _con?.sales?.paid==''?'0.0':
-                                'PaidAmount'.tr+': ${double.parse(_con?.sales?.paid??"").toStringAsFixed(2).toString() ?? ''}SAR',
-                                  style: TextStyle(fontSize: 16),
+                                Expanded(
+                                  flex:2,
+                                  child: Text( _con?.sales?.paid==''?'0.0':
+                                  'PaidAmount'.tr+': ${double.parse(_con?.sales?.paid??"").toStringAsFixed(2).toString() ?? ''}SAR',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                 ),
-                                Text(
-                                  'Change'.tr+': ${_con?.sales?.payment_term ?? ''}',
-                                  style: TextStyle(fontSize: 16),
+                                Expanded(
+                                  flex:2,
+                                  child: Text(
+                                    'Change'.tr+': ${_con?.sales?.payment_term ?? ''}',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                 ),
                               ],
                             ),

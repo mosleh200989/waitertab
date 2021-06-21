@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/data/models/my_tab.dart';
 import 'package:waiter/app/global_widgets/DrawerWidget.dart';
-import 'package:waiter/app/modules/order_details/views/local_widgets/all_order_card_page.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/cancel_order.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/complete_order.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/header_title_text.dart';
@@ -56,71 +55,72 @@ class OrderListView extends GetView<OrderListController> {
             // color: Colors.transparent,
           ),*/
         ],
+        bottom: TabBar(
+          controller: controller.tabController,
+          isScrollable: true,
+          labelColor: Colors.white,
+          indicatorColor: Colors.red,
+          automaticIndicatorColorAdjustment: true,
+          labelStyle: TextStyle(fontWeight: FontWeight.bold),
+          indicatorWeight: 7,
+          indicatorPadding: EdgeInsets.only(top: 0.0,bottom: 50),
+          // labelPadding: EdgeInsets.only(bottom: 5),
+          tabs:<Tab> [
+            Tab(child:Text('${controller.tabs[0].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: Get.theme.textTheme.caption.fontSize),),),
+            Tab(child:Text('${controller.tabs[1].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: Get.theme.textTheme.caption.fontSize)),),
+            Tab(child:Text('${controller.tabs[2].title}',textAlign: TextAlign.center,style: TextStyle(fontSize:  Get.theme.textTheme.caption.fontSize),),),
+            Tab(child:Text('${controller.tabs[3].title}',textAlign: TextAlign.center,style: TextStyle(fontSize:  Get.theme.textTheme.caption.fontSize),),),
+          ],
+        ),
       ),
 
 
-      body: Column(
-        children:<Widget> [
-          Card(
-            elevation: 1,
-            child: Container(
-              // height: 50,
-              color: Colors.white,
-              width: Get.width,
-              child: TabBar(
-                controller: controller.tabController,
-                // isScrollable: true,
-                labelColor: Colors.black,
-                indicatorColor: Colors.red,
-
-                automaticIndicatorColorAdjustment: true,
-                labelStyle: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-                // indicatorWeight: 10,
-                // indicatorPadding: EdgeInsets.only(top: 20,bottom: 10),
-                labelPadding: EdgeInsets.only(bottom: 5),
-
-                tabs:<Tab> [
-                  Tab(child:Text('${controller.tabs[0].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: Get.theme.textTheme.caption.fontSize),),),
-                  Tab(child:Text('${controller.tabs[1].title}',textAlign: TextAlign.center,style: TextStyle(fontSize: Get.theme.textTheme.caption.fontSize)),),
-                  Tab(child:Text('${controller.tabs[2].title}',textAlign: TextAlign.center,style: TextStyle(fontSize:  Get.theme.textTheme.caption.fontSize),),),
-                  Tab(child:Text('${controller.tabs[3].title}',textAlign: TextAlign.center,style: TextStyle(fontSize:  Get.theme.textTheme.caption.fontSize),),),
-                ],
-              ),
-            ),
+      body: TabBarView(
+        controller: controller.tabController,
+        children: [
+          Column(
+            children: [
+                Expanded(
+                  flex: 1,
+                  child: HeaderTitleText(),),
+              Divider(thickness: 1,indent: 1,endIndent: 2,height: 5,color: Colors.black,),
+              Expanded(
+                  flex:11,
+                  child: PendingOrder()),
+            ],
           ),
-          Expanded(
-            child: TabBarView(
-              controller: controller.tabController,
-              children: [
-                Column(
-                  children: [
-                    HeaderTitleText(),
-                    Divider(thickness: 1,indent: 1,endIndent: 2,height: 5,color: Colors.black,),
-                    Expanded(child: PendingOrder()),
-                  ],
-                ),
-                Column(
-                  children: [
-                    HeaderTitleText(),
-                    Divider(thickness: 1,indent: 1,endIndent: 2,height: 5,color: Colors.black,),
-                    Expanded(child: ProcessingOrder()),
-                  ],
-                ),
-                Column(
-                  children: [
-                    HeaderTitleText(),
-                    Divider(thickness: 1,indent: 1,endIndent: 2,height: 5,color: Colors.black,),
-                    Expanded(child: CompleteOrder()),
-                  ],
-                ),  Column(
-                  children: [
-                    HeaderTitleText(),
-                    Divider(thickness: 1,indent: 1,endIndent: 2,height: 5,color: Colors.black,),
-                    Expanded(child: CancelOrder()),
-                  ],
-                ),
-              ],
-            ),
+          Column(
+            children: [
+              Expanded(
+                flex: 1,
+                child: HeaderTitleText(),),
+              Divider(thickness: 1,indent: 1,endIndent: 2,height: 5,color: Colors.black,),
+              Expanded(
+                  flex:11,
+                  child: ProcessingOrder()),
+            ],
+          ),
+          Column(
+            children: [
+              Expanded(
+                flex: 1,
+                child: HeaderTitleText(),),
+              Divider(thickness: 1,indent: 1,endIndent: 2,height: 5,color: Colors.black,),
+              Expanded(
+                  flex:11,
+                  child: CompleteOrder()),
+            ],
+          ),
+          Column(
+            children: [
+              Expanded(
+                flex: 1,
+                child: HeaderTitleText(),),
+              Divider(thickness: 1,indent: 1,endIndent: 2,height: 5,color: Colors.black,),
+              Expanded(
+                  flex:11,
+                  child: CancelOrder()),
+            ],
           ),
         ],
       )

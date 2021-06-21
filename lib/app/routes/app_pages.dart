@@ -10,13 +10,13 @@ import 'package:waiter/app/modules/my_user/bindings/my_user_binding.dart';
 import 'package:waiter/app/modules/my_user/views/my_user_view.dart';
 import 'package:waiter/app/modules/my_user/views/profile_view.dart';
 import 'package:waiter/app/modules/my_user/views/verify_screen.dart';
-import 'package:waiter/app/modules/order_details/bindings/order_details_binding.dart';
-import 'package:waiter/app/modules/order_details/views/order_details_view.dart';
 import 'package:waiter/app/modules/order_history/bindings/order_history_binding.dart';
 import 'package:waiter/app/modules/order_history/views/order_history_view.dart';
 import 'package:waiter/app/modules/order_list/bindings/order_list_binding.dart';
 import 'package:waiter/app/modules/order_list/views/order_list_view.dart';
 import 'package:waiter/app/modules/order_list/views/order_view.dart';
+import 'package:waiter/app/modules/product_list/bindings/product_list_binding.dart';
+import 'package:waiter/app/modules/product_list/views/product_list_view.dart';
 import 'package:waiter/app/modules/splash/bindings/splash_binding.dart';
 import 'package:waiter/app/modules/splash/views/splash_view.dart';
 import 'package:waiter/app/modules/task_details/bindings/task_details_binding.dart';
@@ -44,11 +44,7 @@ class AppPages {
       page: () => SplashView(),
       binding: SplashBinding(),
     ),
-    GetPage(
-      name: _Paths.ORDER_DETAILS,
-      page: () => OrderDetailsView(),
-      binding: OrderDetailsBinding(),
-    ),
+
     GetPage(
       name: _Paths.CARD,
       page: () => CardView(),
@@ -99,6 +95,11 @@ class AppPages {
       fullscreenDialog: true,
       transition: Transition.downToUp,
       transitionDuration: Duration(milliseconds: 300),
+    ),
+    GetPage(
+      name: _Paths.PRODUCT_LIST,
+      page: () => ProductListView(),
+      binding: ProductListBinding(),
     ),
   ];
 }

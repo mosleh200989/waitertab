@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:waiter/app/core/values/mr_constants.dart';
 import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/data/models/options.dart';
@@ -8,10 +8,10 @@ import 'package:waiter/app/data/models/product.dart';
 import 'package:waiter/app/data/providers/order_details_provider.dart';
 import 'package:waiter/app/global_widgets/helpers.dart';
 import 'package:waiter/app/modules/home/controllers/app_controller.dart';
-import 'package:waiter/app/routes/app_pages.dart';
-
-class OrderDetailsController extends GetxController {
- final AppController appController=Get.find();
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
+class ProductListController extends GetxController {
+  final AppController appController=Get.find();
+  final AuthController authController=Get.find();
   var isLoading = true.obs;
   var isDataProcessing = true.obs;
   var productList = <Product>[].obs;
@@ -31,14 +31,16 @@ class OrderDetailsController extends GetxController {
   set quantity(int value) => _quantity.value = value;
   int get quantity => _quantity.value;
 
- int get cartQuantity {
-   return appController.basketItems.length;
- }
- final _grandTotal=0.0.obs;
- double get grandTotal=>_grandTotal.value;
-var _optionValue=''.obs;
-String get optionValue=>_optionValue.value;
-String optionData='';
+  int get cartQuantity {
+    return appController.basketItems.length;
+  }
+  final _grandTotal=0.0.obs;
+  double get grandTotal=>_grandTotal.value;
+  var _optionValue=''.obs;
+  var _optionId=''.obs;
+  String get optionValue=>_optionValue.value;
+  String get optionId=>_optionId.value;
+  String optionData='';
 
 // For Pagination
   ScrollController scrollController = ScrollController();
@@ -46,6 +48,10 @@ String optionData='';
   final _paginationFilter = PaginationFilter().obs;
   int get limit => _paginationFilter.value.limit;
   int get offset => _paginationFilter.value.offset;
+  // final selectedItemValue = [].obs;
+  final _selectedItemValue = <String>[].obs;
+  List<String> get selectedItemValue=>_selectedItemValue.value;
+
   @override
   void onInit()async {
     _changePaginationFilter(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
@@ -57,23 +63,26 @@ String optionData='';
       print('catId');
       // ever(_paginationFilter, (_) async =>  await getAllProducts());
       await getAllProducts(_paginationFilter.value);
-      _optionValue.value='';
     }
     // incrementGrandTotal();
     for(var i=0; i<appController.basketItems.length;i++){
       print(appController.basketItems[i].unit_price);
       _busketTotal.value =_busketTotal.value + double.parse(appController.basketItems[i].subtotal);
+      // _optionValue.value=appController.basketItems[i].product_option;
     }
     print("busketTotal==");
     print(busketTotal);
     //For Pagination
     paginateProductList();
+    for (int i = 0; i < 20; i++) {
+      _selectedItemValue.add("NONE");
+    }
     super.onInit();
   }
 
   @override
   void onReady() {
-   print('or ready order controller');
+    print('or ready order controller');
     super.onReady();
   }
 
@@ -93,7 +102,7 @@ String optionData='';
           scrollController.position.maxScrollExtent) {
         print("reached end");
         _changePaginationFilter(offset + limit, limit);
-      await getMoreProducts(_paginationFilter.value);
+        await getMoreProducts(_paginationFilter.value);
         // page++;
         // getMoreTask(page);
       }
@@ -102,29 +111,40 @@ String optionData='';
   Future<void> refreshProductList() async {
     productList.clear();
     _changePaginationFilter(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
-   await getAllProducts(_paginationFilter.value);
+    await getAllProducts(_paginationFilter.value);
     Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
   }
   void increment(int i) {
     productList[i].counter++;
-   productList[i].totalPrice=productList[i].counter * double.parse(productList[i].price);
+    productList[i].totalPrice=productList[i].counter * double.parse(productList[i].price);
     update();
   }
-  OptionModel optionModel;
-void changedOption(String value){
-      _optionValue.value=value;
-}
-void clearOptionValue(){
-  _optionValue.value='';
-}
- void incrementOpenDialog(int i) {
-   productList[i].totalPrice= 1 * double.parse(productList[i].price);
-   update();
- }
- void decrementOpenDialog(int i) {
-   productList[i].totalPrice =1 * double.parse(productList[i].price);
-   update();
- }
+  void changedOption(OptionModel value){
+    _optionValue.value=value.name;
+    _optionId.value=value.id;
+  }
+  void clearOptionValue(int index){
+    _optionValue.value='';
+    _optionId.value='';
+    bool checkOption=false;
+    for(var i=0; i<appController.basketItems.length; i++){
+      if(appController.basketItems[i].product_id == productList[index].id){
+        _optionValue.value=appController.basketItems[i].optionValue;
+        _optionId.value=appController.basketItems[i].product_option;
+        print('option condition');
+        break;
+      }
+    }
+    appController.basketItems.refresh();
+  }
+  void incrementOpenDialog(int i) {
+    productList[i].totalPrice= 1 * double.parse(productList[i].price);
+    update();
+  }
+  void decrementOpenDialog(int i) {
+    productList[i].totalPrice =1 * double.parse(productList[i].price);
+    update();
+  }
   void decrement(int i){
     if(productList[i].counter > 1 ){
       productList[i].counter--;
@@ -133,37 +153,42 @@ void clearOptionValue(){
     }
   }
   void setAgreedToOrder(bool newValue, int index) {
-   if(newValue==false) {
-     for(var i=0; i<appController.basketItems.length;i++){
-       if(appController.basketItems[i].product_id==productList[index].id){
-         print(appController.basketItems[i].net_price??'0.0');
-         productList[index].isOrder = newValue;
-         _busketTotal.value -= double.parse(appController.basketItems[i].subtotal);
-         appController.basketItems.removeAt(i);
-         productList.refresh();
-         appController.basketItems.refresh();
-       }
-     }
-   }else{
-     print('in condition===');
-     productList[index].isOrder= newValue;
-     productList.refresh();
-     appController.basketItems.refresh();
+    if(newValue==false) {
+      for(var i=0; i<appController.basketItems.length;i++){
+        if(appController.basketItems[i].product_id==productList[index].id){
+          print(appController.basketItems[i].net_price??'0.0');
+          productList[index].isOrder = newValue;
+          _busketTotal.value -= double.parse(appController.basketItems[i].subtotal);
+          appController.basketItems.removeAt(i);
+          productList.refresh();
+          appController.basketItems.refresh();
+        }
+      }
+    }else{
+      print('in condition===');
+      productList[index].isOrder= newValue;
+      productList.refresh();
+      appController.basketItems.refresh();
 
-   }
+    }
 
   }
   Future<void> getAllProducts(PaginationFilter filter) async {
     try {
-      isMoreDataAvailable(false);
-      isDataProcessing(true);
-      var products = await OrderDetailsProvider().getProduct(catId.value,filter);
-      if (products != null) {
-        productList.addAll(products);
-        isDataProcessing(false);
-        // categoriesList.value = categories;
+      if(await authController.checkInternetConnectivity()) {
+        isMoreDataAvailable(false);
+        isDataProcessing(true);
+        var products = await OrderDetailsProvider().getProduct(
+            catId.value, filter);
+        if (products != null) {
+          productList.addAll(products);
+          isDataProcessing(false);
+          // categoriesList.value = categories;
+        } else {
+          print('product null');
+        }
       }else{
-        print('product null');
+        Helpers.showSnackbar(title:'error',message: 'error_dialog__no_internet'.tr);
       }
     } finally {
       isDataProcessing(false);
@@ -178,7 +203,7 @@ void clearOptionValue(){
       } else {
         isMoreDataAvailable(false);
       }
-        productList.addAll(products);
+      productList.addAll(products);
     }catch (exception) {
       isDataProcessing(false);
     }finally{
@@ -202,25 +227,28 @@ void clearOptionValue(){
   // }
 
   Future<void> addToBasketAndBuyClickEvent(int index) async {
-  print("index==$index");
-  try{
-    Basket basket=Basket(
-      product_id: productList.elementAt(index).id,
-      product_name: productList.elementAt(index).name,
-      net_price: productList[index].net_price,
-      quantity: productList.elementAt(index).counter.toString(),
-      product_base_quantity: productList.elementAt(index).counter.toString(),
-      real_unit_price: productList.elementAt(index).price,
-      product_code: productList.elementAt(index).code,
-      product_option: optionValue??'',
-      product_tax: productList.elementAt(index).tax_rate.id,
-      unit_price: productList.elementAt(index).unit_price,
-      product_unit: productList.elementAt(index).unit.id,
-      product_discount: '0',
-      item_discount: '0.0',
-      subtotal: productList[index].totalPrice.toString() ?? productList[index].price,
-    );
-    // setAgreedToOrder(true, index);
+    print("index==$index");
+    try{
+      Basket basket=Basket(
+        product_id: productList.elementAt(index).id,
+        product_name: productList.elementAt(index).name,
+        net_price: productList[index].net_price,
+        quantity: productList.elementAt(index).counter.toString(),
+        product_base_quantity: productList.elementAt(index).counter.toString(),
+        real_unit_price: productList.elementAt(index).price,
+        product_code: productList.elementAt(index).code,
+        product_option: optionId==''?productList.elementAt(index).option:optionId,
+        optionValue: optionValue==''?productList.elementAt(index).optiontext:optionValue,
+        product_tax: productList.elementAt(index).tax_rate.id,
+        unit_price: productList.elementAt(index).unit_price,
+        product_unit: productList.elementAt(index).unit.id,
+        product_discount: '0',
+        item_discount: '0.0',
+        subtotal: productList[index].totalPrice.toString() ?? productList[index].price,
+      );
+      print(basket.toMap());
+      print('basket');
+      // setAgreedToOrder(true, index);
       if(appController.basketItems.length>0) {
         print("appController.basketItems.length=${appController.basketItems.length}");
         int busketLength=appController.basketItems.length;
@@ -240,6 +268,8 @@ void clearOptionValue(){
             appController.basketItems[i].quantity=(int.parse(appController.basketItems[i].quantity)+productList.elementAt(index).counter).toString();
             appController.basketItems[i].product_base_quantity=(int.parse(appController.basketItems[i].product_base_quantity)+productList.elementAt(index).counter).toString();
             appController.basketItems[i].subtotal =(int.parse(appController.basketItems[i].quantity) * double.parse(productList[index].price)).toString() ;
+            appController.basketItems[i].product_option =optionId;
+            appController.basketItems[i].optionValue =optionValue;
             // appController.basketItems.canUpdate;
             print('if contains');
             // appController.basketItems.refresh();
@@ -251,26 +281,27 @@ void clearOptionValue(){
         if(!foundBusket){
           appController.basketItems.add(basket);
         }
-         appController.basketItems.refresh();
+        appController.basketItems.refresh();
       }else{
         appController.basketItems.add(basket);
         print('else =========contains');
       }
 
-    _busketTotal.value=0.0;
-    for(var i=0; i< appController.basketItems.length; i++){
-      // if(i==index){
+      _busketTotal.value=0.0;
+      for(var i=0; i< appController.basketItems.length; i++){
+        // if(i==index){
         // _busketTotal.value+= double.parse(appController.basketItems[i].subtotal);
         // _busketTotal.value
         print(appController.basketItems[i].unit_price);
         _busketTotal.value =_busketTotal.value + double.parse(appController.basketItems[i].subtotal);
+        // _optionValue.value=appController.basketItems[i].product_option;
+        // }
+        update();
+      }
+      // for(var i=0; i<appController.basketItems.length;i++){
+      //
       // }
-      update();
-    }
-    // for(var i=0; i<appController.basketItems.length;i++){
-    //
-    // }
-  /*  if(cartQuantity > 0 && cartQuantity !=0){
+      /*  if(cartQuantity > 0 && cartQuantity !=0){
     for (var i=0; i<appController.basketItems.length; i++) {
       if(appController.basketItems[i].product_id==productList.elementAt(index).id){
         print(appController.basketItems[i].product_id);
@@ -309,25 +340,25 @@ void clearOptionValue(){
       print("false========");
     }
 */
-    //  basket =
-    // appController.basketItems.value.firstWhere((cartItem) {
-    //   print('ekhane===');
-    //   print(cartItem.product_id);
-    //   print(productList.elementAt(i).id);
-    //   print('ekhane');
-    //   return cartItem.product_id == productList.elementAt(i).id;
-    // });
+      //  basket =
+      // appController.basketItems.value.firstWhere((cartItem) {
+      //   print('ekhane===');
+      //   print(cartItem.product_id);
+      //   print(productList.elementAt(i).id);
+      //   print('ekhane');
+      //   return cartItem.product_id == productList.elementAt(i).id;
+      // });
 
-    // increment(i);
-    // print(appController.basketItems[i].product_name);
-    // print(basket.net_price);
-    // print('basket===');
-  }catch(error){
- print(error);
-  }
-  Get.back();
-  // Get.reload();
-  // Get.reloadAll();
+      // increment(i);
+      // print(appController.basketItems[i].product_name);
+      // print(basket.net_price);
+      // print('basket===');
+    }catch(error){
+      print(error);
+    }
+    Get.back();
+    // Get.reload();
+    // Get.reloadAll();
   }
 
 }

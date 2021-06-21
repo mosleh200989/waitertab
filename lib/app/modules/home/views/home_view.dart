@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:waiter/app/core/values/mr_url.dart';
 import 'package:waiter/app/global_widgets/DrawerWidget.dart';
 import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
-import 'package:waiter/app/modules/order_details/controllers/order_details_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
 
 import '../controllers/home_controller.dart';
@@ -53,41 +52,6 @@ class HomeView extends GetWidget<HomeController> {
         ],
       ),
       drawer: DrawerWidget(),
-    /*  body: GetBuilder<HomeController>(
-        builder: (controller) {
-          return Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: TextField(
-                  controller: controller.textController,
-                  decoration: InputDecoration(
-                    hintText: 'Search Here...',
-                  ),
-                  onChanged: (value) {
-                    print(value);
-                    print('value');
-                    controller.onItemChanged(value.toString());
-                    controller.updateFunction();
-
-                    // Apply Search Bar Filter on ListView in Flutter Android iOS Example Tutorial
-                  },
-                ),
-              ),
-              Expanded(
-                child: ListView(
-                  padding: EdgeInsets.all(12.0),
-                  children: controller.newDataList.map((data) {
-                    return ListTile(
-                      title: Text('${data}'),
-                      onTap: ()=> print(data),);
-                  }).toList(),
-                ),
-              )
-            ],
-          );
-        }
-      ),*/
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -98,56 +62,53 @@ class HomeView extends GetWidget<HomeController> {
         return Center(child: CircularProgressIndicator());
       else
           return Expanded(
-              child: Container(
-                // height: Get.height *.70,
-                child: GridView.builder(
-                  itemCount: controller.categoriesList.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 2.0,
-                    mainAxisSpacing: 2.0,
-                      childAspectRatio: width / (height / 2)
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    return InkWell(
-                      onTap: () {
-                        Get.reload<OrderDetailsController>();
-                        Get.toNamed(Routes.ORDER_DETAILS,arguments: {'catId':controller.categoriesList.elementAt(index).id,
-                          'image_url':controller.categoriesList.elementAt(index).image,
-                          'product_name':controller.categoriesList.elementAt(index).name,
-                        });
-                      },
-                      child: Card(
-                        elevation: 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(height: 10,),
-                            CachedNetworkImage(
-                              height: 100,
-                              width: 120,
-                              fit: BoxFit.fill,
-                              imageUrl:"${controller.categoriesList.elementAt(index).image??''}",
-                              errorWidget: (context, url, error) => Image.network('${MrUrl.get_no_image_url}'),
+              child: GridView.builder(
+                itemCount: controller.categoriesList.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 2.0,
+                  mainAxisSpacing: 2.0,
+                    childAspectRatio: width / (height / 2)
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  return InkWell(
+                    onTap: () {
+                      // Get.reload<OrderDetailsController>(force: true);
+                      Get.toNamed(Routes.PRODUCT_LIST,arguments: {'catId':controller.categoriesList.elementAt(index).id,
+                        'image_url':controller.categoriesList.elementAt(index).image,
+                        'product_name':controller.categoriesList.elementAt(index).name,
+                      });
+                    },
+                    child: Card(
+                      elevation: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          // SizedBox(height: 50,),
+                          CachedNetworkImage(
+                            height: 100,
+                            width: 120,
+                            fit: BoxFit.fill,
+                            imageUrl:"${controller.categoriesList.elementAt(index).image??''}",
+                            errorWidget: (context, url, error) => Image.network('${MrUrl.get_no_image_url}'),
+                          ),
+                          // Image(image: AssetImage('assets/images/burger_1.jpg'),  fit: BoxFit.fill,
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('${controller.categoriesList.elementAt(index).name}',
+                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18 ),
                             ),
-                            // Image(image: AssetImage('assets/images/burger_1.jpg'),  fit: BoxFit.fill,
-                            // ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text('${controller.categoriesList.elementAt(index).name}',
-                                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18 ),
-                                ),
-                              ),
-                            ),
+                          ),
 
-                          ],
-                        ),
+                        ],
                       ),
-                    );
-                  },
-                  ),
-              ),
+                    ),
+                  );
+                },
+                ),
             );},
           ),
         ],

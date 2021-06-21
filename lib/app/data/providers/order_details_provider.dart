@@ -12,7 +12,7 @@ class OrderDetailsProvider extends GetConnect {
   }
   Future<dynamic> getProduct(String catId,PaginationFilter filter) async {
     final String productUrl="${MrUrl.get_product_list_url}products?category_code=${catId}&start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
-
+  print(productUrl);
     Response response = await  get(productUrl);
        if (response.statusCode == 200 && response.body['status'] != false  && response.body['data'] !=null) {
       return productFromJson(response.body['data']);

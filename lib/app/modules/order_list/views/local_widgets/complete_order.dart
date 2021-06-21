@@ -8,113 +8,101 @@ class CompleteOrder  extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final OrderListController _con = Get.find<OrderListController>();
-    return  Wrap(
-      children: [
-        Obx(() {
-          return Column(
-            children: [
-              Container(
-                height: Get.height - 200,
-                child: _con.salesListComplete.isEmpty
-                    ? EmptyOrdersWidget()
-                    : RefreshIndicator(
-                  onRefresh: _con.refreshCompleteList,
-                  child: ListView.builder(
-                    controller: _con.scrollControllerComplete,
-                    itemCount: _con.salesListComplete.length,
-                    // shrinkWrap: true,
-                    // physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      Sales salesData = _con.salesListComplete[index];
-                      if (index == _con.salesListComplete.length - 1 &&
-                          _con.isMoreDataAvailableComplete.value == true) {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                      return Container(
-                        margin: EdgeInsets.only(bottom: 2.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+    return  Obx(() {
+      return _con.salesListComplete.isEmpty
+          ? EmptyOrdersWidget()
+          : RefreshIndicator(
+        onRefresh: _con.refreshCompleteList,
+        child: ListView.builder(
+          controller: _con.scrollControllerComplete,
+          itemCount: _con.salesListComplete.length,
+          // shrinkWrap: true,
+          // physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            Sales salesData = _con.salesListComplete[index];
+            if (index == _con.salesListComplete.length - 1 &&
+                _con.isMoreDataAvailableComplete.value == true) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return Container(
+              margin: EdgeInsets.only(bottom: 2.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                          flex: 2,
+                          child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Text('${salesData.id ?? ''}',
+                                  textAlign: TextAlign.center)
+                          )),
+                      Expanded(
+                          flex: 2,
+                          child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Text('${salesData.customer ?? ''}',
+                                  textAlign: TextAlign.center)
+                          )),
+                      Expanded(
+                          flex: 2,
+                          child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Text('${salesData?.tableModel?.name ?? ''}',
+                                  textAlign: TextAlign.center)
+                          )),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text('${salesData.date ?? ''}',
+                                textAlign: TextAlign.center)
+                        ),),
+                      Expanded(
+                        flex: 2,
+                        child: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text('${double.parse(salesData.total)
+                                .toStringAsFixed(2)
+                                .toString() ?? ""}',
+                                textAlign: TextAlign.center)
+                        ),), Expanded(
+                        flex: 2,
+                        child: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Row(
                               children: <Widget>[
-                                Expanded(
-                                    flex: 2,
-                                    child: Padding(
-                                        padding: EdgeInsets.all(5),
-                                        child: Text('${salesData.id ?? ''}',
-                                            textAlign: TextAlign.center)
-                                    )),
-                                Expanded(
-                                    flex: 2,
-                                    child: Padding(
-                                        padding: EdgeInsets.all(5),
-                                        child: Text('${salesData.customer ?? ''}',
-                                            textAlign: TextAlign.center)
-                                    )),
-                                Expanded(
-                                    flex: 2,
-                                    child: Padding(
-                                        padding: EdgeInsets.all(5),
-                                        child: Text('${salesData?.tableModel?.name ?? ''}',
-                                            textAlign: TextAlign.center)
-                                    )),
-                                Expanded(
-                                  flex: 2,
-                                  child: Padding(
-                                      padding: EdgeInsets.all(5),
-                                      child: Text('${salesData.date ?? ''}',
-                                          textAlign: TextAlign.center)
-                                  ),),
-                                Expanded(
-                                  flex: 2,
-                                  child: Padding(
-                                      padding: EdgeInsets.all(5),
-                                      child: Text('${double.parse(salesData.total)
-                                          .toStringAsFixed(2)
-                                          .toString() ?? ""}',
-                                          textAlign: TextAlign.center)
-                                  ),), Expanded(
-                                  flex: 2,
-                                  child: Padding(
-                                      padding: EdgeInsets.all(5),
-                                      child: Row(
-                                        children: <Widget>[
-                                          Expanded(child: IconButton(icon: Icon(
-                                            Icons.visibility, color: Colors.red,),
-                                            onPressed: () {
-                                              Get.reload<OrderListController>();
-                                              Get.toNamed(Routes.ORDER_VIEW,
-                                                  arguments: {'reference': salesData.id,'orderStatus':salesData.order_status
-                                                  });
-                                            },)),
-
-                                        ],
-                                      )
-                                  ),),
-
+                                Expanded(child: IconButton(icon: Icon(
+                                  Icons.visibility, color: Colors.red,),
+                                  onPressed: () {
+                                    Get.reload<OrderListController>();
+                                    Get.toNamed(Routes.ORDER_VIEW,
+                                        arguments: {'reference': salesData.id,'orderStatus':salesData.order_status
+                                        });
+                                  },)),
 
                               ],
-                            ),
-                            Divider(thickness: 2,
-                              indent: 2,
-                              endIndent: 2,
-                              color: Colors.grey,
-                              height: 5,)
-                          ],
-                        ),
-                      );
-                    },),
-                ),
+                            )
+                        ),),
+
+
+                    ],
+                  ),
+                  Divider(thickness: 2,
+                    indent: 2,
+                    endIndent: 2,
+                    color: Colors.grey,
+                    height: 5,)
+                ],
               ),
+            );
+          },),
+      );
 
-            ],
-          );
 
-
-        }
-        ),
-      ],
+    }
     );
   }
 }

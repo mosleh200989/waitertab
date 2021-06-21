@@ -60,7 +60,8 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             onTap: () {
 
-              Get.reload<OrderListController>();
+              // Get.reload<OrderListController>(force: true);
+              Get.put(OrderListController()).reloadFunction();
               Get.back();
               Get.toNamed(Routes.ORDER_LIST);
             },
@@ -76,7 +77,8 @@ class DrawerWidget extends StatelessWidget {
           ListTile(
             onTap: () {
 
-              Get.reload<TasksController>();
+              Get.reload<TasksController>(force: true);
+
               Get.back();
               Get.toNamed(Routes.TASKS);
             },

@@ -43,13 +43,16 @@ class TasksDetailsController extends GetxController {
   void onClose() {}
   Future<void> getSingleTasks() async {
     try {
-      isLoading(true);
-      var tasksValue = await TasksProvider().getOneTasks(taskId);
-      if (tasksValue != null) {
-        _tasks.value=tasksValue;
-
+      if(await authController.checkInternetConnectivity()) {
+        isLoading(true);
+        var tasksValue = await TasksProvider().getOneTasks(taskId);
+        if (tasksValue != null) {
+          _tasks.value = tasksValue;
+        } else {
+          _tasks.value = null;
+        }
       }else{
-        _tasks.value=null;
+        Helpers.showSnackbar(title:'error',message: 'error_dialog__no_internet'.tr);
       }
     } finally {
       isLoading(false);
