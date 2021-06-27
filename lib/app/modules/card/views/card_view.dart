@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/data/models/basket.dart';
+import 'package:waiter/app/data/models/options.dart';
 import 'package:waiter/app/data/models/table.dart';
 import 'package:waiter/app/global_widgets/EmptyOrdersWidget.dart';
 import 'package:waiter/app/modules/home/controllers/app_controller.dart';
@@ -103,7 +104,7 @@ class CardView extends StatelessWidget {
                       itemCount: appController.basketItems.length,
                       itemBuilder: (context, index) {
                         final String productOption =
-                            "${appController?.basketItems?.elementAt(index)?.product_option ?? ''}";
+                            "${appController?.basketItems?.elementAt(index)?.optionValue ?? ''}";
                         appController.textEditNoteController.add(TextEditingController());
                         return Card(
                           margin: EdgeInsets.all(5),
@@ -191,24 +192,38 @@ class CardView extends StatelessWidget {
                                     ))
                                   ],
                                 ),
-                                Container(
-                                  height: 35,
-                                  child: TextButton.icon(
-                                      style: TextButton.styleFrom(
-                                        shape: StadiumBorder(),
-                                        primary: Colors.black
-                                      ),
-                                      onPressed: () {
-                                        controller.changeShowNoteField(
-                                            true, index);
-                                      },
-                                      icon: Icon(
-                                        Icons.arrow_drop_down,
-                                      ),
-                                      label: Text(
-                                        'Notes'.tr,
-                                        style: labelTextStyle,
-                                      )),
+                                Row(
+                                  // crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      height: 35,
+                                      child: TextButton.icon(
+                                          style: TextButton.styleFrom(
+                                            shape: StadiumBorder(),
+                                            primary: Colors.black
+                                          ),
+                                          onPressed: () {
+                                            controller.changeShowNoteField(
+                                                true, index);
+                                          },
+                                          icon: Icon(
+                                            Icons.arrow_drop_down,
+                                          ),
+                                          label: Text(
+                                            'Notes'.tr,
+                                            style: labelTextStyle,
+                                          )),
+                                    ),
+                                    Visibility(
+                                      visible: appController.basketItems.elementAt(index).product_option !=null,
+                                      child: ElevatedButton(onPressed: () {
+                                        controller.getOptionList(appController.basketItems.elementAt(index).product_id);
+                                        _showSubmitDilog(controller,appController.basketItems.elementAt(index));
+
+                                      }, child: Text('Edit'.tr) ),
+                                    )
+                                  ],
                                 ),
                                 GetBuilder<CardController>(builder: (_) {
                                   return Visibility(
@@ -699,6 +714,103 @@ class CardView extends StatelessWidget {
         },
       ),
     );
+  }
+  Widget _showSubmitDilog(CardController controller,Basket basket){
+    final appController=Get.find<AppController>();
+    Get.defaultDialog(
+      title: 'UpdateOption'.tr,
+      titleStyle: TextStyle(fontSize: 24),
+      // backgroundColor: Colors.blueGrey,
+      // barrierDismissible: false,
+      content: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+
+                // Visibility(
+                //     visible: controller.productList.elementAt(index).option!=null,
+                //     child: Text('${controller.productList.elementAt(index).option}')),
+
+                Expanded(
+                  flex:2,
+                  child: Obx(()=>
+                      DropdownButton<OptionModel>(
+                        isExpanded: true,
+                        underline: SizedBox(),
+                        icon: Icon(
+                          Icons.arrow_drop_down_sharp,
+                        ),
+                        // (i == 1) ? 1 : (i == 2) ? 2 : 0
+                        // condition== true ? 1 : stringName == "Steve" ? 0 : 2,
+                        hint:_showOptionText(basket,controller),
+                        // value: controller.optionValue,
+
+                        items:controller?.product?.optionsList?.length  !=null ? controller?.product?.optionsList?.map((lang) {
+                          return  DropdownMenuItem<OptionModel>(
+                            child: Text(lang?.name??''),
+                            value:lang,
+                          );
+                        })?.toList() : null,
+                        // value:controller.optionValue??null,
+                        onChanged: (OptionModel option) {
+                          print(option.id);
+                          // controller.changedOption(option);
+                        },
+                      ),
+                  ),
+                ),
+
+              ],
+            ),
+          ],
+        ),
+      ),
+      // textCancel: 'dismiss'.tr,
+      // cancelTextColor:Colors.white,
+      // onCancel: () {
+      // },
+  /*    textConfirm: 'ADD_TO_CART'.tr,
+      confirmTextColor:Colors.white,
+      onConfirm: () {
+        // controller.addToBasketAndBuyClickEvent(index);
+      },*/
+
+      confirm: Row(
+        children:<Widget> [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+                onPressed: () {
+
+            }, child: Text('Update'.tr)),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+                onPressed: () {
+
+                }, child: Text('Copy'.tr)),
+          ),
+        ],
+      ),
+      buttonColor:Colors.grey ,
+    );
+  }
+  Widget _showOptionText(Basket basket,CardController controller) {
+    if (controller.optionName != '') {
+      return Text('${controller.optionName}');
+    } else if(basket.optionValue!=null) {
+      return Text('${basket.optionValue}');
+    } else {
+      return Text("");
+    }
   }
   Widget singleItemText(int index, TextEditingController controllertxt) {
     final appController=Get.find<AppController>();

@@ -5,6 +5,7 @@ import 'package:waiter/app/core/values/mr_config.dart';
 import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/data/models/billerdetails.dart';
 import 'package:waiter/app/data/models/payment.dart';
+import 'package:waiter/app/data/models/product.dart';
 import 'package:waiter/app/data/models/sales.dart';
 import 'package:waiter/app/data/models/table.dart';
 import 'package:waiter/app/data/providers/card_provider.dart';
@@ -22,6 +23,9 @@ final AppController appController=Get.find();
 final AuthController authController=Get.find();
 var isLoading = true.obs;
 var tableList = <TableModel>[].obs;
+final _product=Product().obs;
+Product get product=>_product.value;
+
   final count = 1.obs;
   final _showNote=false.obs;
   bool get showNote=>_showNote.value;
@@ -52,6 +56,10 @@ String get cc_type=>_cc_type.value;
 var _isDineIn=0.obs;
 int get getIsDineIn=>_isDineIn.value;
 bool buttonActive = false;
+final _optionId=''.obs;
+final _optionName=''.obs;
+String get optionId=>_optionId.value;
+String get optionName=>_optionName.value;
   @override
   void onInit() async {
     super.onInit();
@@ -242,15 +250,10 @@ void addNotes(int index,String value){
     final ProgressDialog progressDialog = loadingDialog(Get.overlayContext);
     try{
       Sales sales=Sales();
-      double total = 0.0;
-      double totalBalance = 0.0;
-      int total_items = 0;
       String customer = "1";
       String warehouse = "1";
-      String add_item = "";
       String biller = "3";
       String pos_note = "";
-      String staff_note = "معجون سنسوداين 75 مل واقي";
 
       BillerDetails billerdetails=BillerDetails();
       billerdetails.id='3';
@@ -344,7 +347,7 @@ void addNotes(int index,String value){
          sales.shipping=shippingTextController.text??"";
          sales.total_items=appController.basketItems.length.toString();
          sales.user_id='1';
-         sales.is_dine_in=isDineIn==true?'2':'1';;
+         sales.is_dine_in=isDineIn==true?'2':'1';
          sales.table_no=isDineIn==true?tableId:'';
          // sales.customer_type=isDineIn==true?'2':'1';
          // isParcel==true?'':
@@ -415,6 +418,16 @@ Future<void> getTableList() async {
     }
   } finally {
     isLoading(false);
+  }
+}
+Future<void> getOptionList(String productId) async {
+  try {
+    var optionData = await CardProvider().getOptions(productId);
+    if (optionData != null) {
+      _product.value=optionData;
+    }
+  } finally {
+  print('finally');
   }
 }
 
