@@ -25,26 +25,47 @@ class CardView extends StatelessWidget {
         title: Text('Card'.tr),
         centerTitle: true,
         actions: [
-          Container(
-            height: 30,
-            width: 100,
-            child: TextButton(
-              onPressed: () {
-                // Get.reload();
-                Get.offNamed(Routes.HOME);
-              },
-
-                child: Text(
-                  'AddNewItem'.tr,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white),
+          TextButton(
+            onPressed: () {
+              Get.offNamed(Routes.NOTIFICATIONS);
+              // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
+            },
+            child: Stack(
+              alignment: AlignmentDirectional.topStart,
+              children: <Widget>[
+                Icon(
+                  Icons.notification_important_rounded,
+                  color: Colors.white,
+                  size: 24,
+                ),
+                Container(
+                  child:  Text('0',
+                    textAlign: TextAlign.center,
+                    style: Get.theme.textTheme.caption.merge   (
+                      TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.normal),
+                    ),
+                  ),
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(color: Colors.blueGrey.shade200, borderRadius: BorderRadius.all(Radius.circular(10))),
+                  constraints: BoxConstraints(minWidth: 15, maxWidth: 80, minHeight: 15, maxHeight: 50),
+                ),
+              ],
+            ),
+            // color: Colors.transparent,
+          ),
+          TextButton(
+            onPressed: () {
+              Get.offNamed(Routes.HOME);
+              // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
+            },
+            child:Icon(
+                  Icons.home,
+                  color: Colors.white,
+                  size: 24,
                 ),
 
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.all(5),
-              ),
-            ),
-          )
+            // color: Colors.transparent,
+          ),
         ],
       ),
       backgroundColor: Colors.grey.shade200,
@@ -219,9 +240,12 @@ class CardView extends StatelessWidget {
                                       visible: appController.basketItems.elementAt(index).product_option !=null,
                                       child: ElevatedButton(onPressed: () {
                                         controller.getOptionList(appController.basketItems.elementAt(index).product_id);
-                                        _showSubmitDilog(controller,appController.basketItems.elementAt(index));
+                                        _showSubmittedDialog(controller,appController.basketItems.elementAt(index),index);
 
-                                      }, child: Text('Edit'.tr) ),
+                                      }, child: Text('Edit'.tr),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.blueGrey.shade400
+                                      ),),
                                     )
                                   ],
                                 ),
@@ -715,8 +739,7 @@ class CardView extends StatelessWidget {
       ),
     );
   }
-  Widget _showSubmitDilog(CardController controller,Basket basket){
-    final appController=Get.find<AppController>();
+  Widget _showSubmittedDialog(CardController controller,Basket basket,int index){
     Get.defaultDialog(
       title: 'UpdateOption'.tr,
       titleStyle: TextStyle(fontSize: 24),
@@ -761,7 +784,7 @@ class CardView extends StatelessWidget {
                         // value:controller.optionValue??null,
                         onChanged: (OptionModel option) {
                           print(option.id);
-                          // controller.changedOption(option);
+                          controller.changeOption(option);
                         },
                       ),
                   ),
@@ -788,15 +811,22 @@ class CardView extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
                 onPressed: () {
+                  controller.updateOption(index);
 
-            }, child: Text('Update'.tr)),
+            }, child: Text('Update'.tr),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blueGrey.shade400
+            ),),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
                 onPressed: () {
-
-                }, child: Text('Copy'.tr)),
+                  controller.newAddItem(basket);
+                }, child: Text('Copy'.tr),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.blueGrey.shade400
+            ),),
           ),
         ],
       ),
@@ -813,11 +843,7 @@ class CardView extends StatelessWidget {
     }
   }
   Widget singleItemText(int index, TextEditingController controllertxt) {
-    final appController=Get.find<AppController>();
     final cardController=Get.find<CardController>();
-    Basket item = appController.basketItems[index];
-print(controllertxt);
-print('controllertxt');
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -825,16 +851,9 @@ print('controllertxt');
       child:TextFormField(
         controller:controllertxt,
         keyboardType: TextInputType.text,
-        /* controller: TextEditingController.fromValue(
-                                                     TextEditingValue(
-                                                         text: appController.basketItems[index].product_name??'',
-                                                         selection: new TextSelection.collapsed(
-                                                             offset: appController.basketItems.length),
-                                                     )),*/
 
         onChanged: (value) {
           print(value);
-
           cardController.addNotes(index, value);
           // controller.textEditNoteList[index].text=value;
         },
@@ -858,25 +877,6 @@ print('controllertxt');
                       .withOpacity(0.2))),
         ),
       ),
-
-     /* Row(
-        children: [
-          Expanded(flex: 1, child: Text("${index + 1}")),
-          Expanded(
-            flex: 3,
-            child:  TextField(
-              controller: controllertxt,
-              keyboardType: TextInputType.number,
-              onChanged: (text) {
-                // takeNumber(text, item.id);
-              },
-              decoration: InputDecoration(
-                labelText: "Qty",
-              ),
-            ),
-          ),
-        ],
-      ),*/
     );
   }
 }

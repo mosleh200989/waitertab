@@ -15,7 +15,6 @@ class ProductsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GetX<ProductListController>(
         init: ProductListController(),
         builder: (controller) {
@@ -92,7 +91,7 @@ class ProductsItem extends StatelessWidget {
                                               alignment:Get.locale.languageCode=='en'?Alignment.topLeft: Alignment.topRight,
                                               child: Text('${controller.productList.elementAt(index).name}')),
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             // crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
 
@@ -131,7 +130,7 @@ class ProductsItem extends StatelessWidget {
                                               // Expanded(child: Obx(()=> Text(controller.optionValue??controller.productList.elementAt(index).option))),
 
                                               Expanded(
-                                                flex:3,
+                                                flex:4,
                                                 child: GetBuilder<ProductListController>(
                                                     builder: (_) {
                                                       // _.productList.elementAt(index).totalPrice=double.parse(_.productList.elementAt(index).price);

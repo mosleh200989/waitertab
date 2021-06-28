@@ -8,6 +8,7 @@ import 'package:waiter/app/modules/order_list/views/local_widgets/complete_order
 import 'package:waiter/app/modules/order_list/views/local_widgets/header_title_text.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/pending_order.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/processing_order.dart';
+import 'package:waiter/app/routes/app_pages.dart';
 
 import '../controllers/order_list_controller.dart';
 
@@ -19,42 +20,49 @@ class OrderListView extends GetView<OrderListController> {
         drawer: DrawerWidget(),
       appBar: AppBar(
         title:Obx(()=> Text('${controller.myHandler.value.title}')),
-        actions: [
-          /*IconButton(
-            icon: const Icon(Icons.rice_bowl),
-            color: Colors.white,
-            onPressed: () {
-              print('android');
-            },
-          ),
-          TextButton(
-            onPressed: () {
-              // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
-            },
-            child: Stack(
-              alignment: AlignmentDirectional.topStart,
-              children: <Widget>[
-                Icon(
-                  Icons.notifications_none,
-                  color: Colors.white,
-                  size: 28,
-                ),
-                Container(
-                  child: Text('10',
-                    textAlign: TextAlign.center,
-                    style: Get.theme.textTheme.caption.merge(
-                      TextStyle(color: Colors.black, fontSize: 10,),
-                    ),
+
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.offNamed(Routes.NOTIFICATIONS);
+                // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
+              },
+              child: Stack(
+                alignment: AlignmentDirectional.topStart,
+                children: <Widget>[
+                  Icon(
+                    Icons.notification_important_rounded,
+                    color: Colors.white,
+                    size: 24,
                   ),
-                  padding: EdgeInsets.all(0),
-                  decoration: BoxDecoration(color: Colors.orange.shade200, borderRadius: BorderRadius.all(Radius.circular(10))),
-                  constraints: BoxConstraints(minWidth: 15, maxWidth: 15, minHeight: 15, maxHeight: 15),
-                ),
-              ],
+                  Container(
+                    child:  Text('0',
+                      textAlign: TextAlign.center,
+                      style: Get.theme.textTheme.caption.merge   (
+                        TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.normal),
+                      ),
+                    ),
+                    padding: EdgeInsets.all(2),
+                    decoration: BoxDecoration(color: Colors.blueGrey.shade200, borderRadius: BorderRadius.all(Radius.circular(10))),
+                    constraints: BoxConstraints(minWidth: 15, maxWidth: 80, minHeight: 15, maxHeight: 50),
+                  ),
+                ],
+              ),
+              // color: Colors.transparent,
             ),
-            // color: Colors.transparent,
-          ),*/
-        ],
+            TextButton(
+              onPressed: () {
+                Get.offNamed(Routes.HOME);
+                // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
+              },
+              child:Icon(
+                Icons.home,
+                color: Colors.white,
+                size: 24,
+              ),
+              // color: Colors.transparent,
+            ),
+          ],
         bottom: TabBar(
           controller: controller.tabController,
           isScrollable: true,

@@ -4,6 +4,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:waiter/app/core/values/mr_config.dart';
 import 'package:waiter/app/data/models/basket.dart';
 import 'package:waiter/app/data/models/billerdetails.dart';
+import 'package:waiter/app/data/models/options.dart';
 import 'package:waiter/app/data/models/payment.dart';
 import 'package:waiter/app/data/models/product.dart';
 import 'package:waiter/app/data/models/sales.dart';
@@ -245,7 +246,51 @@ void addNotes(int index,String value){
     appController.basketItems[index].notes = value;
   } on FormatException {}
 }
+void changeOption(OptionModel optionModel){
+_optionId.value=optionModel.id;
+_optionName.value=optionModel.name;
+}
+void updateOption(int index){
+    print(index);
+    print('index==');
+appController.basketItems[index].product_option=optionId;
+appController.basketItems[index].optionValue=optionName;
+appController.basketItems.refresh();
+_optionId.value='';
+_optionName.value='';
+Get.back();
+}
+void newAddItem(Basket basket){
+    Basket basketObj=Basket(
+      product_id: basket.product_id,
+      product_name: basket.product_name,
+      net_price: basket.net_price,
+      quantity: basket.quantity,
+      product_base_quantity: basket.product_base_quantity,
+      real_unit_price: basket.real_unit_price,
+      product_code: basket.product_code,
+      product_option: basket.product_option,
+      optionValue: basket.optionValue,
+      product_tax: basket.product_tax,
+      unit_price: basket.unit_price,
+      product_unit: basket.product_unit,
+      product_discount: '0',
+      item_discount: '0.0',
+      subtotal: basket.subtotal,
 
+    );
+      appController.basketItems.add(basketObj);
+      appController.basketItems.refresh();
+      print(appController.basketItems.lastIndexOf(basketObj));
+      int index=appController.basketItems.lastIndexOf(basketObj);
+      appController.basketItems[index].product_option=optionId;
+      appController.basketItems[index].optionValue=optionName;
+    _grandTotal.value += double.parse(basketObj.subtotal);
+      _optionId.value='';
+      _optionName.value='';
+      // increment(index);
+      Get.back();
+}
   void postSalesOrder() async {
     final ProgressDialog progressDialog = loadingDialog(Get.overlayContext);
     try{

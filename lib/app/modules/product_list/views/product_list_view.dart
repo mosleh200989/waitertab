@@ -12,6 +12,68 @@ class ProductListView extends GetWidget<ProductListController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
+      appBar: AppBar(
+        title: Text('Products'.tr),
+        actions: [
+             TextButton(
+            onPressed: () {
+              Get.offAndToNamed(Routes.NOTIFICATIONS);
+              // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
+            },
+            child: Stack(
+              alignment: AlignmentDirectional.topStart,
+              children: <Widget>[
+                Icon(
+                  Icons.notification_important_rounded,
+                  color: Colors.white,
+                  size: 28,
+                ),
+                Container(
+                  child:  Text('0',
+                    textAlign: TextAlign.center,
+                    style: Get.theme.textTheme.caption.merge   (
+                      TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.normal),
+                    ),
+                  ),
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(color: Colors.blueGrey.shade200, borderRadius: BorderRadius.all(Radius.circular(10))),
+                  constraints: BoxConstraints(minWidth: 15, maxWidth: 80, minHeight: 15, maxHeight: 50),
+                ),
+              ],
+            ),
+            // color: Colors.transparent,
+          ),
+          TextButton(
+            onPressed: () {
+              // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
+            },
+            child: Stack(
+              alignment: AlignmentDirectional.topStart,
+              children: <Widget>[
+                Icon(
+                  Icons.shopping_bag_outlined,
+                  color: Colors.white,
+                  size: 28,
+                ),
+                Container(
+                  child: Obx(() {
+                    return Text('${controller.busketTotal.toStringAsFixed(0).toString()??0}',
+                      textAlign: TextAlign.center,
+                      style: Get.theme.textTheme.caption.merge(
+                        TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.normal),
+                      ),
+                    );
+                  }),
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(color: Colors.blueGrey.shade200, borderRadius: BorderRadius.all(Radius.circular(10))),
+                  constraints: BoxConstraints(minWidth: 15, maxWidth: 80, minHeight: 15, maxHeight: 50),
+                ),
+              ],
+            ),
+            // color: Colors.transparent,
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -20,24 +82,18 @@ class ProductListView extends GetWidget<ProductListController> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
-                    height: 200,
+                    height: 150,
                     width: Get.width,
                     child: CachedNetworkImage(
                       // height: 100,
                       // width: Get.width,
-                      fit: BoxFit.fill,
+                      // fit: BoxFit.fill,
                       imageUrl:"${controller.imageUrl??''}",
                       errorWidget: (context, url, error) => Image.network('${MrUrl.get_no_image_url}'),
                     ),
                     // Image(image: AssetImage('assets/images/burger_1.jpg'),  fit: BoxFit.fill,width: Get.width,)
                   ),
                 ),
-                Positioned(
-                    top: 5.0,
-                    right:5.0,
-                    child: InkWell(
-                        onTap: () => Get.back(),
-                        child: Icon(Icons.keyboard_arrow_right))),
               ],
             ),
             Card(

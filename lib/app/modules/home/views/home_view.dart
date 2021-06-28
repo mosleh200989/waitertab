@@ -16,39 +16,43 @@ class HomeView extends GetWidget<HomeController> {
   Widget build(BuildContext context) {
     double height = Get.size.height;
     double width = Get.size.width;
+    print(Get.key.currentState);
+    print(Get.key.currentState.canPop());
+    print(Get.key.currentState.maybePop());
+    print('home====');
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
       appBar: AppBar(
         title: Text('Categories'.tr),
         centerTitle: true,
         actions: [
-       /*   TextButton(
+          TextButton(
             onPressed: () {
-              // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
+              Get.toNamed( Routes.NOTIFICATIONS);
             },
             child: Stack(
               alignment: AlignmentDirectional.topStart,
               children: <Widget>[
                 Icon(
-                  Icons.notifications_none,
+                  Icons.notification_important_rounded,
                   color: Colors.white,
-                  size: 28,
+                  size: 24,
                 ),
                 Container(
-                  child: Text('10',
+                  child:  Text('0',
                     textAlign: TextAlign.center,
-                    style: Get.theme.textTheme.caption.merge(
-                      TextStyle(color: Colors.black, fontSize: 10,),
+                    style: Get.theme.textTheme.caption.merge   (
+                      TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.normal),
                     ),
                   ),
-                  padding: EdgeInsets.all(0),
-                  decoration: BoxDecoration(color: Colors.orange.shade200, borderRadius: BorderRadius.all(Radius.circular(10))),
-                  constraints: BoxConstraints(minWidth: 15, maxWidth: 15, minHeight: 15, maxHeight: 15),
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(color: Colors.blueGrey.shade200, borderRadius: BorderRadius.all(Radius.circular(10))),
+                  constraints: BoxConstraints(minWidth: 15, maxWidth: 80, minHeight: 15, maxHeight: 50),
                 ),
               ],
             ),
             // color: Colors.transparent,
-          ),*/
+          ),
         ],
       ),
       drawer: DrawerWidget(),

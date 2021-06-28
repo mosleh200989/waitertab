@@ -10,6 +10,8 @@ import 'package:waiter/app/modules/my_user/bindings/my_user_binding.dart';
 import 'package:waiter/app/modules/my_user/views/my_user_view.dart';
 import 'package:waiter/app/modules/my_user/views/profile_view.dart';
 import 'package:waiter/app/modules/my_user/views/verify_screen.dart';
+import 'package:waiter/app/modules/notifications/bindings/notifications_binding.dart';
+import 'package:waiter/app/modules/notifications/views/notifications_view.dart';
 import 'package:waiter/app/modules/order_history/bindings/order_history_binding.dart';
 import 'package:waiter/app/modules/order_history/views/order_history_view.dart';
 import 'package:waiter/app/modules/order_list/bindings/order_list_binding.dart';
@@ -100,6 +102,11 @@ class AppPages {
       name: _Paths.PRODUCT_LIST,
       page: () => ProductListView(),
       binding: ProductListBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATIONS,
+      page: () => NotificationsView(),
+      binding: NotificationsBinding(),
     ),
   ];
 }
