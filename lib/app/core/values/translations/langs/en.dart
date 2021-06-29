@@ -502,5 +502,10 @@ const Map<String, String> en ={
   "ChecklistItem": "Check list Item",
   "No_more_items": "No more items",
   "TableName": "Table Name",
+  "Edit": "Edit",
+  "UpdateOrCopy": "Update Or Copy",
+  "Copy": "Copy",
+  "Notifications": "Notifications",
+  "NotificationDetails": "Notification Details",
 
 };

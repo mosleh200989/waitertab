@@ -244,7 +244,8 @@ class CardView extends StatelessWidget {
 
                                       }, child: Text('Edit'.tr),
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.blueGrey.shade400
+                                        primary: Colors.blueGrey.shade400,
+                                        fixedSize: Size(130, 20)
                                       ),),
                                     )
                                   ],
@@ -741,9 +742,9 @@ class CardView extends StatelessWidget {
   }
   Widget _showSubmittedDialog(CardController controller,Basket basket,int index){
     Get.defaultDialog(
-      title: 'UpdateOption'.tr,
+      title: 'UpdateOrCopy'.tr,
       titleStyle: TextStyle(fontSize: 24),
-      // backgroundColor: Colors.blueGrey,
+      backgroundColor: Colors.grey.shade100,
       // barrierDismissible: false,
       content: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -751,16 +752,9 @@ class CardView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-
-                // Visibility(
-                //     visible: controller.productList.elementAt(index).option!=null,
-                //     child: Text('${controller.productList.elementAt(index).option}')),
-
                 Expanded(
                   flex:2,
                   child: Obx(()=>
@@ -770,11 +764,7 @@ class CardView extends StatelessWidget {
                         icon: Icon(
                           Icons.arrow_drop_down_sharp,
                         ),
-                        // (i == 1) ? 1 : (i == 2) ? 2 : 0
-                        // condition== true ? 1 : stringName == "Steve" ? 0 : 2,
                         hint:_showOptionText(basket,controller),
-                        // value: controller.optionValue,
-
                         items:controller?.product?.optionsList?.length  !=null ? controller?.product?.optionsList?.map((lang) {
                           return  DropdownMenuItem<OptionModel>(
                             child: Text(lang?.name??''),
@@ -795,16 +785,6 @@ class CardView extends StatelessWidget {
           ],
         ),
       ),
-      // textCancel: 'dismiss'.tr,
-      // cancelTextColor:Colors.white,
-      // onCancel: () {
-      // },
-  /*    textConfirm: 'ADD_TO_CART'.tr,
-      confirmTextColor:Colors.white,
-      onConfirm: () {
-        // controller.addToBasketAndBuyClickEvent(index);
-      },*/
-
       confirm: Row(
         children:<Widget> [
           Padding(
@@ -812,10 +792,10 @@ class CardView extends StatelessWidget {
             child: ElevatedButton(
                 onPressed: () {
                   controller.updateOption(index);
-
             }, child: Text('Update'.tr),
               style: ElevatedButton.styleFrom(
-                primary: Colors.blueGrey.shade400
+                primary: Colors.blueGrey.shade400,
+                  fixedSize: Size(100, 20)
             ),),
           ),
           Padding(
@@ -825,7 +805,9 @@ class CardView extends StatelessWidget {
                   controller.newAddItem(basket);
                 }, child: Text('Copy'.tr),
             style: ElevatedButton.styleFrom(
-              primary: Colors.blueGrey.shade400
+              primary: Colors.blueGrey.shade400,
+                fixedSize: Size(100, 20)
+
             ),),
           ),
         ],
@@ -851,7 +833,6 @@ class CardView extends StatelessWidget {
       child:TextFormField(
         controller:controllertxt,
         keyboardType: TextInputType.text,
-
         onChanged: (value) {
           print(value);
           cardController.addNotes(index, value);

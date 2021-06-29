@@ -10,6 +10,8 @@ import 'package:waiter/app/modules/my_user/bindings/my_user_binding.dart';
 import 'package:waiter/app/modules/my_user/views/my_user_view.dart';
 import 'package:waiter/app/modules/my_user/views/profile_view.dart';
 import 'package:waiter/app/modules/my_user/views/verify_screen.dart';
+import 'package:waiter/app/modules/notification_details/bindings/notification_details_binding.dart';
+import 'package:waiter/app/modules/notification_details/views/notification_details_view.dart';
 import 'package:waiter/app/modules/notifications/bindings/notifications_binding.dart';
 import 'package:waiter/app/modules/notifications/views/notifications_view.dart';
 import 'package:waiter/app/modules/order_history/bindings/order_history_binding.dart';
@@ -107,6 +109,14 @@ class AppPages {
       name: _Paths.NOTIFICATIONS,
       page: () => NotificationsView(),
       binding: NotificationsBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATION_DETAILS,
+      page: () => NotificationDetailsView(),
+      binding: NotificationDetailsBinding(),
+      fullscreenDialog: true,
+      transition: Transition.downToUp,
+      transitionDuration: Duration(milliseconds: 300),
     ),
   ];
 }

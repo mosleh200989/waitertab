@@ -514,4 +514,9 @@ const Map<String, String> ar = {
   "ChecklistItem": "قائمة مرجعية",
   "No_more_items": "ليس هناك المزيد من العناصر",
   "TableName": "اسم الطاولة",
+  "Edit": "يحرر",
+  "UpdateOrCopy": "تحديث أو نسخ",
+  "Copy": "ينسخ",
+  "Notifications": "إشعارات",
+  "NotificationDetails": "تفاصيل الإخطار",
 };

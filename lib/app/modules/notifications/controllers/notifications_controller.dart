@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/core/values/mr_constants.dart';
+import 'package:waiter/app/data/models/notification.dart';
 import 'package:waiter/app/data/models/pagination_filter.dart';
 import 'package:waiter/app/data/providers/notifications_provider.dart';
 import 'package:waiter/app/global_widgets/helpers.dart';
@@ -9,10 +10,13 @@ import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 class NotificationsController extends GetxController {
 final authController=Get.find<AuthController>();
 ScrollController scrollController = ScrollController();
+// final notificationList=<NotificationModel>[].obs;
+var notificationList = <NotificationModel>[].obs;
+// List<NotificationModel> get notificationList=>_notificationList.value;
 var isMoreDataAvailable = true.obs;
 var isDataProcessing = false.obs;
 final _paginationFilter = PaginationFilter().obs;
-int get li mit => _paginationFilter.value.limit;
+int get limit => _paginationFilter.value.limit;
 int get offset => _paginationFilter.value.offset;
   @override
   void onInit() async{
@@ -20,6 +24,7 @@ int get offset => _paginationFilter.value.offset;
     _changePaginationFilter(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
     await getAllNotifications(_paginationFilter.value);
     paginateNotificationList();
+    print('on init notification controller');
   }
 
   @override
@@ -46,7 +51,7 @@ void paginateNotificationList() {
   });
 }
 Future<void> refreshNotificationList() async {
-  // salesList.clear();
+  notificationList.clear();
   _changePaginationFilter(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
   await getAllNotifications(_paginationFilter.value);
   Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
@@ -57,13 +62,13 @@ Future<void> refreshNotificationList() async {
         isMoreDataAvailable(false);
         isDataProcessing(true);
         // isLoading(true);
-        var salesValue = await NotificationsProvider().getNotifications(filter);
-        if (salesValue != null) {
+        var notificationValue = await NotificationsProvider().getNotifications(filter);
+        if (notificationValue != null) {
           // salesList.assignAll(salesValue);
           isDataProcessing(false);
-          // salesList.addAll(salesValue);
+          notificationList.addAll(notificationValue);
         }else{
-          // salesList.addAll([]);
+          notificationList.addAll([]);
           print('no items');
         }
       }else{
@@ -83,7 +88,7 @@ Future<void> getMoreNotifications(PaginationFilter filter)async{
     } else {
       isMoreDataAvailable(false);
     }
-    // salesList.addAll(salesValue);
+    notificationList.addAll(notificationValue);
   }catch (exception) {
     isDataProcessing(false);
   }finally{

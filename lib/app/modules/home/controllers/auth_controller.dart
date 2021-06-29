@@ -10,7 +10,6 @@ import 'package:waiter/app/routes/app_pages.dart';
 class AuthController extends GetxController {
 final _currentUser=UserDb().obs;
 UserDb get currentUser=>_currentUser.value;
-
   @override
   void onInit()async {
     super.onInit();

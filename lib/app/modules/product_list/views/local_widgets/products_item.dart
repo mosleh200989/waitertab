@@ -392,7 +392,6 @@ class ProductsItem extends StatelessWidget {
     );
   }
   Widget _showOptionText(Product product,ProductListController controller) {
-    // Text(controller.optionValue!=''?controller.optionValue:controller.productList.elementAt(index).optiontext!=null?controller.optionValue:controller.productList.elementAt(index).optiontext : '')
     if (controller.optionValue != '') {
       return Text('${controller.optionValue}');
     } else if(product.optiontext!=null) {

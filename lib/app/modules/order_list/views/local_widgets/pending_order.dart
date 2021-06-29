@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:waiter/app/data/models/sales.dart';
 import 'package:waiter/app/global_widgets/EmptyOrdersWidget.dart';
 import 'package:waiter/app/modules/order_list/controllers/order_list_controller.dart';
@@ -9,9 +8,6 @@ class PendingOrder  extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final OrderListController _con = Get.find<OrderListController>();
-    print(Get.height);
-    print(GetPlatform.isMobile);
-    print('Get.height');
     return  Obx(() {
       //     if (_con.isLoading.value)
       //   return Center(child: CircularProgressIndicator());
