@@ -17,6 +17,7 @@ class NotificationsProvider extends GetConnect {
     final String notificationsUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/system_settings/notications_users?start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
      print(notificationsUrl);
      print(notificationsUrl);
+
     Response response = await get(notificationsUrl);
        if (response.statusCode == 200 && response.body['data'] !=null ) {
       return notificationFromJson(response.body['data']);
