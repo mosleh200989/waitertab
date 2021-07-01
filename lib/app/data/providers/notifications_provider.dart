@@ -7,17 +7,18 @@ import 'package:waiter/app/data/models/notification.dart';
 import 'package:waiter/app/data/models/pagination_filter.dart';
 import 'package:waiter/app/data/models/sales.dart';
 import 'package:waiter/app/global_widgets/helpers.dart';
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 
 class NotificationsProvider extends GetConnect {
+  final authController =Get.find<AuthController>();
   @override
   void onInit() {
     httpClient.baseUrl = 'YOUR-API-URL';
   }
   Future<List<NotificationModel>> getNotifications(PaginationFilter filter) async {
-    final String notificationsUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/system_settings/notications_users?start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
+    final String notificationsUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/notifications?start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}&user_id=${authController.currentUser.id}&warehouse_id=${authController.currentUser.warehouse_id}";
      print(notificationsUrl);
      print(notificationsUrl);
-
     Response response = await get(notificationsUrl);
        if (response.statusCode == 200 && response.body['data'] !=null ) {
       return notificationFromJson(response.body['data']);
@@ -28,9 +29,11 @@ class NotificationsProvider extends GetConnect {
   }
 
 
-  Future<NotificationModel> getOneSales(String reference,orderStatus) async {
-    final String salesSingleUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales?include=items,warehouse,biller,payment,restaurant_table&sales_id=$reference&order_status=$orderStatus&api-key=${MrConfig.mr_api_key}";
-      Response response = await get(salesSingleUrl);
+  Future<NotificationModel> getOneNotification(String id) async {
+    // https://eshtri.net/resturant_bukhari/api/v1/notifications/single_notification?api-key=ggsk4wkssoc4sccgskggssws04gc4gokc4g4gokw&id=1
+
+    final String notificationUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/notifications/single_notification?api-key=${MrConfig.mr_api_key}&id=$id";
+      Response response = await get(notificationUrl);
     if (response.statusCode == 200 && response.body['status'] !=false) {
       return NotificationModel.fromJSON(response.body);
     } else {
@@ -38,5 +41,43 @@ class NotificationsProvider extends GetConnect {
       // Helpers.showSnackbar(title:'error'.tr,message: 'No_more_items'.tr);
       return null;
     }
+  }
+  Future<NotificationModel> postIsTouched(NotificationModel notificationModel) async {
+    try
+    {
+      print(notificationModel);
+      String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/login/checkLogin";
+      Response response = await post(postUrl,notificationModel.toMap());
+      var userData=json.decode(response.body);
+      if (response.statusCode == 200 && userData['status']==true) {
+        return NotificationModel.fromJSON(userData['data']);
+      } else {
+        return null;
+      }
+    }
+    catch(exception)
+    {
+      return Future.error(exception.toString());
+    }
+
+  }
+  Future<NotificationModel> postIsRead(NotificationModel notificationModel) async {
+    try
+    {
+      print(notificationModel);
+      String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/login/checkLogin";
+      Response response = await post(postUrl,notificationModel.toMap());
+      var userData=json.decode(response.body);
+      if (response.statusCode == 200 && userData['status']==true) {
+        return NotificationModel.fromJSON(userData['data']);
+      } else {
+        return null;
+      }
+    }
+    catch(exception)
+    {
+      return Future.error(exception.toString());
+    }
+
   }
 }

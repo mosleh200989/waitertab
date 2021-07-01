@@ -36,7 +36,7 @@ class NotificationsView extends GetView<NotificationsController> {
             }
             return InkWell(
               onTap: () {
-                Get.toNamed(Routes.NOTIFICATION_DETAILS);
+                Get.toNamed(Routes.NOTIFICATION_DETAILS,arguments: notification.id);
               },
               child: Container(
                 margin: EdgeInsets.only(bottom: 2.0),
@@ -55,13 +55,7 @@ class NotificationsView extends GetView<NotificationsController> {
                     ),
                     Padding(
                         padding: EdgeInsets.all(5),
-                        child: Text('${notification?.from_date?? ''}',
-                            textAlign: TextAlign.center)
-                    ),
-
-                    Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Text('${notification.comment??''}',
+                        child: Text('${notification?.title?? ''}',
                             textAlign: TextAlign.center)
                     ),
                     Divider(thickness: 2,

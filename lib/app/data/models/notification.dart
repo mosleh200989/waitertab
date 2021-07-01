@@ -2,8 +2,10 @@
 List<NotificationModel> notificationFromJson(dynamic str) => List<NotificationModel>.from((str as List<dynamic>).map((x) => NotificationModel.fromJSON(x)));
 class NotificationModel {
    String id;
+   String title;
    String comment;
    String date;
+   // String time;
    String from_date;
    String till_date;
    String scope;
@@ -15,8 +17,13 @@ class NotificationModel {
   NotificationModel.fromJSON(Map<String, dynamic> jsonMap) {
     try {
       id = jsonMap['id'] !=null ? jsonMap['id'] : '';
+      title = jsonMap['title'] !=null ? jsonMap['title'] : '';
       comment = jsonMap['comment'] !=null ? jsonMap['comment'] : '';
-      date = jsonMap['date'] !=null ? jsonMap['date'] : '';
+      // date = jsonMap['date'] !=null ? jsonMap['date'] : '';
+      String dateValue = jsonMap["date"];
+      var adddate=jsonMap["date"] != null ? dateValue.substring(0, 10):null;
+      // time = jsonMap["date"] != null ? dateValue.substring(11, 19) :null;
+      date =adddate;
       from_date = jsonMap['from_date'] !=null ? jsonMap['from_date'] : '';
       till_date = jsonMap['till_date'] !=null ? jsonMap['till_date'] : '';
       scope = jsonMap['scope'] !=null ? jsonMap['scope'] : '';
