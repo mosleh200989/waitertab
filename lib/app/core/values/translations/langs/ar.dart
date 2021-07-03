@@ -519,4 +519,7 @@ const Map<String, String> ar = {
   "Copy": "ينسخ",
   "Notifications": "إشعارات",
   "NotificationDetails": "تفاصيل الإخطار",
+  "Id": "هوية شخصية",
+  "Title": "لقب",
+  "Comment": "تعليق",
 };

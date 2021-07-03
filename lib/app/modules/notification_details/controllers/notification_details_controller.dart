@@ -16,7 +16,7 @@ final appController=Get.find<AppController>();
       id= Get?.arguments;
       getSingleNotification(id);
      print(id);
-     print('id');
+     print('id============');
     }
     print(notification.id);
     print(notification.id);

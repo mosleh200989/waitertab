@@ -42,15 +42,28 @@ class NotificationsProvider extends GetConnect {
       return null;
     }
   }
-  Future<NotificationModel> postIsTouched(NotificationModel notificationModel) async {
+  Future<NotificationModel> showNotification() async {
+    final String notificationUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/notifications?api-key=${MrConfig.mr_api_key}&user_id=${authController.currentUser.id}";
+    Response response = await get(notificationUrl);
+    if (response.statusCode == 200 && response.body['status'] !=false) {
+      return NotificationModel.fromJSON(response.body);
+    } else {
+      return null;
+    }
+  }
+  Future<dynamic> postIsNotified(NotificationModel notificationModel) async {
     try
     {
-      print(notificationModel);
-      String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/login/checkLogin";
+      print(notificationModel.toMap());
+      print('notify data tomap');
+      // api/v1/notifications/is_notified?api-key=ggsk4wkssoc4sccgskggssws04gc4gokc4g4gokw
+      String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/notifications/is_notified";
+      print(postUrl);
       Response response = await post(postUrl,notificationModel.toMap());
-      var userData=json.decode(response.body);
-      if (response.statusCode == 200 && userData['status']==true) {
-        return NotificationModel.fromJSON(userData['data']);
+      print(response.body);
+      print('response.body');
+      if (response.statusCode == 200 && response.body['status']==true) {
+        return response.body['status'];
       } else {
         return null;
       }

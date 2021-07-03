@@ -507,4 +507,7 @@ const Map<String, String> en ={
   "Copy": "Copy",
   "Notifications": "Notifications",
   "NotificationDetails": "Notification Details",
+  "Id": "Id",
+  "Title": "Title",
+  "Comment": "Comment",
 };

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:waiter/app/core/values/mr_config.dart';
 import 'package:waiter/app/core/values/mr_constants.dart';
 import 'package:waiter/app/data/models/basket.dart';
 import 'package:rxdart/subjects.dart';
@@ -28,17 +29,19 @@ class AppController extends GetxController {
   final _paginationFilter = PaginationFilter().obs;
   int get limit => _paginationFilter.value.limit;
   int get offset => _paginationFilter.value.offset;
+  final _notification = NotificationModel().obs;
+  NotificationModel get notification=>_notification.value;
   @override
   void onInit()async {
     super.onInit();
     _changePaginationFilter(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
     await mainLoadLocalNotifications();
-    await getAllNotifications(_paginationFilter.value);
+    // await getAllNotifications(_paginationFilter.value);
+    await getSingleNotification();
     Timer.periodic(Duration(seconds: 10), (timer) async {
       // showNotification();
-      await getAllNotifications(_paginationFilter.value);
-      print(authController.currentUser.warehouse_id);
-      print('authController.currentUser.warehouse_id');
+      // await getAllNotifications(_paginationFilter.value);
+      await getSingleNotification();
     });
 
   }
@@ -56,6 +59,20 @@ class AppController extends GetxController {
       val.limit = limit;
     });
   }
+  Future<void> getSingleNotification() async {
+    try {
+      var notificationValue = await NotificationsProvider().showNotification();
+      if (notificationValue != null) {
+        _notification.value=notificationValue;
+        print(notification.id);
+        print('notification==============');
+        await showNotification(notification);
+      }else{
+        _notification.value=null;
+      }
+    } finally {
+    }
+  }
   Future<void> getAllNotifications(PaginationFilter filter) async {
     try {
       if(await authController.checkInternetConnectivity()) {
@@ -69,7 +86,7 @@ class AppController extends GetxController {
               notificationList.addAll(notificationValue);
               for(var i=0; i<notificationList.length; i++){
                 if(notificationList[i].isread=='0'){
-                  await showNotification(notificationList[i]);
+                  // await showNotification(notificationList[i]);
                   print(notificationList.length);
                   print(notificationList[i].isread);
                   print('condition is read==');
@@ -101,6 +118,12 @@ class AppController extends GetxController {
 
     /*Do whatever you want to do on notification click. In this case, I'll show an alert dialog*/
 if(payload !=null) {
+  NotificationModel notificationModel=NotificationModel();
+  notificationModel.user_id=authController.currentUser.id;
+  notificationModel.id=payload;
+  notificationModel.is_notified='1';
+  notificationModel.apiKey=MrConfig.mr_api_key;
+  postIsNotify(notificationModel);
   Get.back();
   Get.toNamed(Routes.NOTIFICATION_DETAILS, arguments: payload);
   print(payload);
@@ -118,14 +141,16 @@ if(payload !=null) {
     NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(int.parse(notificationModel.id), notificationModel?.title, notificationModel?.comment, platformChannelSpecifics, payload: notificationModel.id);
   }
-  void postIsTouched(NotificationModel notificationModel) async {
+  void postIsNotify(NotificationModel notificationModel) async {
     try{
         if (await authController.checkInternetConnectivity()) {
           final ProgressDialog progressDialog = loadingDialog(Get.overlayContext);
-          progressDialog.show();
-          NotificationsProvider().postIsTouched(notificationModel).then((resp) {
-            if (resp != null) {
-              progressDialog.hide();
+          // progressDialog.show();
+          NotificationsProvider().postIsNotified(notificationModel).then((resp) {
+            print(resp);
+            print('resp======');
+            if (resp ==true) {
+              // progressDialog.hide();
               // _user.value=resp;
               // isProcessing(false);
               // Get.toNamed(Routes.HOME);

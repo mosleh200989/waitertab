@@ -12,6 +12,8 @@ class NotificationModel {
    String touserid;
    String isread;
    String user_id;
+   String is_notified;
+   String apiKey;
   NotificationModel();
 
   NotificationModel.fromJSON(Map<String, dynamic> jsonMap) {
@@ -38,15 +40,17 @@ class NotificationModel {
 
   Map toMap() {
     var map = new Map<String, dynamic>();
-    map["id"] = id;
-    map["comment"] = comment;
-    map["date"] = date;
-    map["from_date"] = from_date;
-    map["till_date"] = till_date;
-    map["scope"] = scope;
-    map["touserid"] = touserid;
-    map["isread"] = isread;
+    map["notify_id"] = id;
+    // map["comment"] = comment;
+    // map["date"] = date;
+    // map["from_date"] = from_date;
+    // map["till_date"] = till_date;
+    // map["scope"] = scope;
+    // map["touserid"] = touserid;
+    // map["isread"] = isread;
     map["user_id"] = user_id;
+    map["is_notified"] = is_notified;
+    map["api-key"] = apiKey;
     return map;
   }
 

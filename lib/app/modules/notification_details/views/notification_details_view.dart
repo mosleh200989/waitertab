@@ -28,21 +28,24 @@ class NotificationDetailsView extends GetView<NotificationDetailsController> {
                 margin: EdgeInsets.all(10),
                 elevation: 1,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Id'.tr+': ${_con.notification.id??""}',
+                      style: labelTextStyle,
+                    ),
+                    Text('Title'.tr+': ${_con.notification.title??""}',
                       style: labelTextStyle,
                     ),
                     Text('Date'.tr+': ${_con.notification.date??""}',
                       style: labelTextStyle,
                     ),
-                    Text('FromDate'.tr+': ${_con.notification.from_date??""}',
+                    /*Text('FromDate'.tr+': ${_con.notification.from_date??""}',
                       style: labelTextStyle,
                     ),
                     Text(
                       'TillDate'.tr+': ${_con?.notification?.till_date??''}',
                       style: labelTextStyle,
-                    ),
+                    ),*/
                     Text(
                       'Comment'.tr+': ${_con?.notification?.comment??''}',
                       style: labelTextStyle,
