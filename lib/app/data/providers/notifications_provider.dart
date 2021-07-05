@@ -16,7 +16,7 @@ class NotificationsProvider extends GetConnect {
     httpClient.baseUrl = 'YOUR-API-URL';
   }
   Future<List<NotificationModel>> getNotifications(PaginationFilter filter) async {
-    final String notificationsUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/notifications?start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}&user_id=${authController.currentUser.id}&warehouse_id=${authController.currentUser.warehouse_id}";
+   final String notificationsUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/notifications?start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}&user_id=${authController.currentUser.id}";
      print(notificationsUrl);
      print(notificationsUrl);
     Response response = await get(notificationsUrl);
@@ -43,7 +43,7 @@ class NotificationsProvider extends GetConnect {
     }
   }
   Future<NotificationModel> showNotification() async {
-    final String notificationUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/notifications?api-key=${MrConfig.mr_api_key}&user_id=${authController.currentUser.id}";
+    final String notificationUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/notifications/notifications_alert?api-key=${MrConfig.mr_api_key}&user_id=${authController.currentUser.id}";
     Response response = await get(notificationUrl);
     if (response.statusCode == 200 && response.body['status'] !=false) {
       return NotificationModel.fromJSON(response.body);
@@ -74,15 +74,17 @@ class NotificationsProvider extends GetConnect {
     }
 
   }
-  Future<NotificationModel> postIsRead(NotificationModel notificationModel) async {
+  Future<dynamic> postIsRead(NotificationModel notificationModel) async {
     try
     {
       print(notificationModel);
-      String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/login/checkLogin";
+      String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/notifications/is_touch";
       Response response = await post(postUrl,notificationModel.toMap());
-      var userData=json.decode(response.body);
-      if (response.statusCode == 200 && userData['status']==true) {
-        return NotificationModel.fromJSON(userData['data']);
+      // var userData=json.decode(response.body);
+      print(response.body);
+      print('response.body');
+      if (response.statusCode == 200 && response.body['status']==true) {
+        return response.body['status'];
       } else {
         return null;
       }

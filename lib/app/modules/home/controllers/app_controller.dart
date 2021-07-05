@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -9,7 +7,6 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'package:waiter/app/core/values/mr_config.dart';
 import 'package:waiter/app/core/values/mr_constants.dart';
 import 'package:waiter/app/data/models/basket.dart';
-import 'package:rxdart/subjects.dart';
 import 'package:waiter/app/data/models/notification.dart';
 import 'package:waiter/app/data/models/pagination_filter.dart';
 import 'package:waiter/app/data/providers/notifications_provider.dart';
@@ -39,8 +36,6 @@ class AppController extends GetxController {
     // await getAllNotifications(_paginationFilter.value);
     await getSingleNotification();
     Timer.periodic(Duration(seconds: 10), (timer) async {
-      // showNotification();
-      // await getAllNotifications(_paginationFilter.value);
       await getSingleNotification();
     });
 
@@ -67,43 +62,19 @@ class AppController extends GetxController {
         print(notification.id);
         print('notification==============');
         await showNotification(notification);
+        NotificationModel notificationObj=NotificationModel();
+        notificationObj.user_id=authController.currentUser.id;
+        notificationObj.id=notification.id;
+        notificationObj.is_notified='1';
+        notificationObj.apiKey=MrConfig.mr_api_key;
+        postIsNotify(notificationObj);
       }else{
         _notification.value=null;
       }
     } finally {
     }
   }
-  Future<void> getAllNotifications(PaginationFilter filter) async {
-    try {
-      if(await authController.checkInternetConnectivity()) {
-        // isMoreDataAvailable(false);
-        // isDataProcessing(true);
-        // isLoading(true);
-        var notificationValue = await NotificationsProvider().getNotifications(filter);
-        if (notificationValue != null) {
-          // salesList.assignAll(salesValue);
-          // isDataProcessing(false);
-              notificationList.addAll(notificationValue);
-              for(var i=0; i<notificationList.length; i++){
-                if(notificationList[i].isread=='0'){
-                  // await showNotification(notificationList[i]);
-                  print(notificationList.length);
-                  print(notificationList[i].isread);
-                  print('condition is read==');
-                }
-              }
-        }else{
-          notificationList.addAll([]);
-          print('no items');
-        }
-      }else{
-        Helpers.showSnackbar(title:'error',message: 'error_dialog__no_internet'.tr);
-      }
-    } finally {
-      // isLoading(false);
-      // isDataProcessing(false);
-    }
-  }
+
 
   Future<void> mainLoadLocalNotifications() async {
     AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -118,12 +89,12 @@ class AppController extends GetxController {
 
     /*Do whatever you want to do on notification click. In this case, I'll show an alert dialog*/
 if(payload !=null) {
-  NotificationModel notificationModel=NotificationModel();
-  notificationModel.user_id=authController.currentUser.id;
-  notificationModel.id=payload;
-  notificationModel.is_notified='1';
-  notificationModel.apiKey=MrConfig.mr_api_key;
-  postIsNotify(notificationModel);
+  NotificationModel notificationObj=NotificationModel();
+  notificationObj.user_id=authController.currentUser.id;
+  notificationObj.id=notification.id;
+  notificationObj.is_touch='1';
+  notificationObj.apiKey=MrConfig.mr_api_key;
+  postIsRead(notificationObj);
   Get.back();
   Get.toNamed(Routes.NOTIFICATION_DETAILS, arguments: payload);
   print(payload);
@@ -173,16 +144,11 @@ if(payload !=null) {
     try{
       if (await authController.checkInternetConnectivity()) {
         final ProgressDialog progressDialog = loadingDialog(Get.overlayContext);
-        progressDialog.show();
+        // progressDialog.show();
         NotificationsProvider().postIsRead(notificationModel).then((resp) {
-          if (resp != null) {
-            progressDialog.hide();
-            // _user.value=resp;
-            // isProcessing(false);
-            // Get.toNamed(Routes.HOME);
+          if (resp ==true) {
             Helpers.showSnackbar(title:'success'.tr,message: 'your_tasks_has_been_successfully_update'.tr);
           } else {
-            progressDialog.hide();
             Helpers.showSnackbar(message: 'pleas_correct_username_or_password'.tr);
 
           }

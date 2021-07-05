@@ -17,39 +17,88 @@ class NotificationDetailsView extends GetView<NotificationDetailsController> {
       ),
       body: SingleChildScrollView(
         child: SafeArea(
-          child: GetX<NotificationDetailsController>(builder: (_con) {
+          child: GetX<NotificationDetailsController>(
+              builder: (_con) {
             if (_con.isLoading.value)
               return Center(child: CircularProgressIndicator());
             else
             if(_con.notification == null){
               return EmptyOrdersWidget();
             }else{
-              return  Card(
-                margin: EdgeInsets.all(10),
-                elevation: 1,
+              return  Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: Column(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Id'.tr+': ${_con.notification.id??""}',
-                      style: labelTextStyle,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children:<Widget> [
+                        Expanded(
+                          flex: 2,
+                          child: Text('Id'.tr+':',
+                            style: labelTextStyle,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 6,
+                          child: Text('${_con.notification.id??""}',
+                            style: labelTextStyle,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text('Title'.tr+': ${_con.notification.title??""}',
-                      style: labelTextStyle,
+                    Row(
+                      children:<Widget> [
+                        Expanded(
+                          flex: 2,
+                          child: Text('Title'.tr+':',
+                            style: labelTextStyle,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 6,
+                          child: Text('${_con.notification.title??""}',
+                            style: labelTextStyle,  textAlign: TextAlign.start
+                          ),
+                        ),
+                      ],
                     ),
-                    Text('Date'.tr+': ${_con.notification.date??""}',
-                      style: labelTextStyle,
+                    Row(
+                      children:<Widget> [
+                        Expanded(
+                          flex: 2,
+                          child: Text('Date'.tr+':',
+                            style: labelTextStyle,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 6,
+                          child: Text('${_con.notification.date??""}',
+                            style: labelTextStyle,
+                          ),
+                        ),
+                      ],
                     ),
-                    /*Text('FromDate'.tr+': ${_con.notification.from_date??""}',
-                      style: labelTextStyle,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children:<Widget> [
+                        Expanded(
+                          flex: 2,
+                          child: Text('Comment'.tr+':',
+                            style: labelTextStyle,  textAlign: TextAlign.start,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 6,
+                          child: Text('${_con.notification.comment??""}',
+                            style: labelTextStyle,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      'TillDate'.tr+': ${_con?.notification?.till_date??''}',
-                      style: labelTextStyle,
-                    ),*/
-                    Text(
-                      'Comment'.tr+': ${_con?.notification?.comment??''}',
-                      style: labelTextStyle,
-                    ),
+
 
                   ],
                 ),

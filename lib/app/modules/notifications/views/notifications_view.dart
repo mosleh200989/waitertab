@@ -34,36 +34,45 @@ class NotificationsView extends GetView<NotificationsController> {
                 controller.isMoreDataAvailable.value == true) {
               return Center(child: CircularProgressIndicator());
             }
-            return InkWell(
-              onTap: () {
-                Get.toNamed(Routes.NOTIFICATION_DETAILS,arguments: notification.id);
-              },
-              child: Container(
-                margin: EdgeInsets.only(bottom: 2.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Text('${notification.id ?? ''}',
-                            textAlign: TextAlign.center)
-                    ),
-                    Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Text('${notification.date ?? ''}',
-                            textAlign: TextAlign.center)
-                    ),
-                    Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Text('${notification?.title?? ''}',
-                            textAlign: TextAlign.center)
-                    ),
-                    Divider(thickness: 2,
-                      indent: 2,
-                      endIndent: 2,
-                      color: Colors.grey,
-                      height: 5,)
-                  ],
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: InkWell(
+                onTap: () {
+                  if(notification.notificationsAlert.is_read == '0'){
+                    controller.isReadNotification(notification.id);
+                  }
+                  Get.toNamed(Routes.NOTIFICATION_DETAILS,arguments: notification.id);
+                },
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 2.0),
+                  // padding: EdgeInsets.all(5),
+                  color: notification.notificationsAlert.is_read=='1'?Colors.blueGrey.shade100:null,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Text('Id'.tr +':${notification.id ?? ''}',
+                              textAlign: TextAlign.center)
+                      ),
+                      Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Text('Title'.tr +':${notification?.title?? ''}',
+                              textAlign: TextAlign.center)
+                      ),
+                      Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Text('Date'.tr +':${notification.date ?? ''}',
+                              textAlign: TextAlign.center)
+                      ),
+
+                      Divider(thickness: 2,
+                        indent: 2,
+                        endIndent: 2,
+                        color: Colors.grey,
+                        height: 5,)
+                    ],
+                  ),
                 ),
               ),
             );

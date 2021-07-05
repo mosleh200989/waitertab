@@ -1,4 +1,6 @@
 
+import 'package:waiter/app/data/models/notification_alert.dart';
+
 List<NotificationModel> notificationFromJson(dynamic str) => List<NotificationModel>.from((str as List<dynamic>).map((x) => NotificationModel.fromJSON(x)));
 class NotificationModel {
    String id;
@@ -14,6 +16,8 @@ class NotificationModel {
    String user_id;
    String is_notified;
    String apiKey;
+   String is_touch;
+   NotificationsAlert notificationsAlert;
   NotificationModel();
 
   NotificationModel.fromJSON(Map<String, dynamic> jsonMap) {
@@ -32,7 +36,7 @@ class NotificationModel {
       touserid = jsonMap['touserid'] !=null ? jsonMap['touserid'] : '';
       isread = jsonMap['isread'] !=null ? jsonMap['isread'] : '';
       user_id = jsonMap['user_id'] !=null ? jsonMap['user_id'] : '';
-
+      notificationsAlert = jsonMap['notify_alert'] != null ? NotificationsAlert.fromJSON(jsonMap['notify_alert']) : new NotificationsAlert();
     } catch (e) {
       print(e);
     }
@@ -51,6 +55,7 @@ class NotificationModel {
     map["user_id"] = user_id;
     map["is_notified"] = is_notified;
     map["api-key"] = apiKey;
+    map["is_touch"] = is_touch;
     return map;
   }
 
