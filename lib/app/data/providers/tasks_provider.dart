@@ -13,8 +13,10 @@ class TasksProvider extends GetConnect {
   }
 
   Future<List<Tasks>> getTasks(PaginationFilter filter) async {
-    final String taskssUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks?status=1&start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
-    Response response = await get(taskssUrl);
+    final String tasksUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks?status=1&start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
+    print(tasksUrl);
+    print('getTasks tasksUrl');
+    Response response = await get(tasksUrl);
     if (response.statusCode == 200 && response.body['data'] !=null) {
       return taskFromJson(response.body['data']);
     } else {
@@ -54,7 +56,8 @@ class TasksProvider extends GetConnect {
 
   Future<Tasks> getOneTasks(String tasksId) async {
     final String tasksSingleUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks?task_id=$tasksId&api-key=${MrConfig.mr_api_key}";
-
+print(tasksId);
+print(tasksSingleUrl);
     Response response = await get(tasksSingleUrl);
        if (response.statusCode == 200 && response.body['data'] !=null ) {
       return Tasks.fromJSON(response.body['data']);

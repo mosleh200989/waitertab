@@ -510,4 +510,8 @@ const Map<String, String> en ={
   "Id": "Id",
   "Title": "Title",
   "Comment": "Comment",
+  "ConfirmExit": "Confirm Exit",
+  "Are_you_sure_you_want_to_exit": "Are you sure you want to exit?",
+  "Close": "Close",
+
 };

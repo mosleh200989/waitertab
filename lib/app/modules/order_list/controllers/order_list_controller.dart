@@ -128,33 +128,7 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
     });
 
   }
-  // For Pagination
 
-  Future<void> refreshPendingList() async {
-    salesList.clear();
-    _changePaginationFilter(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
-    await getAllSales(_paginationFilter.value);
-    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
-  }
-
-  Future<void> refreshProcessingList() async {
-    salesListProcessing.clear();
-    _changePaginationFilterProcessing(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
-    await getAllProcessingOrder(_paginationFilterProcessing.value);
-    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
-  }
-  Future<void> refreshCompleteList() async {
-    salesListComplete.clear();
-    _changePaginationFilterComplete(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
-    await getAllCompleteOrder(_paginationFilterComplete.value);
-    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
-  }
-  Future<void> refreshCancelList() async {
-    salesListCancel.clear();
-    _changePaginationFilterCancel(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
-    await getAllCancelOrder(_paginationFilterCancel.value);
-    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
-  }
   void paginateProductList() {
     scrollController.addListener(() async {
       if (scrollController.position.pixels ==
@@ -348,6 +322,31 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
     }
   }
 
-//Cancel order end
+//Cancel order end// For refresh start
 
+  Future<void> refreshPendingList() async {
+    salesList.clear();
+    _changePaginationFilter(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
+    await getAllSales(_paginationFilter.value);
+    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
+  }
+
+  Future<void> refreshProcessingList() async {
+    salesListProcessing.clear();
+    _changePaginationFilterProcessing(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
+    await getAllProcessingOrder(_paginationFilterProcessing.value);
+    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
+  }
+  Future<void> refreshCompleteList() async {
+    salesListComplete.clear();
+    _changePaginationFilterComplete(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
+    await getAllCompleteOrder(_paginationFilterComplete.value);
+    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
+  }
+  Future<void> refreshCancelList() async {
+    salesListCancel.clear();
+    _changePaginationFilterCancel(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
+    await getAllCancelOrder(_paginationFilterCancel.value);
+    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
+  }
 }

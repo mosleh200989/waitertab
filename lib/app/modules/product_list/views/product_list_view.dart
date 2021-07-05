@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/core/values/mr_url.dart';
 import 'package:waiter/app/global_widgets/helpers.dart';
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
+import 'package:waiter/app/modules/notifications/controllers/notifications_controller.dart';
 import 'package:waiter/app/modules/product_list/controllers/product_list_controller.dart';
 import 'package:waiter/app/modules/product_list/views/local_widgets/products_item.dart';
 import 'package:waiter/app/routes/app_pages.dart';
@@ -10,6 +12,7 @@ import 'package:waiter/app/routes/app_pages.dart';
 class ProductListView extends GetWidget<ProductListController> {
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
@@ -17,7 +20,8 @@ class ProductListView extends GetWidget<ProductListController> {
         actions: [
              TextButton(
             onPressed: () {
-              Get.offAndToNamed(Routes.NOTIFICATIONS);
+              Get.find<NotificationsController>().refreshNotificationList();
+              Get.toNamed(Routes.NOTIFICATIONS);
               // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
             },
             child: Stack(
@@ -28,8 +32,9 @@ class ProductListView extends GetWidget<ProductListController> {
                   color: Colors.white,
                   size: 28,
                 ),
-                Container(
-                  child:  Text('0',
+                Obx(() {
+                 return Container(
+                  child:  Text('${Get.find<AuthController>().inReadCount??''}',
                     textAlign: TextAlign.center,
                     style: Get.theme.textTheme.caption.merge   (
                       TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.normal),
@@ -38,7 +43,8 @@ class ProductListView extends GetWidget<ProductListController> {
                   padding: EdgeInsets.all(2),
                   decoration: BoxDecoration(color: Colors.blueGrey.shade200, borderRadius: BorderRadius.all(Radius.circular(10))),
                   constraints: BoxConstraints(minWidth: 15, maxWidth: 80, minHeight: 15, maxHeight: 50),
-                ),
+                );
+}),
               ],
             ),
             // color: Colors.transparent,
@@ -82,7 +88,7 @@ class ProductListView extends GetWidget<ProductListController> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
-                    height: 150,
+                    height: Get.height *.20,
                     width: Get.width,
                     child: CachedNetworkImage(
                       // height: 100,

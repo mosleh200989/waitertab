@@ -18,7 +18,6 @@ class CompleteTasks extends StatelessWidget {
                 controller: _con.scrollControllerComplete,
                 itemCount:_con.taskListCompleted.length ,
                 itemBuilder: (context, index) {
-
                   Tasks task=_con.taskListCompleted[index];
                   if(task.status=='1'){
                     task.statusValue='Not Started';

@@ -522,4 +522,7 @@ const Map<String, String> ar = {
   "Id": "هوية شخصية",
   "Title": "لقب",
   "Comment": "تعليق",
+  "ConfirmExit": "تأكيد الخروج",
+  "Are_you_sure_you_want_to_exit": "هل أنت متأكد من انك تريد الخروج",
+  "Close": "يغلق",
 };

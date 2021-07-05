@@ -48,6 +48,7 @@ class NotificationDetailsView extends GetView<NotificationDetailsController> {
                         ),
                       ],
                     ),
+                    SizedBox(height: 10,),
                     Row(
                       children:<Widget> [
                         Expanded(
@@ -64,6 +65,7 @@ class NotificationDetailsView extends GetView<NotificationDetailsController> {
                         ),
                       ],
                     ),
+                    SizedBox(height: 10,),
                     Row(
                       children:<Widget> [
                         Expanded(
@@ -80,6 +82,7 @@ class NotificationDetailsView extends GetView<NotificationDetailsController> {
                         ),
                       ],
                     ),
+                    SizedBox(height: 10,),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -92,10 +95,7 @@ class NotificationDetailsView extends GetView<NotificationDetailsController> {
                         ),
                         Expanded(
                           flex: 6,
-                          child: Text('${_con.notification.comment??""}',
-                            style: labelTextStyle,
-                          ),
-                        ),
+                          child: controller.htmlComment??Container()),
                       ],
                     ),
 

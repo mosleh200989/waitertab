@@ -6,6 +6,8 @@ import 'package:flutter/gestures.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/global_widgets/DrawerWidget.dart';
 import 'package:waiter/app/global_widgets/indicator.dart';
+import 'package:waiter/app/modules/notifications/controllers/notifications_controller.dart';
+import 'package:waiter/app/routes/app_pages.dart';
 
 import '../controllers/order_history_controller.dart';
 
@@ -24,16 +26,10 @@ class PieChart2State extends State {
       drawer: DrawerWidget(),
       appBar: AppBar(title: Text('Order History'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.rice_bowl),
-            color: Colors.white,
-            onPressed: () {
-              print('android');
-            },
-          ),
           TextButton(
             onPressed: () {
-              // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
+              Get.find<NotificationsController>().refreshNotificationList();
+              Get.toNamed(Routes.NOTIFICATIONS);
             },
             child: Stack(
               alignment: AlignmentDirectional.topStart,
@@ -56,6 +52,18 @@ class PieChart2State extends State {
                 ),
               ],
             ),
+            // color: Colors.transparent,
+          ),
+          TextButton(
+            onPressed: () {
+              Get.offNamed(Routes.HOME);
+            },
+            child:Icon(
+              Icons.home,
+              color: Colors.white,
+              size: 24,
+            ),
+
             // color: Colors.transparent,
           ),
         ],

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/data/models/my_tab.dart';
 import 'package:waiter/app/global_widgets/DrawerWidget.dart';
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
+import 'package:waiter/app/modules/notifications/controllers/notifications_controller.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/cancel_order.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/complete_order.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/header_title_text.dart';
@@ -24,7 +26,8 @@ class OrderListView extends GetView<OrderListController> {
           actions: [
             TextButton(
               onPressed: () {
-                Get.offNamed(Routes.NOTIFICATIONS);
+                Get.put(NotificationsController()).refreshNotificationList();
+                Get.toNamed(Routes.NOTIFICATIONS);
                 // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
               },
               child: Stack(
@@ -35,8 +38,9 @@ class OrderListView extends GetView<OrderListController> {
                     color: Colors.white,
                     size: 24,
                   ),
-                  Container(
-                    child:  Text('0',
+                  Obx(() {
+                    return Container(
+                    child:  Text('${Get.find<AuthController>().inReadCount}',
                       textAlign: TextAlign.center,
                       style: Get.theme.textTheme.caption.merge   (
                         TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.normal),
@@ -45,7 +49,8 @@ class OrderListView extends GetView<OrderListController> {
                     padding: EdgeInsets.all(2),
                     decoration: BoxDecoration(color: Colors.blueGrey.shade200, borderRadius: BorderRadius.all(Radius.circular(10))),
                     constraints: BoxConstraints(minWidth: 15, maxWidth: 80, minHeight: 15, maxHeight: 50),
-                  ),
+                  );
+}),
                 ],
               ),
               // color: Colors.transparent,

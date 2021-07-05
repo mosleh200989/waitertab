@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
+import 'package:waiter/app/modules/notifications/controllers/notifications_controller.dart';
 import 'package:waiter/app/modules/tasks/views/Local_widgets/complete_tasks.dart';
 import 'package:waiter/app/modules/tasks/views/Local_widgets/list_header.dart';
 import 'package:waiter/app/modules/tasks/views/Local_widgets/pending_tasks.dart';
@@ -18,7 +20,8 @@ class TasksView extends GetView<TasksController>  {
         actions: [
           TextButton(
             onPressed: () {
-              Get.offNamed(Routes.NOTIFICATIONS);
+              Get.find<NotificationsController>().refreshNotificationList();
+              Get.toNamed(Routes.NOTIFICATIONS);
               // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
             },
             child: Stack(
@@ -29,8 +32,9 @@ class TasksView extends GetView<TasksController>  {
                   color: Colors.white,
                   size: 24,
                 ),
-                Container(
-                  child:  Text('0',
+                Obx(() {
+               return Container(
+                  child:  Text('${Get.find<AuthController>().inReadCount}',
                     textAlign: TextAlign.center,
                     style: Get.theme.textTheme.caption.merge   (
                       TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.normal),
@@ -39,7 +43,8 @@ class TasksView extends GetView<TasksController>  {
                   padding: EdgeInsets.all(2),
                   decoration: BoxDecoration(color: Colors.blueGrey.shade200, borderRadius: BorderRadius.all(Radius.circular(10))),
                   constraints: BoxConstraints(minWidth: 15, maxWidth: 80, minHeight: 15, maxHeight: 50),
-                ),
+                );
+}),
               ],
             ),
             // color: Colors.transparent,

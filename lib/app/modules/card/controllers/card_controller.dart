@@ -71,6 +71,9 @@ String get optionName=>_optionName.value;
     shippingTextController.text='0';
     discountTextController.text='0';
 
+    print(authController.currentUser.warehouse_id);
+    print('authController.currentUser.warehouse_id');
+
   }
 
   @override
@@ -296,7 +299,7 @@ void newAddItem(Basket basket){
     try{
       Sales sales=Sales();
       String customer = "1";
-      String warehouse = "1";
+      String warehouse =authController.currentUser.warehouse_id;
       String biller = "3";
       String pos_note = "";
 
@@ -391,7 +394,7 @@ void newAddItem(Basket basket){
          sales.discount=discountTextController.text??"";
          sales.shipping=shippingTextController.text??"";
          sales.total_items=appController.basketItems.length.toString();
-         sales.user_id='1';
+         sales.user_id=authController.currentUser.id;
          sales.is_dine_in=isDineIn==true?'2':'1';
          sales.table_no=isDineIn==true?tableId:'';
          // sales.customer_type=isDineIn==true?'2':'1';
@@ -448,7 +451,7 @@ void removeAllListAndGoToOrderList(){
   if(appController.basketItems.length==0){
     Get.reload<OrderListController>();
     // Get.put(OrderListController()).reloadFunction();
-    Get.offAllNamed(Routes.ORDER_LIST);
+    Get.offAndToNamed(Routes.ORDER_LIST);
   }
 
 }

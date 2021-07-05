@@ -10,6 +10,8 @@ import 'package:waiter/app/routes/app_pages.dart';
 class AuthController extends GetxController {
 final _currentUser=UserDb().obs;
 UserDb get currentUser=>_currentUser.value;
+var isReadCountSet=0.obs;
+int get inReadCount=>isReadCountSet.value;
   @override
   void onInit()async {
     super.onInit();
@@ -23,7 +25,6 @@ UserDb get currentUser=>_currentUser.value;
 
   @override
   void onClose() {}
-
   Future<UserDb> getCurrentUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('current_user')) {

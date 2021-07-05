@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/core/values/mr_config.dart';
@@ -21,6 +23,7 @@ var isDataProcessing = false.obs;
 final _paginationFilter = PaginationFilter().obs;
 int get limit => _paginationFilter.value.limit;
 int get offset => _paginationFilter.value.offset;
+
   @override
   void onInit() async{
     super.onInit();
@@ -28,6 +31,17 @@ int get offset => _paginationFilter.value.offset;
     await getAllNotifications(_paginationFilter.value);
     paginateNotificationList();
     print('on init notification controller');
+    // for(var i=0; i<notificationList.length; i++){
+    //   if(notificationList[i].notificationsAlert.is_read !='1'){
+    //     authController.isReadCountSet.value++;
+    //     print(authController.inReadCount);
+    //     print('inReadCount');
+    //   }
+    // }
+  /*  Timer.periodic(Duration(seconds: 10), (timer) async {
+      await getAllNotifications(_paginationFilter.value);
+    });*/
+
   }
 
   @override
@@ -57,6 +71,7 @@ Future<void> refreshNotificationList() async {
   notificationList.clear();
   _changePaginationFilter(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
   await getAllNotifications(_paginationFilter.value);
+
   Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
 }
   Future<void> getAllNotifications(PaginationFilter filter) async {
@@ -70,6 +85,14 @@ Future<void> refreshNotificationList() async {
           // salesList.assignAll(salesValue);
           isDataProcessing(false);
           notificationList.addAll(notificationValue);
+          authController.isReadCountSet.value=0;
+          for(var i=0; i<notificationList.length; i++){
+            if(notificationList[i].notificationsAlert.is_read !='1'){
+              authController.isReadCountSet.value++;
+              print(authController.inReadCount);
+              print('inReadCount');
+            }
+          }
         }else{
           notificationList.addAll([]);
           print('no items');

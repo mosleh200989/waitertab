@@ -38,11 +38,6 @@ class AppPages {
       page: () => HomeView(),
       binding: HomeBinding(),
     ),
-    // GetPage(
-    //   name: _Paths.UNKNOWN,
-    //   page: () => UnknownView(),
-    //   binding: UnknownBinding(),
-    // ),
     GetPage(
       name: _Paths.SPLASH,
       page: () => SplashView(),
@@ -108,7 +103,7 @@ class AppPages {
     GetPage(
       name: _Paths.NOTIFICATIONS,
       page: () => NotificationsView(),
-      binding: NotificationsBinding(),
+      // binding: NotificationsBinding(),
     ),
     GetPage(
       name: _Paths.NOTIFICATION_DETAILS,

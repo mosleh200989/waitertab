@@ -91,49 +91,43 @@ class ProductsItem extends StatelessWidget {
                                               alignment:Get.locale.languageCode=='en'?Alignment.topLeft: Alignment.topRight,
                                               child: Text('${controller.productList.elementAt(index).name}')),
                                           Row(
-                                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            // crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
+                                              Visibility(
+                                                visible:controller?.productList?.elementAt(index)?.optionsList?.length  !=null,
+                                                child: Expanded(
+                                                  flex:2,
+                                                  child: Obx(()=>
+                                                      DropdownButton<OptionModel>(
+                                                        isExpanded: true,
+                                                        underline: SizedBox(),
+                                                        icon: Icon(
+                                                          Icons.arrow_drop_down_sharp,
+                                                        ),
+                                                          // (i == 1) ? 1 : (i == 2) ? 2 : 0
+                                                        // condition== true ? 1 : stringName == "Steve" ? 0 : 2,
+                                                        hint:_showOptionText(controller?.productList?.elementAt(index),controller),
+                                                        // value: controller.optionValue,
 
-                                              // Visibility(
-                                              //     visible: controller.productList.elementAt(index).option!=null,
-                                              //     child: Text('${controller.productList.elementAt(index).option}')),
-
-                                              Expanded(
-                                                flex:2,
-                                                child: Obx(()=>
-                                                    DropdownButton<OptionModel>(
-                                                      isExpanded: true,
-                                                      underline: SizedBox(),
-                                                      icon: Icon(
-                                                        Icons.arrow_drop_down_sharp,
+                                                        items:controller?.productList?.elementAt(index)?.optionsList?.length  !=null ? controller?.productList?.elementAt(index)?.optionsList?.map((lang) {
+                                                          return  DropdownMenuItem<OptionModel>(
+                                                            child: Text(lang?.name??''),
+                                                            value:lang,
+                                                          );
+                                                        })?.toList() : null,
+                                                        // value:controller.optionValue??null,
+                                                        onChanged: (OptionModel option) {
+                                                          print(option.id);
+                                                          controller.changedOption(option);
+                                                        },
                                                       ),
-                                                        // (i == 1) ? 1 : (i == 2) ? 2 : 0
-                                                      // condition== true ? 1 : stringName == "Steve" ? 0 : 2,
-                                                      hint:_showOptionText(controller?.productList?.elementAt(index),controller),
-                                                      // value: controller.optionValue,
-
-                                                      items:controller?.productList?.elementAt(index)?.optionsList?.length  !=null ? controller?.productList?.elementAt(index)?.optionsList?.map((lang) {
-                                                        return  DropdownMenuItem<OptionModel>(
-                                                          child: Text(lang?.name??''),
-                                                          value:lang,
-                                                        );
-                                                      })?.toList() : null,
-                                                      // value:controller.optionValue??null,
-                                                      onChanged: (OptionModel option) {
-                                                        print(option.id);
-                                                        controller.changedOption(option);
-                                                      },
-                                                    ),
+                                                  ),
                                                 ),
                                               ),
-                                              // Expanded(child: Obx(()=> Text(controller.optionValue??controller.productList.elementAt(index).option))),
 
                                               Expanded(
                                                 flex:4,
                                                 child: GetBuilder<ProductListController>(
                                                     builder: (_) {
-                                                      // _.productList.elementAt(index).totalPrice=double.parse(_.productList.elementAt(index).price);
                                                       return Row(
                                                         crossAxisAlignment: CrossAxisAlignment.center,
                                                         mainAxisAlignment: MainAxisAlignment.start,

@@ -43,7 +43,6 @@ class DrawerWidget extends StatelessWidget {
 
             ListTile(
               onTap: () {
-
                 Get.reload<HomeController>();
                 Get.back();
                 Get.toNamed(Routes.HOME);
@@ -76,7 +75,6 @@ class DrawerWidget extends StatelessWidget {
           ),
           ListTile(
             onTap: () {
-
               Get.reload<TasksController>(force: true);
 
               Get.back();
@@ -91,7 +89,7 @@ class DrawerWidget extends StatelessWidget {
               style:Get.theme.textTheme.subtitle1,
             ),
           ),
-          ListTile(
+      /*    ListTile(
             onTap: () {
               Get.back();
               Get.toNamed(Routes.ORDER_HISTORY);
@@ -104,7 +102,7 @@ class DrawerWidget extends StatelessWidget {
               'OrderHistory'.tr,
               style:Get.theme.textTheme.subtitle1,
             ),
-          ),
+          ),*/
 
           ListTile(
             dense: true,

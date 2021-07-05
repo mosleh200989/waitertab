@@ -7,6 +7,9 @@ import 'package:waiter/app/data/models/options.dart';
 import 'package:waiter/app/data/models/table.dart';
 import 'package:waiter/app/global_widgets/EmptyOrdersWidget.dart';
 import 'package:waiter/app/modules/home/controllers/app_controller.dart';
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
+import 'package:waiter/app/modules/home/controllers/home_controller.dart';
+import 'package:waiter/app/modules/notifications/controllers/notifications_controller.dart';
 import 'package:waiter/app/modules/product_list/controllers/product_list_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
 import '../controllers/card_controller.dart';
@@ -27,7 +30,8 @@ class CardView extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              Get.offNamed(Routes.NOTIFICATIONS);
+              Get.find<NotificationsController>().refreshNotificationList();
+              Get.toNamed(Routes.NOTIFICATIONS);
               // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
             },
             child: Stack(
@@ -38,8 +42,9 @@ class CardView extends StatelessWidget {
                   color: Colors.white,
                   size: 24,
                 ),
-                Container(
-                  child:  Text('0',
+                Obx(() {
+                return Container(
+                  child:  Text('${Get.find<AuthController>().inReadCount}',
                     textAlign: TextAlign.center,
                     style: Get.theme.textTheme.caption.merge   (
                       TextStyle(color: Colors.black, fontSize: 12,fontWeight: FontWeight.normal),
@@ -48,15 +53,19 @@ class CardView extends StatelessWidget {
                   padding: EdgeInsets.all(2),
                   decoration: BoxDecoration(color: Colors.blueGrey.shade200, borderRadius: BorderRadius.all(Radius.circular(10))),
                   constraints: BoxConstraints(minWidth: 15, maxWidth: 80, minHeight: 15, maxHeight: 50),
-                ),
+                );
+}),
               ],
             ),
             // color: Colors.transparent,
           ),
           TextButton(
             onPressed: () {
-              Get.offNamed(Routes.HOME);
-              // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
+              if(Get.currentRoute==Routes.CARD){
+                Get.delete<ProductListController>();
+                Get.reload<HomeController>(force: true);
+                Get.offNamed(Routes.HOME);
+              }
             },
             child:Icon(
                   Icons.home,
@@ -119,7 +128,7 @@ class CardView extends StatelessWidget {
                 ),
                 GetX<AppController>(builder: (appController) {
                   return Container(
-                    height: 200,
+                    height: Get.height * .30,
                     child: ListView.builder(
                       // reverse: controller.isReverse,
                       itemCount: appController.basketItems.length,
