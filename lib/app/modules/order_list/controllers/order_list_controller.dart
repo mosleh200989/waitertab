@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:waiter/app/core/values/mr_config.dart';
 import 'package:waiter/app/core/values/mr_constants.dart';
 import 'package:waiter/app/data/models/my_tab.dart';
 import 'package:waiter/app/data/models/pagination_filter.dart';
@@ -7,9 +10,10 @@ import 'package:waiter/app/data/models/sales.dart';
 import 'package:waiter/app/data/providers/order_list_provider.dart';
 import 'package:waiter/app/global_widgets/helpers.dart';
 import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
-
+import 'package:waiter/app/routes/app_pages.dart';
 class OrderListController extends GetxController  with SingleGetTickerProviderMixin {
   TabController tabController;
+  AnimationController animationController;
   final authController=Get.find<AuthController>()
 ;  final List<MyTabModel> tabs = [
      MyTabModel(title: "PendingOrder".tr, color: Colors.teal[200]),
@@ -50,9 +54,12 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
   int get offsetComplete => _paginationFilterComplete.value.offset;
   int get limitCancel => _paginationFilterCancel.value.limit;
   int get offsetCancel => _paginationFilterCancel.value.offset;
+
   @override
   void onInit()  async {
     print('on init order list controller===');
+    // animationController =
+    //     AnimationController(duration: MrConfig.animation_duration, vsync: this);
     tabController = TabController(vsync: this, length: tabs.length);
     myHandler.value = tabs[0];
     tabController.addListener(handleSelected);
@@ -60,10 +67,10 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
     _changePaginationFilterProcessing(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
     _changePaginationFilterComplete(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
     _changePaginationFilterCancel(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
-    await getAllSales(_paginationFilter.value);
-    await getAllProcessingOrder(_paginationFilterProcessing.value);
-    await getAllCompleteOrder(_paginationFilterComplete.value);
-    await getAllCancelOrder(_paginationFilterCancel.value);
+    // await getAllSales(_paginationFilter.value);
+    // await getAllProcessingOrder(_paginationFilterProcessing.value);
+    // await getAllCompleteOrder(_paginationFilterComplete.value);
+    // await getAllCancelOrder(_paginationFilterCancel.value);
 
     // ever(_paginationFilter, (_) async =>  await getAllSales());
     // once(_paginationFilter, (_) async => await getAllSales());
@@ -86,16 +93,35 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
   @override
   void onClose() {
     super.onClose();
+    // animationController.dispose();
     tabController.dispose();
     print('on close controller');
   }
-
+  Future<bool> willPopCallback() async {
+    Get.offAndToNamed(Routes.HOME);
+    return Future.value(true);
+  }
+/*  Future<bool> requestPop() {
+    animationController.reverse().then<dynamic>(
+          (void data) {
+        // if (!mounted) {
+        //   return Future<bool>.value(false);
+        // }
+        // Navigator.pop(context, true);
+            print('back paga');
+        Get.offAndToNamed(Routes.HOME);
+        return Future<bool>.value(true);
+      },
+    );
+    print('back paga=====');
+    return Future<bool>.value(false);
+  }*/
   void reloadFunction()async{
     print('reload Function call ');
-    await getAllSales(_paginationFilter.value);
-    await getAllProcessingOrder(_paginationFilterProcessing.value);
-    await getAllCompleteOrder(_paginationFilterComplete.value);
-    await getAllCancelOrder(_paginationFilterCancel.value);
+    await refreshPendingList();
+    await refreshProcessingList();
+    await refreshCompleteList();
+    await refreshCancelList();
   }
   void handleSelected() {
     myHandler.value= tabs[tabController.index];
@@ -145,13 +171,13 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
     try {
       if(await authController.checkInternetConnectivity()) {
         isMoreDataAvailable(false);
-        isDataProcessing(true);
+        isLoading(true);
         // isLoading(true);
         var salesValue = await OrderListProvider().getSales(filter);
         if (salesValue != null) {
           // salesList.assignAll(salesValue);
-          isDataProcessing(false);
           salesList.addAll(salesValue);
+          isLoading(false);
         }else{
           // salesList.addAll([]);
           print('no items');
@@ -159,9 +185,11 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
       }else{
         Helpers.showSnackbar(title:'error',message: 'error_dialog__no_internet'.tr);
       }
+    }catch(error){
+      isLoading(false);
     } finally {
       // isLoading(false);
-      isDataProcessing(false);
+      isLoading(false);
     }
   }
   Future<void> getMoreSales(PaginationFilter filter)async{
@@ -174,10 +202,11 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
         isMoreDataAvailable(false);
       }
       salesList.addAll(salesValue);
+      // salesList.addAllIf(salesValue!=salesList,salesValue);
     }catch (exception) {
-      isDataProcessing(false);
+      isLoading(false);
     }finally{
-      isDataProcessing(false);
+      isLoading(false);
     }
 }
   //processing order start
@@ -252,13 +281,19 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
           salesListComplete.addAll(salesValue);
           // salesList.value = salesValue;
         } else {
+          isLoadingComplete(false);
           salesListComplete.value = [];
         }
       }else{
         Helpers.showSnackbar(title:'error',message: 'error_dialog__no_internet'.tr);
       }
+    }catch(error){
+        isLoadingComplete(false);
     } finally {
-      isLoadingComplete(false);
+      Timer(Duration(seconds: 5), () {
+        isLoadingComplete(false);
+        print('loading== false');
+      });
     }
   }
   Future<void> getMoreCompleteOrder(PaginationFilter filter)async{
@@ -295,6 +330,7 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
         isLoadingCancel(true);
         var salesValue = await OrderListProvider().getCancelSales(filter);
         if (salesValue != null) {
+          isLoadingCancel(false);
           salesListCancel.addAll(salesValue);
           // salesList.value = salesValue;
         }
@@ -328,25 +364,25 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
     salesList.clear();
     _changePaginationFilter(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
     await getAllSales(_paginationFilter.value);
-    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
+    // Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
   }
 
   Future<void> refreshProcessingList() async {
     salesListProcessing.clear();
     _changePaginationFilterProcessing(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
     await getAllProcessingOrder(_paginationFilterProcessing.value);
-    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
+    // Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
   }
   Future<void> refreshCompleteList() async {
     salesListComplete.clear();
     _changePaginationFilterComplete(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
     await getAllCompleteOrder(_paginationFilterComplete.value);
-    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
+    // Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
   }
   Future<void> refreshCancelList() async {
     salesListCancel.clear();
     _changePaginationFilterCancel(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
     await getAllCancelOrder(_paginationFilterCancel.value);
-    Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
+    // Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
   }
 }

@@ -12,11 +12,17 @@ class PendingOrder  extends StatelessWidget {
       //     if (_con.isLoading.value)
       //   return Center(child: CircularProgressIndicator());
       // else
-      return _con.salesList.isEmpty
+      return/* _con.salesList.isEmpty
           ? EmptyOrdersWidget()
-          : RefreshIndicator(
+          :*/
+       RefreshIndicator(
         onRefresh: _con.refreshPendingList,
-        child: ListView.builder(
+        child:  _con.isLoading.value?SizedBox(
+          height: 3,
+          child: LinearProgressIndicator(
+            backgroundColor: Get.theme.accentColor.withOpacity(0.2),
+          ),
+        ): ListView.builder(
           controller: _con.scrollController,
           itemCount: _con.salesList.length,
           // shrinkWrap: true,

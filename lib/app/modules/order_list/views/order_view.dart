@@ -95,7 +95,7 @@ class OrderView extends StatelessWidget {
                                     // ),
                                     LabelAndText(
                                       title:
-                                          '${double.parse(items.quantity).toStringAsFixed(0).toString()} X ${double.parse(items.unit_price).toStringAsFixed(2).toString()}',
+                                          '${double.parse(items.quantity).toStringAsFixed(0).toString()} '+ 'X'.tr +' ${double.parse(items.unit_price).toStringAsFixed(2).toString()}',
                                       salesInfoText:
                                           '${double.parse(items.subtotal).toStringAsFixed(2).toString()}',
                                     ),

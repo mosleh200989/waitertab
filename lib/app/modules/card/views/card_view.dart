@@ -62,9 +62,9 @@ class CardView extends StatelessWidget {
           TextButton(
             onPressed: () {
               if(Get.currentRoute==Routes.CARD){
-                Get.delete<ProductListController>();
+                // Get.delete<ProductListController>();
                 Get.reload<HomeController>(force: true);
-                Get.offNamed(Routes.HOME);
+                Get.offAllNamed(Routes.HOME);
               }
             },
             child:Icon(
@@ -444,161 +444,6 @@ class CardView extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: <Widget>[
-                      /*  Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text('CustomerName'.tr),
-                            Card(
-                              elevation: 1,
-                              child: Container(
-                                  width: Get.width * .5,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 7.0, bottom: 7.0),
-                                    child: Text(
-                                      '${Get.find<AuthController>().currentUser.username}',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )),
-                            )
-                          ],
-                        ),*/
-                        /*      Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children:<Widget> [
-                                Text('Discount'.tr),
-                                Card(
-                                  elevation: 0.0,
-                                  child: Container(
-                                      width: Get.width *.5,
-                                      height: 45.0,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
-                                        child: TextFormField(
-                                          controller: controller.discountTextController,
-                                          keyboardType: TextInputType.numberWithOptions(signed: false, decimal: true),
-                                         textInputAction: TextInputAction.next,
-                                         inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[0-9.,]+')),],
-                                          onChanged: (value) {
-                                            controller.discountChange(value);
-                                          },
-                                          decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.all(12),
-                                            hintText: 'Discount'.tr,
-                                            hintStyle: TextStyle(
-                                                color: Get.theme
-                                                    .focusColor
-                                                    .withOpacity(0.7)),
-                                            border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color:Get.theme
-                                                        .focusColor
-                                                        .withOpacity(0.2))),
-                                            focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color:Get.theme
-                                                        .focusColor
-                                                        .withOpacity(0.0))),
-                                            enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Get.theme
-                                                        .focusColor
-                                                        .withOpacity(0.2))),
-
-                                          ),
-                                        ),
-                                      )),
-                                )
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children:<Widget> [
-                                Text('ShippingCost'.tr),
-                                Card(
-                                  elevation: 0.0,
-                                  child: Container(
-                                      width: Get.width *.5,
-                                      height: 45,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
-                                        child: TextFormField(
-                                          controller: controller.shippingTextController,
-                                          keyboardType: TextInputType.number,
-                                          textInputAction: TextInputAction.done,
-                                         inputFormatters:  <TextInputFormatter>[
-                                           FilteringTextInputFormatter.digitsOnly
-                                         ],
-                                          onChanged: (value) {
-                                            controller.shippingChange(value);
-                                          },
-
-                                            onFieldSubmitted: (value){
-                                              print(value);
-                                              print('value======');
-                                              // or do whatever you want when you are done editing
-                                              // call your method/print values etc
-                                            },
-
-                                          decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.all(12),
-                                            hintText: 'ShippingCost'.tr,
-                                            hintStyle: TextStyle(
-                                                color: Get.theme
-                                                    .focusColor
-                                                    .withOpacity(0.7)),
-                                            // border: OutlineInputBorder(
-                                            //     borderSide: BorderSide(
-                                            //         color:Get.theme
-                                            //             .focusColor
-                                            //             .withOpacity(0.2))),
-                                            focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color:Get.theme
-                                                        .focusColor
-                                                        .withOpacity(0.0))),
-                                            // enabledBorder: OutlineInputBorder(
-                                            //     borderSide: BorderSide(
-                                            //         color: Get.theme
-                                            //             .focusColor
-                                            //             .withOpacity(0.2))),
-
-                                          ),
-                                        ),
-                                      )),
-                                )
-                              ],
-                            ),*/
-                        /*        Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children:<Widget> [
-                                Text('Vat/Tax'),
-                                Card(
-                                  elevation: 1,
-                                  child: Container(
-                                      width: Get.width *.5,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
-                                        child: Text('Tk 15',textAlign: TextAlign.center,),
-                                      )),
-                                )
-                              ],
-                            ),*/
-                        /*  Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children:<Widget> [
-                                Text('Service Charge'),
-                                Card(
-                                  elevation: 1,
-                                  child: Container(
-                                      width: Get.width *.5,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 7.0,bottom: 7.0),
-                                        child: Text('Tk 15',textAlign: TextAlign.center,),
-                                      )),
-                                )
-                              ],
-                            ),*/
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -800,7 +645,7 @@ class CardView extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
                 onPressed: () {
-                  controller.updateOption(index);
+                  controller.updateOption(index,basket);
             }, child: Text('Update'.tr),
               style: ElevatedButton.styleFrom(
                 primary: Colors.blueGrey.shade400,

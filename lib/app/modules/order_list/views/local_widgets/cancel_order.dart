@@ -9,11 +9,17 @@ class CancelOrder  extends StatelessWidget {
   Widget build(BuildContext context) {
     final OrderListController _con = Get.find<OrderListController>();
     return  Obx(() {
-      return _con.salesListCancel.isEmpty
+      return /*_con.salesListCancel.isEmpty
           ? EmptyOrdersWidget()
-          : RefreshIndicator(
+          :*/ RefreshIndicator(
         onRefresh: _con.refreshCompleteList,
-        child: ListView.builder(
+        child:_con.isLoadingCancel.value?
+            SizedBox(
+      height: 3,
+        child: LinearProgressIndicator(
+          backgroundColor: Get.theme.accentColor.withOpacity(0.2),
+        ),
+      ) : ListView.builder(
           controller: _con.scrollControllerCancel,
           itemCount: _con.salesListCancel.length,
           // shrinkWrap: true,
@@ -98,7 +104,7 @@ class CancelOrder  extends StatelessWidget {
                 ],
               ),
             );
-          },),
+          },)
       );
 
 

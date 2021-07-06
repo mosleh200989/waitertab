@@ -161,18 +161,21 @@ void increment(int index) {
 }
 void decrement(int index){
   int quantity=int.parse(appController.basketItems[index].quantity);
-  quantity--;
-  appController.basketItems[index].quantity=quantity.toString();
-  double netPrice=double.parse(appController.basketItems[index].real_unit_price) * double.parse(appController.basketItems[index].quantity);
-  appController.basketItems[index].subtotal=netPrice.toString();
-  for(var i=0; i<appController.basketItems.length; i++) {
-    if(index==i){
-      _grandTotal.value -=
-          double.parse(appController.basketItems[i].real_unit_price);
-    }
+  if(quantity>1){
+    quantity--;
+    appController.basketItems[index].quantity=quantity.toString();
+    double netPrice=double.parse(appController.basketItems[index].real_unit_price) * double.parse(appController.basketItems[index].quantity);
+    appController.basketItems[index].subtotal=netPrice.toString();
+    for(var i=0; i<appController.basketItems.length; i++) {
+      if(index==i){
+        _grandTotal.value -=
+            double.parse(appController.basketItems[i].real_unit_price);
+      }
 
+    }
+    update();
   }
-  update();
+
 }
   void removeSingleOrder(index){
     for(var i=0; i<appController.basketItems.length; i++){
@@ -253,11 +256,11 @@ void changeOption(OptionModel optionModel){
 _optionId.value=optionModel.id;
 _optionName.value=optionModel.name;
 }
-void updateOption(int index){
+void updateOption(int index,Basket basket){
     print(index);
     print('index==');
-appController.basketItems[index].product_option=optionId;
-appController.basketItems[index].optionValue=optionName;
+appController.basketItems[index].product_option=optionId==''?basket.product_option:optionId;
+appController.basketItems[index].optionValue=optionName==''?basket.optionValue:optionName;
 appController.basketItems.refresh();
 _optionId.value='';
 _optionName.value='';
@@ -273,7 +276,7 @@ void newAddItem(Basket basket){
       real_unit_price: basket.real_unit_price,
       product_code: basket.product_code,
       product_option: basket.product_option,
-      optionValue: basket.optionValue,
+      optionValue: basket.optionValue??optionName,
       product_tax: basket.product_tax,
       unit_price: basket.unit_price,
       product_unit: basket.product_unit,
@@ -286,8 +289,8 @@ void newAddItem(Basket basket){
       appController.basketItems.refresh();
       print(appController.basketItems.lastIndexOf(basketObj));
       int index=appController.basketItems.lastIndexOf(basketObj);
-      appController.basketItems[index].product_option=optionId;
-      appController.basketItems[index].optionValue=optionName;
+      appController.basketItems[index].product_option=optionId==''?basket.product_option:optionId;
+      appController.basketItems[index].optionValue=optionName==''?basket.optionValue:optionName;
     _grandTotal.value += double.parse(basketObj.subtotal);
       _optionId.value='';
       _optionName.value='';
@@ -449,9 +452,9 @@ void removeAllListAndGoToOrderList(){
   appController.basketItems.clear();
   // Get.reload<OrderListController>();
   if(appController.basketItems.length==0){
-    Get.reload<OrderListController>();
-    // Get.put(OrderListController()).reloadFunction();
-    Get.offAndToNamed(Routes.ORDER_LIST);
+    // Get.reload<OrderListController>();
+    Get.put(OrderListController()).reloadFunction();
+    Get.offAllNamed(Routes.ORDER_LIST);
   }
 
 }

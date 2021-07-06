@@ -1,38 +1,25 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-class EmptyOrdersWidget extends StatefulWidget {
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
+import 'package:waiter/app/modules/order_list/controllers/order_list_controller.dart';
+class EmptyOrdersWidget extends StatelessWidget {
   EmptyOrdersWidget({
     Key key,
   }) : super(key: key);
-
-  @override
-  _EmptyOrdersWidgetState createState() => _EmptyOrdersWidgetState();
-}
-
-class _EmptyOrdersWidgetState extends State<EmptyOrdersWidget> {
-  bool loading = true;
-
-  @override
-  void onInit() {
-    Timer(Duration(seconds: 5), () {
-          loading = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+  return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          loading
-              ? SizedBox(
-            height: 3,
-            child: LinearProgressIndicator(
-              backgroundColor: Theme.of(context).accentColor.withOpacity(0.2),
-            ),
-          )
-              : SizedBox(),
+          // isLoading
+          //     ? SizedBox(
+          //   height: 3,
+          //   child: LinearProgressIndicator(
+          //     backgroundColor: Theme.of(context).accentColor.withOpacity(0.2),
+          //   ),
+          // )
+          //     : SizedBox(),
           Container(
             alignment: AlignmentDirectional.center,
             padding: EdgeInsets.symmetric(horizontal: 30),
@@ -101,5 +88,6 @@ class _EmptyOrdersWidgetState extends State<EmptyOrdersWidget> {
         ],
       ),
     );
+
   }
 }

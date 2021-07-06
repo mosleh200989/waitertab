@@ -9,12 +9,22 @@ class ProcessingOrder  extends StatelessWidget {
   Widget build(BuildContext context) {
     final OrderListController _con = Get.find<OrderListController>();
     return  Obx(() {
-      //     if (_con.isLoading.value)
-      //   return Center(child: CircularProgressIndicator());
-      // else
-      return _con.salesListProcessing.isEmpty
+     /*     if (_con.isLoading.value)
+        return SizedBox(
+          height: 3,
+          child: LinearProgressIndicator(
+            backgroundColor: Get.theme.accentColor.withOpacity(0.2),
+          ),
+        );
+      else*/
+      return /*_con.salesListProcessing.isEmpty
           ? EmptyOrdersWidget()
-          : RefreshIndicator(
+          :*/_con.isLoadingProcessing.value?SizedBox(
+        height: 3,
+        child: LinearProgressIndicator(
+          backgroundColor: Get.theme.accentColor.withOpacity(0.2),
+        ),
+      ): RefreshIndicator(
         onRefresh: _con.refreshProcessingList,
         child: ListView.builder(
           controller: _con.scrollControllerProcessing,
