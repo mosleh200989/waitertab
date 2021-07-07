@@ -5,14 +5,18 @@ import 'package:waiter/app/data/models/categories.dart';
 import 'package:waiter/app/data/providers/categories_provider.dart';
 import 'package:waiter/app/global_widgets/helpers.dart';
 import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
+import 'package:waiter/app/modules/notifications/controllers/notifications_controller.dart';
 
 class HomeController extends GetxController {
   final AuthController authController=Get.find();
+  final NotificationsController notificationController=Get.find();
   var isLoading = true.obs;
   var categoriesList = <Categories>[].obs;
   @override
   void onInit()async {
     super.onInit();
+    await authController.getCurrentUser();
+    notificationController.refreshNotificationList();
    await getAllCategories();
   }
 

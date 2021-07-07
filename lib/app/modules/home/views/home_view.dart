@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:waiter/app/core/values/mr_url.dart';
 import 'package:waiter/app/global_widgets/DrawerWidget.dart';
+import 'package:waiter/app/modules/home/controllers/app_controller.dart';
 import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:waiter/app/modules/notifications/controllers/notifications_controller.dart';
 import 'package:waiter/app/routes/app_pages.dart';
@@ -175,8 +176,12 @@ class HomeView extends GetWidget<HomeController> {
                               child: Text('${controller.categoriesList.elementAt(index).name}',
                                 style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18 ),
                               ),
+                            ),  Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('${Get.find<AppController>().htmlComment??''}',
+                                style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18 ),
+                              ),
                             ),
-
                           ],
                         ),
                       ),

@@ -59,7 +59,7 @@ class OrderListView extends GetView<OrderListController> {
               ),
               TextButton(
                 onPressed: () {
-                  Get.offNamed(Routes.HOME);
+                  Get.offAllNamed(Routes.HOME);
                   // Get.offNamed(Routes.NOTIFICATION_PAGE, arguments: 0);
                 },
                 child:Icon(

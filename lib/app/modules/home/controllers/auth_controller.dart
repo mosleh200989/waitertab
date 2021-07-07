@@ -16,6 +16,8 @@ int get inReadCount=>isReadCountSet.value;
   void onInit()async {
     super.onInit();
     await getCurrentUser();
+    print(currentUser.id);
+    print('currentUser.id');
   }
 
   @override

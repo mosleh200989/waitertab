@@ -4,8 +4,10 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:waiter/app/core/values/mr_config.dart';
 import 'package:waiter/app/data/models/user_db.dart';
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 
 class MyUserProvider extends GetConnect {
+
   @override
   void onInit() {
     httpClient.baseUrl = 'YOUR-API-URL';
@@ -21,7 +23,10 @@ class MyUserProvider extends GetConnect {
       var userData=json.decode(response.body);
       if (response.statusCode == 200 && userData['status']==true) {
         setCurrentUser(userData['data']);
-        return UserDb.fromJSON(userData['data']);
+        if(Get.find<AuthController>().currentUser != null){
+          return UserDb.fromJSON(userData['data']);
+        }
+
       } else {
         return null;
       }
@@ -32,7 +37,6 @@ class MyUserProvider extends GetConnect {
     }
 
   }
-
   void setCurrentUser(jsonString) async {
     try {
       if (jsonString != null) {
@@ -43,4 +47,5 @@ class MyUserProvider extends GetConnect {
       throw new Exception(e);
     }
   }
+
 }

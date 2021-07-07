@@ -53,5 +53,7 @@ final appController=Get.find<AppController>();
 Widget htmlComment;
  void htmlData(String value){
    htmlComment = Html( data:value,);
+   print(htmlComment);
+   print('============htmlComment');
   }
 }

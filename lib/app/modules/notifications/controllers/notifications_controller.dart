@@ -28,7 +28,9 @@ int get offset => _paginationFilter.value.offset;
   void onInit() async{
     super.onInit();
     _changePaginationFilter(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
-    await getAllNotifications(_paginationFilter.value);
+    if(authController.currentUser.id != null){
+      await getAllNotifications(_paginationFilter.value);
+    }
     paginateNotificationList();
     print('on init notification controller');
     // for(var i=0; i<notificationList.length; i++){
@@ -70,7 +72,10 @@ void paginateNotificationList() {
 Future<void> refreshNotificationList() async {
   notificationList.clear();
   _changePaginationFilter(MrConst.LOADING_OFFSET,MrConst.LOADING_LIMIT);
-  await getAllNotifications(_paginationFilter.value);
+  if(authController.currentUser.id != null){
+    await getAllNotifications(_paginationFilter.value);
+  }
+
 
   Helpers.showSnackbar(title:'success'.tr,message: 'refreshed_successfully_completed'.tr);
 }

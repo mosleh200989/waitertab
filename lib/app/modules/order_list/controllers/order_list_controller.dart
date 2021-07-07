@@ -94,11 +94,11 @@ class OrderListController extends GetxController  with SingleGetTickerProviderMi
   void onClose() {
     super.onClose();
     // animationController.dispose();
-    tabController.dispose();
+    // tabController.dispose();
     print('on close controller');
   }
   Future<bool> willPopCallback() async {
-    Get.offAndToNamed(Routes.HOME);
+    Get.offAllNamed(Routes.HOME);
     return Future.value(true);
   }
 /*  Future<bool> requestPop() {

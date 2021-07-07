@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:waiter/app/core/values/mr_config.dart';
 import 'package:waiter/app/data/models/user_db.dart';
 import 'package:waiter/app/data/providers/my_user_provider.dart';
@@ -51,10 +54,15 @@ class MyUserController extends GetxController {
           progressDialog.show();
           MyUserProvider().postLogin(userDb).then((resp) {
             if (resp != null) {
-              progressDialog.hide();
-              _user.value=resp;
-              // isProcessing(false);
-              Get.toNamed(Routes.HOME);
+              print(resp);
+              print('resp====');
+                progressDialog.hide();
+                _user.value=resp;
+
+                // isProcessing(false);
+                Get.toNamed(Routes.HOME);
+
+
             } else {
               progressDialog.hide();
               Helpers.showSnackbar(message: 'pleas_correct_username_or_password'.tr);
@@ -70,5 +78,6 @@ class MyUserController extends GetxController {
       print(e);
     }
   }
+
 
 }
