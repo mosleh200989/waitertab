@@ -514,5 +514,6 @@ const Map<String, String> en ={
   "Are_you_sure_you_want_to_exit": "Are you sure you want to exit?",
   "Close": "Close",
   "X": "X",
+  "Products": "Products",
 
 };

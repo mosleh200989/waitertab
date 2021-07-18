@@ -526,4 +526,5 @@ const Map<String, String> ar = {
   "Are_you_sure_you_want_to_exit": "هل أنت متأكد من انك تريد الخروج",
   "Close": "يغلق",
   "X": "X",
+  "Products": "منتجات",
 };

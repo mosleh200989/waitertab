@@ -14,8 +14,8 @@ import 'package:waiter/app/routes/app_pages.dart';
 class OrderListController extends GetxController  with SingleGetTickerProviderMixin {
   TabController tabController;
   AnimationController animationController;
-  final authController=Get.find<AuthController>()
-;  final List<MyTabModel> tabs = [
+  final authController=Get.find<AuthController>();
+  final List<MyTabModel> tabs = [
      MyTabModel(title: "PendingOrder".tr, color: Colors.teal[200]),
      MyTabModel(title: "ProcessingOrder".tr,color: Colors.orange[200]),
      MyTabModel(title: "CompleteOrder".tr,color: Colors.blueGrey[200]),
