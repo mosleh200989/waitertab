@@ -515,5 +515,9 @@ const Map<String, String> en ={
   "Close": "Close",
   "X": "X",
   "Products": "Products",
+  "Devices": "Devices",
+  "NoDevices": "No Devices",
+  "Alama360": "Alama360",
+  "BluetoothDisconnect": "Bluetooth Disconnect!",
 
 };

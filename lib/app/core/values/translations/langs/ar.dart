@@ -527,4 +527,8 @@ const Map<String, String> ar = {
   "Close": "يغلق",
   "X": "X",
   "Products": "منتجات",
+  "Devices": "الأجهزة",
+  "NoDevices": "لا يوجد جهاز",
+  "Alama360": "علامة 360",
+  "BluetoothDisconnect": "قطع اتصال البلوتوث!",
 };

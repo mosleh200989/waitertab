@@ -23,7 +23,8 @@ class OrderViewController extends GetxController {
   PrinterBluetoothManager printerManager = PrinterBluetoothManager();
   var  devices = <PrinterBluetooth>[].obs;
   // List<PrinterBluetooth> get devices=>_devices;
-  String devicesMsg;
+  var _devicesMsg=''.obs;
+  String get devicesMsg=>_devicesMsg.value;
   BluetoothManager bluetoothManager = BluetoothManager.instance;
 
   @override
@@ -45,7 +46,7 @@ class OrderViewController extends GetxController {
           initPrinter();
         } else if (val == 10) {
           print('off');
-          devicesMsg = 'Bluetooth Disconnect!';
+          _devicesMsg.value = 'BluetoothDisconnect'.tr;
         }
       });
     } else {
@@ -84,7 +85,7 @@ class OrderViewController extends GetxController {
       print('val=============');
        devices.value = val;
        // devices.addAll(val);
-      if (devices.isEmpty)  devicesMsg = 'No Devices';
+      if (devices.isEmpty)  _devicesMsg.value = 'NoDevices'.tr;
     });
   }
 
@@ -101,15 +102,13 @@ class OrderViewController extends GetxController {
 
   Future<Ticket> _ticket(PaperSize paper) async {
     final ticket = Ticket(paper);
-    int total = 0;
-
     // Image assets
     final ByteData data = await rootBundle.load('assets/images/store.png');
     final Uint8List bytes = data.buffer.asUint8List();
     final Image image = decodeImage(bytes);
     ticket.image(image);
     ticket.text(
-      'TOKO KU',
+      'Alama360'.tr,
       styles: PosStyles(align: PosAlign.center,height: PosTextSize.size2,width: PosTextSize.size2),
       linesAfter: 1,
     );
@@ -121,14 +120,14 @@ class OrderViewController extends GetxController {
         PosColumn(
             text: '${sales.items[i].quantity} x ${sales.items[i].unit_price}',
             width: 6),
-        PosColumn(text: 'Rp ${sales.items[i].subtotal}', width: 6),
+        PosColumn(text: 'SAR ${sales.items[i].subtotal}', width: 6),
       ]);
     }
     ticket.text(sales.id);
     ticket.feed(1);
     ticket.row([
-      PosColumn(text: 'Total', width: 6, styles: PosStyles(bold: true)),
-      PosColumn(text: 'Rp $total', width: 6, styles: PosStyles(bold: true)),
+      PosColumn(text: 'GrandTotal'.tr, width: 6, styles: PosStyles(bold: true)),
+      PosColumn(text: 'SAR ${sales.grand_total}', width: 6, styles: PosStyles(bold: true)),
     ]);
     ticket.feed(2);
     ticket.text('Thank You',styles: PosStyles(align: PosAlign.center, bold: true));

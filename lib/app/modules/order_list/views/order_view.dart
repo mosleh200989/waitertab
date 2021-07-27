@@ -39,7 +39,7 @@ class OrderView extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () {
                               Get.defaultDialog(
-                                title: 'AddProduct'.tr,
+                                title: 'Devices'.tr,
                                 titleStyle: TextStyle(fontSize: 24),
                                 // backgroundColor: Colors.blueGrey,
                                 // barrierDismissible: false,
