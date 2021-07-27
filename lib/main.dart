@@ -7,7 +7,7 @@ import 'package:waiter/app/core/theme/theme_service.dart';
 import 'package:waiter/app/core/values/translations/app_translation.dart';
 import 'package:waiter/app/global_bindings.dart';
 import 'package:waiter/app/modules/unknown/views/unknown_view.dart';
-import 'package:device_preview/device_preview.dart';
+// import 'package:device_preview/device_preview.dart';
 import 'app/routes/app_pages.dart';
 
 void main()async {
@@ -16,7 +16,7 @@ void main()async {
   print(GetPlatform.isAndroid);
   print(GetPlatform.isDesktop);
   print(GetPlatform.isIOS);
-  print(GetPlatform.isDesktop);
+  print(GetPlatform. isDesktop);
   print('GetPlatform.isAndroid');
   runApp(
     //   DevicePreview(

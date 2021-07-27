@@ -143,7 +143,7 @@ class HomeView extends GetWidget<HomeController> {
                     crossAxisCount: 2,
                     crossAxisSpacing: 2.0,
                     mainAxisSpacing: 2.0,
-                      childAspectRatio: width / (height / 2)
+                      childAspectRatio: width / (height * 0.60)
                   ),
                   itemBuilder: (BuildContext context, int index) {
                     return InkWell(

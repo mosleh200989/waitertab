@@ -36,8 +36,40 @@ class OrderView extends StatelessWidget {
                       Positioned(
                           right:  Get.locale.languageCode=="en"? 5:Get.width-40,
                           top: 5,
-                          child: Container(
-                              child: Icon(Icons.print)
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.defaultDialog(
+                                title: 'AddProduct'.tr,
+                                titleStyle: TextStyle(fontSize: 24),
+                                // backgroundColor: Colors.blueGrey,
+                                // barrierDismissible: false,
+                                content: SizedBox(
+                                  width: Get.width,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child:_con.devices.isEmpty
+                                        ? Center(child: Text(_con.devicesMsg ?? ''))
+                                        : ListView.builder(
+                                      itemCount: _con.devices.length,
+                                      itemBuilder: (c, i) {
+                                        return ListTile(
+                                          leading: Icon(Icons.print),
+                                          title: Text(_con.devices[i].name),
+                                          subtitle: Text(_con.devices[i].address),
+                                          onTap: () {
+                                            _con.startPrint(_con.devices[i]);
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  ),
+                                buttonColor:Colors.grey ,
+                              );
+                            },
+                            child: Container(
+                                child: Icon(Icons.print)
+                            ),
                           )),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
