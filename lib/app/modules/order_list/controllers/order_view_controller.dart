@@ -2,14 +2,14 @@ import 'package:get/get.dart';
 import 'package:waiter/app/data/models/sales.dart';
 import 'package:waiter/app/data/providers/order_list_provider.dart';
 import 'dart:async';
-import 'dart:typed_data';
+// import 'dart:typed_data';
 import 'package:flutter/material.dart' hide Image;
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'dart:io' show Platform;
-import 'package:image/image.dart';
+// import 'package:image/image.dart';
 class OrderViewController extends GetxController {
   var isLoading = true.obs;
   final _sales = Sales().obs;
@@ -103,10 +103,10 @@ class OrderViewController extends GetxController {
   Future<Ticket> _ticket(PaperSize paper) async {
     final ticket = Ticket(paper);
     // Image assets
-    final ByteData data = await rootBundle.load('assets/images/store.png');
-    final Uint8List bytes = data.buffer.asUint8List();
-    final Image image = decodeImage(bytes);
-    ticket.image(image);
+    // final ByteData data = await rootBundle.load('assets/images/store.png');
+    // final Uint8List bytes = data.buffer.asUint8List();
+    // final Image image = decodeImage(bytes);
+    // ticket.image(image);
     ticket.text(
       'Alama360'.tr,
       styles: PosStyles(align: PosAlign.center,height: PosTextSize.size2,width: PosTextSize.size2),
