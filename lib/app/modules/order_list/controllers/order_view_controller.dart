@@ -136,5 +136,24 @@ class OrderViewController extends GetxController {
     return ticket;
   }
 
-
+  final List<Map<String, dynamic>> data = [
+    {
+      'title': 'Produk 1',
+      'price': 10000,
+      'qty': 2,
+      'total_price': 20000,
+    },
+    {
+      'title': 'Produk 2',
+      'price': 20000,
+      'qty': 2,
+      'total_price': 40000,
+    },
+    {
+      'title': 'Produk 3',
+      'price': 12000,
+      'qty': 1,
+      'total_price': 12000,
+    },
+  ];
 }

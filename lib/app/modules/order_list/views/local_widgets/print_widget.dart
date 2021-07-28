@@ -7,9 +7,11 @@ import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:get/get.dart';
 import 'dart:io' show Platform;
 import 'package:image/image.dart';
+import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:waiter/app/modules/order_list/controllers/order_view_controller.dart';
 
 class PrintWidget extends StatefulWidget {
+  // PrintWidget(data);
   // final List<Map<String, dynamic>> data=[];
   // Print(this.data);
   @override
@@ -22,9 +24,13 @@ class _PrintWidgetState extends State<PrintWidget> {
   List<PrinterBluetooth> _devices = [];
   String _devicesMsg;
   BluetoothManager bluetoothManager = BluetoothManager.instance;
-
+  final orderDetailsController=Get.find<OrderViewController>();
   @override
   void initState() {
+
+    print('widget.data.length');
+    print(orderDetailsController.sales.id);
+    print(orderDetailsController.sales.items.length);
     if (Platform.isAndroid) {
       bluetoothManager.state.listen((val) {
         print('state = $val');
@@ -46,7 +52,7 @@ class _PrintWidgetState extends State<PrintWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final orderDetailsController=Get.find<OrderViewController>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Print'),
@@ -62,10 +68,12 @@ class _PrintWidgetState extends State<PrintWidget> {
                   subtitle: Text(_devices[i].address),
                   onTap: () {
                     _startPrint(_devices[i]);
+
                   },
                 );
               },
             ),
+
     );
   }
 
@@ -90,7 +98,6 @@ class _PrintWidgetState extends State<PrintWidget> {
   }
 
   Future<Ticket> _ticket(PaperSize paper) async {
-    final detailsController=Get.find<OrderViewController>();
     final ticket = Ticket(paper);
     // Image assets
     final ByteData data = await rootBundle.load('assets/images/store.png');
@@ -98,27 +105,36 @@ class _PrintWidgetState extends State<PrintWidget> {
     final Image image = decodeImage(bytes);
     ticket.image(image);
     ticket.text(
-      'Alama360'.tr,
-      styles: PosStyles(align: PosAlign.center,height: PosTextSize.size2,width: PosTextSize.size2),
-      linesAfter: 1,
+      'SaleNumber : ${orderDetailsController.sales.id??""}',
+      styles: PosStyles(align: PosAlign.center, bold: true),
     );
+    /*ticket.text(
+      'SaleReference'.tr+': ${orderDetailsController.sales.reference_no??""}',
+      styles: PosStyles(align: PosAlign.center, bold: true),
+    );
+    ticket.text(
+      'SalesAssociate'.tr+': ${Get.find<AuthController>().currentUser.username??""}',
+      styles: PosStyles(align: PosAlign.center, bold: true),
+    );
+    ticket.text(
+      'Customer'.tr+': ${orderDetailsController.sales.customer??""}',
+      styles: PosStyles(align: PosAlign.center, bold: true),
+    );*/
+    // for (var i = 0; i < orderDetailsController.sales.items.length; i++) {
+    //   print(orderDetailsController.sales.items[i].product_name);
+    //   ticket.row([
+    //     PosColumn(
+    //         text: '${orderDetailsController.sales.items[i].unit_price} x ${orderDetailsController.sales.items[i].quantity}',
+    //         width: 6),
+    //     PosColumn(text: 'SAR', width: 6),
+    //   ]);
+    // }
 
-    for (var i = 0; i < detailsController.sales.items.length; i++) {
-      // total += widget.data[i]['total_price'];
-      ticket.text(detailsController.sales.items[i].id);
-      ticket.row([
-        PosColumn(
-            text: '${detailsController.sales.items[i].quantity} x ${detailsController.sales.items[i].unit_price}',
-            width: 6),
-        PosColumn(text: 'SAR ${detailsController.sales.items[i].subtotal}', width: 6),
-      ]);
-    }
-    ticket.text(detailsController.sales.id);
     ticket.feed(1);
-    ticket.row([
-      PosColumn(text: 'GrandTotal'.tr, width: 6, styles: PosStyles(bold: true)),
-      PosColumn(text: 'SAR ${detailsController.sales.grand_total}', width: 6, styles: PosStyles(bold: true)),
-    ]);
+    // ticket.row([
+    //   PosColumn(text: 'Total', width: 6, styles: PosStyles(bold: true)),
+    //   PosColumn(text: 'SAR ${orderDetailsController.sales.grand_total}', width: 6, styles: PosStyles(bold: true)),
+    // ]);
     ticket.feed(2);
     ticket.text('Thank You',styles: PosStyles(align: PosAlign.center, bold: true));
     ticket.cut();
