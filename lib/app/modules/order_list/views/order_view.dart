@@ -7,6 +7,7 @@ import 'package:waiter/app/global_widgets/EmptyOrdersWidget.dart';
 import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:waiter/app/modules/order_list/controllers/order_view_controller.dart';
 import 'package:waiter/app/modules/order_list/views/local_widgets/label_and_text.dart';
+import 'package:waiter/app/modules/order_list/views/local_widgets/print_widget.dart';
 import '../controllers/order_list_controller.dart';
 
 class OrderView extends StatelessWidget {
@@ -38,7 +39,9 @@ class OrderView extends StatelessWidget {
                           top: 5,
                           child: GestureDetector(
                             onTap: () {
-                              Get.defaultDialog(
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (_) => PrintWidget()));
+                           /*   Get.defaultDialog(
                                 title: 'Devices'.tr,
                                 titleStyle: TextStyle(fontSize: 24),
                                 // backgroundColor: Colors.blueGrey,
@@ -65,7 +68,7 @@ class OrderView extends StatelessWidget {
                                   ),
                                   ),
                                 buttonColor:Colors.grey ,
-                              );
+                              );*/
                             },
                             child: Container(
                                 child: Icon(Icons.print)
