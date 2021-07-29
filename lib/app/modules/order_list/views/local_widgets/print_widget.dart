@@ -167,14 +167,14 @@ class _PrintWidgetState extends State<PrintWidget> {
     ticket.row([
       PosColumn(
           text: 'TOTAL',
-          width: 4,
+          width: 6,
           styles: PosStyles(
             height: PosTextSize.size2,
             width: PosTextSize.size1,
           )),
       PosColumn(
           text: '\$10.97',
-          width: 4,
+          width: 6,
           styles: PosStyles(
             align: PosAlign.right,
             height: PosTextSize.size2,
