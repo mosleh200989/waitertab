@@ -134,12 +134,11 @@ class _PrintWidgetState extends State<PrintWidget> {
     // );
     ticket.hr();
     ticket.row([
-      PosColumn(text: 'Qty', width: 1),
-      PosColumn(text: 'Item', width: 7),
+      PosColumn(text: 'Qty', width: 2),
+      PosColumn(text: 'Item', width: 5),
       PosColumn(
           text: 'Price', width: 2, styles: PosStyles(align: PosAlign.right)),
-      PosColumn(
-          text: 'Total', width: 2, styles: PosStyles(align: PosAlign.right)),
+
     ]);
 
     ticket.row([
@@ -147,22 +146,18 @@ class _PrintWidgetState extends State<PrintWidget> {
       PosColumn(text: 'ONION RINGS', width: 7),
       PosColumn(
           text: '0.99', width: 2, styles: PosStyles(align: PosAlign.right)),
-      PosColumn(
-          text: '1.98', width: 2, styles: PosStyles(align: PosAlign.right)),
+
     ]);
     ticket.row([
       PosColumn(text: '1', width: 1),
       PosColumn(text: 'PIZZA', width: 7),
       PosColumn(
           text: '3.45', width: 2, styles: PosStyles(align: PosAlign.right)),
-      PosColumn(
-          text: '3.45', width: 2, styles: PosStyles(align: PosAlign.right)),
+
     ]);
     ticket.row([
       PosColumn(text: '1', width: 1),
       PosColumn(text: 'SPRING ROLLS', width: 7),
-      PosColumn(
-          text: '2.99', width: 2, styles: PosStyles(align: PosAlign.right)),
       PosColumn(
           text: '2.99', width: 2, styles: PosStyles(align: PosAlign.right)),
     ]);
@@ -171,25 +166,24 @@ class _PrintWidgetState extends State<PrintWidget> {
       PosColumn(text: 'CRUNCHY STICKS', width: 7),
       PosColumn(
           text: '0.85', width: 2, styles: PosStyles(align: PosAlign.right)),
-      PosColumn(
-          text: '2.55', width: 2, styles: PosStyles(align: PosAlign.right)),
+
     ]);
     ticket.hr();
     ticket.row([
       PosColumn(
           text: 'TOTAL',
-          width: 6,
+          width: 4,
           styles: PosStyles(
             height: PosTextSize.size2,
-            width: PosTextSize.size2,
+            width: PosTextSize.size1,
           )),
       PosColumn(
           text: '\$10.97',
-          width: 6,
+          width: 4,
           styles: PosStyles(
             align: PosAlign.right,
             height: PosTextSize.size2,
-            width: PosTextSize.size2,
+            width: PosTextSize.size1,
           )),
     ]);
 
