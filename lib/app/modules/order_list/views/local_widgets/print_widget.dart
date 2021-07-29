@@ -143,7 +143,7 @@ class _PrintWidgetState extends State<PrintWidget> {
     ]);
 
     ticket.row([
-      PosColumn(text: '2', width: 1),
+      PosColumn(text: '2', width: 2),
       PosColumn(text: 'ONION RINGS', width: 4),
       PosColumn(
           text: '0.99', width: 3,),
