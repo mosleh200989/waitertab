@@ -112,7 +112,7 @@ class _PrintWidgetState extends State<PrintWidget> {
           width: PosTextSize.size2,
         ),
         linesAfter: 1);
-    ticket.text('--------------------');
+    ticket.hr();
     ticket.text('889  Watson Lane', styles: PosStyles(align: PosAlign.center));
     ticket.text('New Braunfels, TX', styles: PosStyles(align: PosAlign.center));
     ticket.text('Tel: 830-221-1234', styles: PosStyles(align: PosAlign.center));
@@ -135,39 +135,34 @@ class _PrintWidgetState extends State<PrintWidget> {
     ticket.hr();
     ticket.row([
       PosColumn(text: 'Qty', width: 2),
-      PosColumn(text: 'Item', width: 5),
+      PosColumn(text: 'Item', width: 4),
       PosColumn(
-          text: 'Price', width: 2, styles: PosStyles(align: PosAlign.right)),
-
+          text: 'Price', width: 3, ),
+      PosColumn(
+          text: 'Total', width: 3, ),
     ]);
 
     ticket.row([
       PosColumn(text: '2', width: 1),
-      PosColumn(text: 'ONION RINGS', width: 7),
+      PosColumn(text: 'ONION RINGS', width: 4),
       PosColumn(
-          text: '0.99', width: 2, styles: PosStyles(align: PosAlign.right)),
-
-    ]);
-    ticket.row([
-      PosColumn(text: '1', width: 1),
-      PosColumn(text: 'PIZZA', width: 7),
+          text: '0.99', width: 3,),
       PosColumn(
-          text: '3.45', width: 2, styles: PosStyles(align: PosAlign.right)),
-
+          text: '1.98', width: 3, ),
     ]);
-    ticket.row([
-      PosColumn(text: '1', width: 1),
-      PosColumn(text: 'SPRING ROLLS', width: 7),
-      PosColumn(
-          text: '2.99', width: 2, styles: PosStyles(align: PosAlign.right)),
-    ]);
-    ticket.row([
-      PosColumn(text: '3', width: 1),
-      PosColumn(text: 'CRUNCHY STICKS', width: 7),
-      PosColumn(
-          text: '0.85', width: 2, styles: PosStyles(align: PosAlign.right)),
-
-    ]);
+    // ticket.row([
+    //   PosColumn(text: '1', width: 1),
+    //   PosColumn(text: 'SPRING ROLLS', width: 7),
+    //   PosColumn(
+    //       text: '2.99', width: 2, styles: PosStyles(align: PosAlign.right)),
+    // ]);
+    // ticket.row([
+    //   PosColumn(text: '3', width: 1),
+    //   PosColumn(text: 'CRUNCHY STICKS', width: 7),
+    //   PosColumn(
+    //       text: '0.85', width: 2, styles: PosStyles(align: PosAlign.right)),
+    //
+    // ]);
     ticket.hr();
     ticket.row([
       PosColumn(
