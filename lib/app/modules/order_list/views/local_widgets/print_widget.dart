@@ -193,7 +193,7 @@ class _PrintWidgetState extends State<PrintWidget> {
       PosColumn(
           text: 'Cash',
           width: 7,
-          styles: PosStyles(align: PosAlign.right, width: PosTextSize.size2)),
+          styles: PosStyles(align: PosAlign.left, width: PosTextSize.size2)),
       PosColumn(
           text: '\$15.00',
           width: 5,
@@ -203,7 +203,7 @@ class _PrintWidgetState extends State<PrintWidget> {
       PosColumn(
           text: 'Change',
           width: 7,
-          styles: PosStyles(align: PosAlign.right, width: PosTextSize.size2)),
+          styles: PosStyles(align: PosAlign.left, width: PosTextSize.size2)),
       PosColumn(
           text: '\$4.03',
           width: 5,
