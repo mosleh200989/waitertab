@@ -134,21 +134,21 @@ class _PrintWidgetState extends State<PrintWidget> {
     // );
     ticket.hr();
     ticket.row([
-      PosColumn(text: 'Qty', width: 2),
-      PosColumn(text: 'Item', width: 4),
+      PosColumn(text: 'Qty', width: 1),
+      PosColumn(text: 'Item', width: 7),
       PosColumn(
-          text: 'Price', width: 3, ),
+          text: 'Price', width: 2, ),
       PosColumn(
-          text: 'Total', width: 3, ),
+          text: 'Total', width: 2, ),
     ]);
 
     ticket.row([
-      PosColumn(text: '2', width: 2),
-      PosColumn(text: 'ONION RINGS', width: 4),
+      PosColumn(text: '2', width: 1),
+      PosColumn(text: 'ONION RINGS', width: 7),
       PosColumn(
-          text: '0.99', width: 3,),
+          text: '0.99', width: 2, ),
       PosColumn(
-          text: '1.98', width: 3, ),
+          text: '1.98', width: 2, ),
     ]);
     // ticket.row([
     //   PosColumn(text: '1', width: 1),
