@@ -124,14 +124,14 @@ class _PrintWidgetState extends State<PrintWidget> {
       'SaleReference'.tr+': ${orderDetailsController.sales.reference_no??""}',
       styles: PosStyles(align: PosAlign.center, bold: true),
     );*/
-    ticket.text(
-      'SalesAssociate'.tr+': ${Get.find<AuthController>().currentUser.username??""}',
-      styles: PosStyles(align: PosAlign.center, bold: true),
-    );
-    ticket.text(
-      'Customer'.tr+': ${orderDetailsController.sales.customer??""}',
-      styles: PosStyles(align: PosAlign.center, bold: true),
-    );
+    // ticket.text(
+    //   'SalesAssociate'.tr+': ${Get.find<AuthController>().currentUser.username??""}',
+    //   styles: PosStyles(align: PosAlign.center, bold: true),
+    // );
+    // ticket.text(
+    //   'Customer'.tr+': ${orderDetailsController.sales.customer??""}',
+    //   styles: PosStyles(align: PosAlign.center, bold: true),
+    // );
     ticket.hr();
     ticket.row([
       PosColumn(text: 'Qty', width: 1),
