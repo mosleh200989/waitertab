@@ -105,7 +105,7 @@ class _PrintWidgetState extends State<PrintWidget> {
     // final Uint8List bytes = data.buffer.asUint8List();
     // final Image image = decodeImage(bytes);
     // ticket.image(image);
-    ticket.text('ألاما',
+    ticket.text('Alama360',
         styles: PosStyles(
           align: PosAlign.center,
           height: PosTextSize.size2,
@@ -120,10 +120,10 @@ class _PrintWidgetState extends State<PrintWidget> {
       'SaleNumber : ${orderDetailsController.sales.id??""}',
       styles: PosStyles(align: PosAlign.center, bold: true,codeTable:PosCodeTable.pc850 ),
     );
-    ticket.text(
+   /* ticket.text(
       'SaleReference'.tr+': ${orderDetailsController.sales.reference_no??""}',
       styles: PosStyles(align: PosAlign.center, bold: true),
-    );
+    );*/
     ticket.text(
       'SalesAssociate'.tr+': ${Get.find<AuthController>().currentUser.username??""}',
       styles: PosStyles(align: PosAlign.center, bold: true),
