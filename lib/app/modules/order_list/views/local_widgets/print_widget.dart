@@ -89,7 +89,7 @@ class _PrintWidgetState extends State<PrintWidget> {
 
   Future<void> _startPrint(PrinterBluetooth printer) async {
     _printerManager.selectPrinter(printer);
-    final result = await _printerManager.printTicket(await _ticket(PaperSize.mm80));
+    final result = await _printerManager.printTicket(await _ticket(PaperSize.mm58));
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
