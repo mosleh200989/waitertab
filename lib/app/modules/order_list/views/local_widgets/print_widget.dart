@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart' hide Image;
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
@@ -105,6 +106,7 @@ class _PrintWidgetState extends State<PrintWidget> {
     // final Uint8List bytes = data.buffer.asUint8List();
     // final Image image = decodeImage(bytes);
     // ticket.image(image);
+    final arabicText = utf8.encode('ا ب ت ث ج ح خ د ذ ر ز س ش ص ض ف ق ك ل م ن ه و ي');
     ticket.text('Alama360',
         styles: PosStyles(
           align: PosAlign.center,
@@ -112,6 +114,7 @@ class _PrintWidgetState extends State<PrintWidget> {
           width: PosTextSize.size2,
         ),
         linesAfter: 1);
+    ticket.textEncoded(arabicText);
     ticket.hr();
     ticket.text('889  Watson Lane', styles: PosStyles(align: PosAlign.center));
     ticket.text('New Braunfels, TX', styles: PosStyles(align: PosAlign.center));
