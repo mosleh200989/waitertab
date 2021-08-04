@@ -1,17 +1,14 @@
-import 'dart:convert';
+import 'dart:convert' show utf8;
 import 'dart:typed_data';
 import 'package:flutter/material.dart' hide Image;
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:get/get.dart';
 import 'dart:io' show Platform;
-import 'package:image/image.dart';
 import 'package:intl/intl.dart';
-import 'package:waiter/app/modules/home/controllers/auth_controller.dart';
 import 'package:waiter/app/modules/order_list/controllers/order_view_controller.dart';
-
+import 'package:charset_converter/charset_converter.dart';
 class PrintWidget extends StatefulWidget {
   // PrintWidget(data);
   // final List<Map<String, dynamic>> data=[];
@@ -100,13 +97,13 @@ class _PrintWidgetState extends State<PrintWidget> {
   }
 
   Future<Ticket> _ticket(PaperSize paper) async {
-    final ticket = Ticket(paper);
+   /* final ticket = Ticket(paper);
     // Image assets
     // final ByteData data = await rootBundle.load('assets/images/store.png');
     // final Uint8List bytes = data.buffer.asUint8List();
     // final Image image = decodeImage(bytes);
     // ticket.image(image);
-    final arabicText = utf8.encode('ا ب ت ث ج ح خ د ذ ر ز س ش ص ض ف ق ك ل م ن ه و ي');
+    final arabicText = utf8.encode('ألاما');
     ticket.text('Alama360',
         styles: PosStyles(
           align: PosAlign.center,
@@ -114,7 +111,12 @@ class _PrintWidgetState extends State<PrintWidget> {
           width: PosTextSize.size2,
         ),
         linesAfter: 1);
-    ticket.textEncoded(arabicText);
+
+    // ticket.textEncoded(arabicText, styles: PosStyles(codeTable: PosCodeTable.arabic));
+    // ticket.text('ألاما',styles:PosStyles(codeTable: PosCodeTable.arabic));
+    // ticket.text('Watson',styles:PosStyles(codeTable: PosCodeTable.arabic));
+    Uint8List encArabic = await CharsetConverter.encode("windows-1256", "ألامااهلا");
+    ticket.textEncoded(encArabic,styles: PosStyles(codeTable: PosCodeTable.arabic));
     ticket.hr();
     ticket.text('889  Watson Lane', styles: PosStyles(align: PosAlign.center));
     ticket.text('New Braunfels, TX', styles: PosStyles(align: PosAlign.center));
@@ -123,10 +125,10 @@ class _PrintWidgetState extends State<PrintWidget> {
       'SaleNumber : ${orderDetailsController.sales.id??""}',
       styles: PosStyles(align: PosAlign.center, bold: true,codeTable:PosCodeTable.pc850 ),
     );
-   /* ticket.text(
+   *//* ticket.text(
       'SaleReference'.tr+': ${orderDetailsController.sales.reference_no??""}',
       styles: PosStyles(align: PosAlign.center, bold: true),
-    );*/
+    );*//*
     // ticket.text(
     //   'SalesAssociate'.tr+': ${Get.find<AuthController>().currentUser.username??""}',
     //   styles: PosStyles(align: PosAlign.center, bold: true),
@@ -233,6 +235,65 @@ class _PrintWidgetState extends State<PrintWidget> {
 
     ticket.cut();
 
+    return ticket;*/
+    final Ticket ticket = Ticket(paper);
+
+    ticket.text(
+        'Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
+    ticket.text('Special 1: àÀ èÈ éÉ ûÛ üÜ çÇ ôÔ',
+        styles: PosStyles(codeTable: PosCodeTable.westEur));
+    ticket.text('Special 2: blåbærgrød',
+        styles: PosStyles(codeTable: PosCodeTable.westEur));
+    ticket.text('Special 3: ألامااهلا',
+        styles: PosStyles(codeTable: PosCodeTable.arabic));
+
+    ticket.text('Bold text', styles: PosStyles(bold: true));
+    ticket.text('Reverse text', styles: PosStyles(reverse: true));
+    ticket.text('Underlined text',
+        styles: PosStyles(underline: true), linesAfter: 1);
+    ticket.text('Align left', styles: PosStyles(align: PosAlign.left));
+    ticket.text('Align center', styles: PosStyles(align: PosAlign.center));
+    ticket.text('Align right',
+        styles: PosStyles(align: PosAlign.right), linesAfter: 1);
+
+    ticket.row([
+      PosColumn(
+        text: 'col3',
+        width: 3,
+        styles: PosStyles(align: PosAlign.center, underline: true),
+      ),
+      PosColumn(
+        text: 'col6',
+        width: 6,
+        styles: PosStyles(align: PosAlign.center, underline: true),
+      ),
+      PosColumn(
+        text: 'col3',
+        width: 3,
+        styles: PosStyles(align: PosAlign.center, underline: true),
+      ),
+    ]);
+
+    ticket.text('Text size 200%',
+        styles: PosStyles(
+          height: PosTextSize.size2,
+          width: PosTextSize.size2,
+        ));
+
+    // Print barcode
+    final List<int> barData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 4];
+    ticket.barcode(Barcode.upcA(barData));
+
+    // Print mixed (chinese + latin) text. Only for printers supporting Kanji mode
+    // ticket.text(
+    //   'hello ! 中文字 # world @ éphémère &',
+    //   styles: PosStyles(codeTable: PosCodeTable.westEur),
+    //   containsChinese: true,
+    // );
+
+    ticket.feed(2);
+
+    ticket.cut();
     return ticket;
   }
  /* Future<Ticket> demoReceipt(PaperSize paper) async {

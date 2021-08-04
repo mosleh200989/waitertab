@@ -47,6 +47,7 @@ dependencies:
   flutter_bluetooth_basic: ^0.1.5
   image: ^2.1.4
   intl: ^0.17.0
+  charset_converter: ^2.0.0
 
 
 dev_dependencies:
