@@ -13,7 +13,7 @@ class CardProvider extends GetConnect {
   Future<Sales> postSales(Sales sales) async {
     try
     {
-      final String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/sales/postsales?api-key=${MrConfig.mr_api_key}";
+      final String postUrl="${MrConfig.base_app_url}resturant_salama/api/v1/sales/postsales?api-key=${MrConfig.mr_api_key}";
       print(sales.toMap());
       print('sales.toMap()');
       Response response = await post(postUrl,sales.toMap());
@@ -38,7 +38,7 @@ class CardProvider extends GetConnect {
     }
   }
   Future<Product> getOptions(String productId) async {
-    final String optionUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/products?code=$productId&include=items&api-key=${MrConfig.mr_api_key}";
+    final String optionUrl="${MrConfig.base_app_url}resturant_salama/api/v1/products?code=$productId&include=items&api-key=${MrConfig.mr_api_key}";
     Response response = await get(optionUrl);
     if (response.statusCode == 200) {
       return Product.fromJson(response.body);

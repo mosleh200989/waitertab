@@ -18,7 +18,7 @@ class MyUserProvider extends GetConnect {
     try
     {
       print(userDb);
-      String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/login/checkLogin";
+      String postUrl="${MrConfig.base_app_url}resturant_salama/api/v1/login/checkLogin";
       Response response = await post(postUrl,userDb.toMap());
       var userData=json.decode(response.body);
       if (response.statusCode == 200 && userData['status']==true) {

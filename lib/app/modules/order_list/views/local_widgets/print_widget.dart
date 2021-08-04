@@ -237,52 +237,61 @@ class _PrintWidgetState extends State<PrintWidget> {
 
     return ticket;*/
     final Ticket ticket = Ticket(paper);
+    // ticket.printCustom("السلام ",2,1,charset: "UTF-8");
+    // ticket.text(
+    //     'Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
+    // ticket.text('Special 1: àÀ èÈ éÉ ûÛ üÜ çÇ ôÔ',
+    //     styles: PosStyles(codeTable: PosCodeTable.westEur));
+    // ticket.text('Special 2: blåbærgrød',
+    //     styles: PosStyles(codeTable: PosCodeTable.westEur));
+    Uint8List encoded2 =
+    await CharsetConverter.encode('ISO-8859-6', 'مابيقرا شي وهو بيستخدم');
 
-    ticket.text(
-        'Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
-    ticket.text('Special 1: àÀ èÈ éÉ ûÛ üÜ çÇ ôÔ',
-        styles: PosStyles(codeTable: PosCodeTable.westEur));
-    ticket.text('Special 2: blåbærgrød',
-        styles: PosStyles(codeTable: PosCodeTable.westEur));
-    ticket.text('Special 3: ألامااهلا',
-        styles: PosStyles(codeTable: PosCodeTable.arabic));
+    ticket.textEncoded(encoded2,
+        styles: PosStyles(align: PosAlign.center,width: PosTextSize.size1, bold: true) );
+    final arabicText = utf8.encode('ا ب ت ث ج ح خ د ذ ر ز س ش ص ض ف ق ك ل م ن ه و ي');
 
-    ticket.text('Bold text', styles: PosStyles(bold: true));
-    ticket.text('Reverse text', styles: PosStyles(reverse: true));
-    ticket.text('Underlined text',
-        styles: PosStyles(underline: true), linesAfter: 1);
-    ticket.text('Align left', styles: PosStyles(align: PosAlign.left));
-    ticket.text('Align center', styles: PosStyles(align: PosAlign.center));
-    ticket.text('Align right',
-        styles: PosStyles(align: PosAlign.right), linesAfter: 1);
+    ticket.textEncoded(arabicText);
+    // var encoded = utf8.encode("Special 3: ألامااهلا");
+    // ticket.text(utf8.decode(encoded),
+    //     styles: PosStyles(codeTable: PosCodeTable.arabic));
 
-    ticket.row([
-      PosColumn(
-        text: 'col3',
-        width: 3,
-        styles: PosStyles(align: PosAlign.center, underline: true),
-      ),
-      PosColumn(
-        text: 'col6',
-        width: 6,
-        styles: PosStyles(align: PosAlign.center, underline: true),
-      ),
-      PosColumn(
-        text: 'col3',
-        width: 3,
-        styles: PosStyles(align: PosAlign.center, underline: true),
-      ),
-    ]);
-
-    ticket.text('Text size 200%',
-        styles: PosStyles(
-          height: PosTextSize.size2,
-          width: PosTextSize.size2,
-        ));
-
-    // Print barcode
-    final List<int> barData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 4];
-    ticket.barcode(Barcode.upcA(barData));
+    // ticket.text('Bold text', styles: PosStyles(bold: true));
+    // ticket.text('Reverse text', styles: PosStyles(reverse: true));
+    // ticket.text('Underlined text',
+    //     styles: PosStyles(underline: true), linesAfter: 1);
+    // ticket.text('Align left', styles: PosStyles(align: PosAlign.left));
+    // ticket.text('Align center', styles: PosStyles(align: PosAlign.center));
+    // ticket.text('Align right',
+    //     styles: PosStyles(align: PosAlign.right), linesAfter: 1);
+    //
+    // ticket.row([
+    //   PosColumn(
+    //     text: 'col3',
+    //     width: 3,
+    //     styles: PosStyles(align: PosAlign.center, underline: true),
+    //   ),
+    //   PosColumn(
+    //     text: 'col6',
+    //     width: 6,
+    //     styles: PosStyles(align: PosAlign.center, underline: true),
+    //   ),
+    //   PosColumn(
+    //     text: 'col3',
+    //     width: 3,
+    //     styles: PosStyles(align: PosAlign.center, underline: true),
+    //   ),
+    // ]);
+    //
+    // ticket.text('Text size 200%',
+    //     styles: PosStyles(
+    //       height: PosTextSize.size2,
+    //       width: PosTextSize.size2,
+    //     ));
+    //
+    // // Print barcode
+    // final List<int> barData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 4];
+    // ticket.barcode(Barcode.upcA(barData));
 
     // Print mixed (chinese + latin) text. Only for printers supporting Kanji mode
     // ticket.text(

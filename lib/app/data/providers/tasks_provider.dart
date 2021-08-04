@@ -13,7 +13,7 @@ class TasksProvider extends GetConnect {
   }
 
   Future<List<Tasks>> getTasks(PaginationFilter filter) async {
-    final String tasksUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks?status=1&start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
+    final String tasksUrl="${MrConfig.base_app_url}resturant_salama/api/v1/tasks?status=1&start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
     print(tasksUrl);
     print('getTasks tasksUrl');
     Response response = await get(tasksUrl);
@@ -25,7 +25,7 @@ class TasksProvider extends GetConnect {
     }
   }
   Future<List<Tasks>> getTasksCompleted(PaginationFilter filter) async {
-    final String taskssUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks?status=5&start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
+    final String taskssUrl="${MrConfig.base_app_url}resturant_salama/api/v1/tasks?status=5&start=${filter.offset}&limit=${filter.limit}&api-key=${MrConfig.mr_api_key}";
     print(taskssUrl);
     print('processing order url');
     Response response = await get(taskssUrl);
@@ -39,7 +39,7 @@ class TasksProvider extends GetConnect {
   Future<Tasks> updateTask(Tasks task) async {
     try
     {
-      final String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks/changetaskstatus";
+      final String postUrl="${MrConfig.base_app_url}resturant_salama/api/v1/tasks/changetaskstatus";
       Response response = await post(postUrl,task.toMap());
       if (response.statusCode == 200 ) {
         return Tasks.fromJSON(response.body['data']);
@@ -55,7 +55,7 @@ class TasksProvider extends GetConnect {
   }
 
   Future<Tasks> getOneTasks(String tasksId) async {
-    final String tasksSingleUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks?task_id=$tasksId&api-key=${MrConfig.mr_api_key}";
+    final String tasksSingleUrl="${MrConfig.base_app_url}resturant_salama/api/v1/tasks?task_id=$tasksId&api-key=${MrConfig.mr_api_key}";
 print(tasksId);
 print(tasksSingleUrl);
     Response response = await get(tasksSingleUrl);
@@ -70,7 +70,7 @@ print(tasksSingleUrl);
 
   Future<dynamic> updateTaskCheckItem(TaskCheckItemModel task) async {
     try{
-      final String postUrl="${MrConfig.base_app_url}resturant_bukhari/api/v1/tasks/changecheckliststatus";
+      final String postUrl="${MrConfig.base_app_url}resturant_salama/api/v1/tasks/changecheckliststatus";
       print(postUrl);
       Response response = await post(postUrl,task.toMap());
       if (response.statusCode == 200 && response.body['data'] !=null) {
