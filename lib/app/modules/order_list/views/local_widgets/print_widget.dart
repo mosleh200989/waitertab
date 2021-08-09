@@ -97,38 +97,40 @@ class _PrintWidgetState extends State<PrintWidget> {
   }
 
   Future<Ticket> _ticket(PaperSize paper) async {
-   /* final ticket = Ticket(paper);
+    final ticket = Ticket(paper);
     // Image assets
     // final ByteData data = await rootBundle.load('assets/images/store.png');
     // final Uint8List bytes = data.buffer.asUint8List();
     // final Image image = decodeImage(bytes);
     // ticket.image(image);
-    final arabicText = utf8.encode('ألاما');
+ /*   final arabicText = utf8.encode('ألاما');
     ticket.text('Alama360',
         styles: PosStyles(
           align: PosAlign.center,
           height: PosTextSize.size2,
           width: PosTextSize.size2,
         ),
-        linesAfter: 1);
+        linesAfter: 1);*/
 
     // ticket.textEncoded(arabicText, styles: PosStyles(codeTable: PosCodeTable.arabic));
     // ticket.text('ألاما',styles:PosStyles(codeTable: PosCodeTable.arabic));
     // ticket.text('Watson',styles:PosStyles(codeTable: PosCodeTable.arabic));
-    Uint8List encArabic = await CharsetConverter.encode("windows-1256", "ألامااهلا");
+  /*  Uint8List encArabic = await CharsetConverter.encode("windows-1256", "ألامااهلا");
     ticket.textEncoded(encArabic,styles: PosStyles(codeTable: PosCodeTable.arabic));
-    ticket.hr();
-    ticket.text('889  Watson Lane', styles: PosStyles(align: PosAlign.center));
-    ticket.text('New Braunfels, TX', styles: PosStyles(align: PosAlign.center));
-    ticket.text('Tel: 830-221-1234', styles: PosStyles(align: PosAlign.center));
-    ticket.text(
-      'SaleNumber : ${orderDetailsController.sales.id??""}',
+    ticket.hr();*/
+    ticket.text('Alama360', styles: PosStyles(align: PosAlign.center));
+    ticket.text('Tel: ${orderDetailsController.sales.billerdetails.phone}', styles: PosStyles(align: PosAlign.center));
+    ticket.text('SaleNumber : ${orderDetailsController.sales.id??""}',
       styles: PosStyles(align: PosAlign.center, bold: true,codeTable:PosCodeTable.pc850 ),
     );
-   *//* ticket.text(
+    ticket.text(
       'SaleReference'.tr+': ${orderDetailsController.sales.reference_no??""}',
       styles: PosStyles(align: PosAlign.center, bold: true),
-    );*//*
+    );
+    ticket.text(
+      'Date'.tr+': ${orderDetailsController.sales.date??""}',
+      styles: PosStyles(align: PosAlign.center, bold: true),
+    );
     // ticket.text(
     //   'SalesAssociate'.tr+': ${Get.find<AuthController>().currentUser.username??""}',
     //   styles: PosStyles(align: PosAlign.center, bold: true),
@@ -145,38 +147,65 @@ class _PrintWidgetState extends State<PrintWidget> {
           text: 'Price', width: 3, ),
 
     ]);
+    ticket.hr(ch: '=', linesAfter: 1);
+    for (var i = 0; i < orderDetailsController.sales.items.length; i++) {
+      print(orderDetailsController.sales.items[i].id);
+      ticket.row([
+        PosColumn(text: '${orderDetailsController.sales.items[i].id}', width: 2),
+        PosColumn(text: 'ONION RINGS', width: 7),
+        PosColumn(
+          text: '${orderDetailsController.sales.items[i].subtotal}', width: 3, ),
 
-    ticket.row([
-      PosColumn(text: '2', width: 2),
-      PosColumn(text: 'ONION RINGS', width: 7),
-      PosColumn(
-          text: '0.99', width: 3, ),
-
-    ]);
-    // ticket.row([
-    //   PosColumn(text: '1', width: 1),
-    //   PosColumn(text: 'SPRING ROLLS', width: 7),
-    //   PosColumn(
-    //       text: '2.99', width: 2, styles: PosStyles(align: PosAlign.right)),
-    // ]);
-    // ticket.row([
-    //   PosColumn(text: '3', width: 1),
-    //   PosColumn(text: 'CRUNCHY STICKS', width: 7),
-    //   PosColumn(
-    //       text: '0.85', width: 2, styles: PosStyles(align: PosAlign.right)),
-    //
-    // ]);
-    ticket.hr();
+      ]);
+    }
+    ticket.hr(ch: '-', linesAfter: 1);
     ticket.row([
       PosColumn(
           text: 'TOTAL',
           width: 6,
           styles: PosStyles(
+            align: PosAlign.left,
             height: PosTextSize.size2,
             width: PosTextSize.size1,
           )),
       PosColumn(
-          text: '\$10.97',
+          text: '${orderDetailsController.sales.total}',
+          width: 6,
+          styles: PosStyles(
+            align: PosAlign.right,
+            height: PosTextSize.size2,
+            width: PosTextSize.size1,
+          )),
+    ]);
+    ticket.row([
+      PosColumn(
+          text: 'VAT',
+          width: 6,
+          styles: PosStyles(
+            align: PosAlign.left,
+            height: PosTextSize.size2,
+            width: PosTextSize.size1,
+          )),
+      PosColumn(
+          text: '${orderDetailsController.sales.total_tax}',
+          width: 6,
+          styles: PosStyles(
+            align: PosAlign.right,
+            height: PosTextSize.size2,
+            width: PosTextSize.size1,
+          )),
+    ]);
+    ticket.row([
+      PosColumn(
+          text: 'Total With Vat',
+          width: 6,
+          styles: PosStyles(
+            align: PosAlign.left,
+            height: PosTextSize.size2,
+            width: PosTextSize.size1,
+          )),
+      PosColumn(
+          text: '${orderDetailsController.sales.grand_total}',
           width: 6,
           styles: PosStyles(
             align: PosAlign.right,
@@ -185,28 +214,36 @@ class _PrintWidgetState extends State<PrintWidget> {
           )),
     ]);
 
-    ticket.hr(ch: '=', linesAfter: 1);
-
+    ticket.hr(ch: '-', linesAfter: 1);
     ticket.row([
       PosColumn(
           text: 'Cash',
-          width: 7,
-          styles: PosStyles(align: PosAlign.left, width: PosTextSize.size2)),
+          width: 6,
+          styles: PosStyles(
+            align: PosAlign.left,
+            height: PosTextSize.size2,
+            width: PosTextSize.size1,
+          )),
       PosColumn(
-          text: '\$15.00',
-          width: 5,
-          styles: PosStyles(align: PosAlign.right, width: PosTextSize.size2)),
+          text: '${orderDetailsController.sales.grand_total}',
+          width: 6,
+          styles: PosStyles(
+            align: PosAlign.right,
+            height: PosTextSize.size2,
+            width: PosTextSize.size1,
+          )),
     ]);
     ticket.row([
       PosColumn(
           text: 'Change',
-          width: 7,
+          width: 6,
           styles: PosStyles(align: PosAlign.left, width: PosTextSize.size2)),
       PosColumn(
-          text: '\$4.03',
-          width: 5,
+          text: '${orderDetailsController.sales.payment_term}',
+          width: 6,
           styles: PosStyles(align: PosAlign.right, width: PosTextSize.size2)),
     ]);
+
 
     ticket.feed(2);
     ticket.text('Thank you!',
@@ -217,15 +254,7 @@ class _PrintWidgetState extends State<PrintWidget> {
     final String timestamp = formatter.format(now);
     ticket.text(timestamp,
         styles: PosStyles(align: PosAlign.center), linesAfter: 2);
-    // for (var i = 0; i < orderDetailsController.sales.items.length; i++) {
-    //   print(orderDetailsController.sales.items[i].product_name);
-    //   ticket.row([
-    //     PosColumn(
-    //         text: '${orderDetailsController.sales.items[i].unit_price} x ${orderDetailsController.sales.items[i].quantity}',
-    //         width: 6),
-    //     PosColumn(text: 'SAR', width: 6),
-    //   ]);
-    // }
+
 
     ticket.feed(1);
     // ticket.row([
@@ -235,8 +264,8 @@ class _PrintWidgetState extends State<PrintWidget> {
 
     ticket.cut();
 
-    return ticket;*/
-    final Ticket ticket = Ticket(paper);
+    return ticket;
+  /*  final Ticket ticket = Ticket(paper);
     // ticket.printCustom("السلام ",2,1,charset: "UTF-8");
     // ticket.text(
     //     'Regular: aA bB cC dD eE fF gG hH iI jJ kK lL mM nN oO pP qQ rR sS tT uU vV wW xX yY zZ');
@@ -248,10 +277,10 @@ class _PrintWidgetState extends State<PrintWidget> {
     await CharsetConverter.encode('ISO-8859-6', 'مابيقرا شي وهو بيستخدم');
 
     ticket.textEncoded(encoded2,
-        styles: PosStyles(align: PosAlign.center,width: PosTextSize.size1, bold: true) );
-    final arabicText = utf8.encode('ا ب ت ث ج ح خ د ذ ر ز س ش ص ض ف ق ك ل م ن ه و ي');
+        styles: PosStyles(align: PosAlign.center,width: PosTextSize.size1,codeTable: PosCodeTable.arabic) );
+    final arabicText = utf8.encode('شي وهو بيستخدم');
 
-    ticket.textEncoded(arabicText);
+    ticket.textEncoded(arabicText,styles: PosStyles(codeTable: PosCodeTable.pc864_2));*/
     // var encoded = utf8.encode("Special 3: ألامااهلا");
     // ticket.text(utf8.decode(encoded),
     //     styles: PosStyles(codeTable: PosCodeTable.arabic));

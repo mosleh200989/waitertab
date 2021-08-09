@@ -67,7 +67,10 @@ class OrderListProvider extends GetConnect {
   }
   Future<Sales> getOneSales(String reference,orderStatus) async {
     final String salesSingleUrl="${MrConfig.base_app_url}resturant_salama/api/v1/sales?include=items,warehouse,biller,payment,restaurant_table&sales_id=$reference&order_status=$orderStatus&api-key=${MrConfig.mr_api_key}";
+print(salesSingleUrl);
       Response response = await get(salesSingleUrl);
+    // print(response.body);
+    print('response.body');
     if (response.statusCode == 200 && response.body['status'] !=false) {
       return Sales.fromJSON(response.body);
     } else {

@@ -19,14 +19,14 @@ class ProcessingOrder  extends StatelessWidget {
       else*/
       return /*_con.salesListProcessing.isEmpty
           ? EmptyOrdersWidget()
-          :*/_con.isLoadingProcessing.value?SizedBox(
-        height: 3,
-        child: LinearProgressIndicator(
-          backgroundColor: Get.theme.accentColor.withOpacity(0.2),
-        ),
-      ): RefreshIndicator(
+          :*/ RefreshIndicator(
         onRefresh: _con.refreshProcessingList,
-        child: ListView.builder(
+        child: _con.isLoadingProcessing.value?SizedBox(
+          height: 3,
+          child: LinearProgressIndicator(
+            backgroundColor: Get.theme.accentColor.withOpacity(0.2),
+          ),
+        ): ListView.builder(
           controller: _con.scrollControllerProcessing,
           itemCount: _con.salesListProcessing.length,
           // shrinkWrap: true,
